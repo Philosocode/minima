@@ -1,0 +1,46 @@
+@import-normalize;
+
+// 1. Settings
+@import "settings/settings.colors";
+
+// 2. Tools
+
+// 3. Generics
+@import "generics/generics.base";
+
+// 4. Elements
+
+// 5. Objects
+@import "objects/objects.layout";
+
+// 6. Components
+@import "components/components.footer";
+@import "components/components.navbar";
+
+// 7. Tools
+@import "tools/tools.respond";
+
+/*
+@import "settings.global";
+@import "settings.colors";
+
+@import "tools.functions";
+@import "tools.mixins";
+
+@import "generic.box-sizing";
+@import "generic.normalize";
+
+@import "elements.headings";
+@import "elements.links";
+
+@import "objects.wrappers";
+@import "objects.grid";
+
+@import "components.site-nav";
+@import "components.buttons";
+@import "components.carousel";
+
+@import "trumps.clearfix";
+@import "trumps.utilities";
+@import "trumps.ie8";
+*/

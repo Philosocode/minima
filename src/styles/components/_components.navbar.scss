@@ -1,0 +1,25 @@
+.c-navbar {
+  &__list {
+    padding-left: 0;
+    list-style-type: none;
+    margin: 0 auto;
+    margin-top: 3rem;
+    width: 50rem;
+
+    display: flex;
+    justify-content: space-around;
+  }
+
+  &__list-item {
+    display: inline-block;
+  }
+
+  &__link {
+    color: green;
+    text-decoration: none;
+
+    &--is-active {
+      color: orangered;
+    }
+  }
+}
