@@ -1,5 +1,5 @@
 import React, { FC } from "react";
 
 export const SearchBar: FC = () => (
-  <div></div>
+  <div className="c-search-bar"></div>
 )
