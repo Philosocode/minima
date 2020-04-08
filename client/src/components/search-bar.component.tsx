@@ -1,17 +1,23 @@
-import React, { FC, useState, ChangeEvent } from "react";
+import React, { FC, useState, ChangeEvent, KeyboardEvent } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
 export const SearchBar: FC = () => { 
   const [searchText, setSearchText] = useState("");
 
-  const handleChange = (ev: ChangeEvent<HTMLInputElement>) => {
+  function handleChange(ev: ChangeEvent<HTMLInputElement>) {
     setSearchText(ev.target.value);
   }
 
-  const handleSearchClear = () => {
+  function handleSearchClear() {
     setSearchText("");
   }
+
+  function handleSubmit(ev: KeyboardEvent<HTMLInputElement>) {
+    if (ev.key === "Enter") {
+      handleSearchClear();
+    }
+  } 
 
   let searchClasses = "c-search-bar__clear";
   if (searchText.length > 0) searchClasses += " c-search-bar__clear--show";
@@ -23,6 +29,7 @@ export const SearchBar: FC = () => {
         className="c-search-bar__input"
         value={searchText}
         onChange={handleChange}
+        onKeyPress={handleSubmit}
       />
       <FontAwesomeIcon className={searchClasses} icon={faTimes} onClick={handleSearchClear} />
     </div>
