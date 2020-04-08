@@ -9,15 +9,22 @@ export const SearchBar: FC = () => {
     setSearchText(ev.target.value);
   }
 
+  const handleSearchClear = () => {
+    setSearchText("");
+  }
+
+  let searchClasses = "c-search-bar__clear";
+  if (searchText.length > 0) searchClasses += " c-search-bar__clear--show";
+
   return (
-    <div className="c-search-bar">
+    <div className="c-search-bar__container">
       <input
         type="text"
         className="c-search-bar__input"
         value={searchText}
         onChange={handleChange}
       />
-      <FontAwesomeIcon icon={faTimes} className="c-search-bar__clear" />
+      <FontAwesomeIcon className={searchClasses} icon={faTimes} onClick={handleSearchClear} />
     </div>
   )
  }
