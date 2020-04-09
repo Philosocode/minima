@@ -1,25 +1,20 @@
 .c-header {
-  &__list {
-    padding-left: 0;
-    list-style-type: none;
-    margin: 0 auto;
-    margin-top: 3rem;
-    width: 50rem;
-
+  &__container {
     display: flex;
-    justify-content: space-around;
+      flex-direction: row;
+      align-items: center;
+    padding-top: 2rem;
   }
 
-  &__list-item {
-    display: inline-block;
-  }
-
-  &__link {
-    color: green;
+  &__logo {
+    color: $color-black;
+    margin-left: 5rem;
+    font-size: 2rem;
+    font-weight: bold;
     text-decoration: none;
+    transition: color 0.1s ease;
+    position: absolute;
 
-    &--is-active {
-      color: orangered;
-    }
+    &:hover { color: lighten($color-black, 30) }
   }
 }
