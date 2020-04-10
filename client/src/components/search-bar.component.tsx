@@ -3,7 +3,7 @@ import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
-import { YOUTUBE_BASE_URL, YOUTUBE_API_KEY } from "shared/constants";
+import { getUrlAndParams } from "apis/youtube.api";
 
 export class SearchBar extends Component {
   state = {
@@ -22,15 +22,11 @@ export class SearchBar extends Component {
     if (ev.key !== "Enter") return;
     if (!this.state.searchText) return;
 
-    const res = axios.get(`${YOUTUBE_BASE_URL}/search`, {
-      params: {
-        part: "snippet",
-        key: YOUTUBE_API_KEY,
-        q: "hello" 
-      }
-    })
-    .then(res => console.log(res))
-    .catch(err => console.log(err));
+    const [url, params] = getUrlAndParams(this.state.searchText);
+
+    const res = axios.get(url, { params })
+      .then(res => console.log(res))
+      .catch(err => console.log(err));
   } 
 
   render() {
