@@ -26,7 +26,7 @@ export interface IYouTubeVideo {
   }
 }
 
-export function getUrlAndParams(query: string, searchType: SearchType = "video", numResults: number = 5): [string, object] {
+export function getUrlAndParams(query: string, searchType: SearchType = "video", numResults: number = 20): [string, object] {
   const params = {
     part: "snippet",
     key: API_KEY,

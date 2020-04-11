@@ -1,4 +1,4 @@
-import React, { Component, ChangeEvent, KeyboardEvent } from "react";
+import React, { useState, useContext, FC, ChangeEvent, KeyboardEvent } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
@@ -6,50 +6,43 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { getUrlAndParams } from "apis/youtube.api";
 import { VideosContext } from "contexts/videos.context";
 
-export class SearchBar extends Component {
-  static contextType = VideosContext;
-  state = {
-    searchText: ""
+export const SearchBar: FC = () => {
+  // State
+  const [searchText, setSearchText] = useState("");
+  const { setVideos } = useContext(VideosContext);
+  let searchClasses = "c-search-bar__clear";
+  if (searchText.length > 0) searchClasses += " c-search-bar__clear--show";
+
+  // Functions
+  function handleChange(ev: ChangeEvent<HTMLInputElement>) {
+    setSearchText(ev.target.value);
   }
 
-  handleChange = (ev: ChangeEvent<HTMLInputElement>) => {
-    this.setState({ searchText: ev.target.value });
+  function handleSearchClear() {
+    setSearchText("");
   }
 
-  handleSearchClear = () => {
-    this.setState({ searchText: "" });
-  }
-
-  handleSubmit = (ev: KeyboardEvent<HTMLInputElement>) => {
+  function handleSubmit(ev: KeyboardEvent<HTMLInputElement>) {
     if (ev.key !== "Enter") return;
-    if (!this.state.searchText) return;
+    if (!searchText) return;
 
-    const [url, params] = getUrlAndParams(this.state.searchText);
+    const [url, params] = getUrlAndParams(searchText);
 
-    axios.get<any>(url, { params })
-      .then(res => {
-        this.context.setVideos(res.data.items);
-        console.log("Videos: ", this.context.videos);
-      })
+    axios.get(url, { params })
+      .then(res => setVideos && setVideos(res.data.items))
       .catch(err => console.log(err));
   } 
 
-  render() {
-    const {searchText} = this.state;
-    let searchClasses = "c-search-bar__clear";
-    if (searchText.length > 0) searchClasses += " c-search-bar__clear--show";
-
-    return (
-      <div className="c-search-bar__container">
-        <input
-          type="text"
-          className="c-search-bar__input"
-          value={searchText}
-          onChange={this.handleChange}
-          onKeyPress={this.handleSubmit}
-        />
-        <FontAwesomeIcon className={searchClasses} icon={faTimes} onClick={this.handleSearchClear} />
-      </div>
-    )
-  }
- }
+  return (
+    <div className="c-search-bar__container">
+      <input
+        type="text"
+        className="c-search-bar__input"
+        value={searchText}
+        onChange={handleChange}
+        onKeyPress={handleSubmit}
+      />
+      <FontAwesomeIcon className={searchClasses} icon={faTimes} onClick={handleSearchClear} />
+    </div>
+  )
+}
