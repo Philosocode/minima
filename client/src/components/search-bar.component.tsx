@@ -4,8 +4,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
 import { getUrlAndParams } from "apis/youtube.api";
+import { VideosContext } from "contexts/videos.context";
 
 export class SearchBar extends Component {
+  static contextType = VideosContext;
   state = {
     searchText: ""
   }
@@ -24,8 +26,11 @@ export class SearchBar extends Component {
 
     const [url, params] = getUrlAndParams(this.state.searchText);
 
-    const res = axios.get(url, { params })
-      .then(res => console.log(res))
+    axios.get<any>(url, { params })
+      .then(res => {
+        this.context.setVideos(res.data.items);
+        console.log("Videos: ", this.context.videos);
+      })
       .catch(err => console.log(err));
   } 
 
