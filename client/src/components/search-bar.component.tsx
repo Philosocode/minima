@@ -1,15 +1,13 @@
-import React, { useState, useContext, FC, ChangeEvent, KeyboardEvent } from "react";
-import axios from "axios";
+import React, { useState, FC, ChangeEvent, KeyboardEvent } from "react";
+import { Redirect } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
-
-import { getUrlAndParams } from "apis/youtube.api";
-import { VideosContext } from "contexts/videos.context";
 
 export const SearchBar: FC = () => {
   // State
   const [searchText, setSearchText] = useState("");
-  const { setVideos } = useContext(VideosContext);
+  const [shouldRedirect, setShouldRedirect] = useState(false);
+
   let searchClasses = "c-search-bar__clear";
   if (searchText.length > 0) searchClasses += " c-search-bar__clear--show";
 
@@ -26,15 +24,12 @@ export const SearchBar: FC = () => {
     if (ev.key !== "Enter") return;
     if (!searchText) return;
 
-    const [url, params] = getUrlAndParams(searchText);
-
-    axios.get(url, { params })
-      .then(res => setVideos && setVideos(res.data.items))
-      .catch(err => console.log(err));
+    setShouldRedirect(true);
   } 
 
   return (
     <div className="c-search-bar__container">
+      { shouldRedirect &&  <Redirect to={`/search?query=${searchText}`} /> }
       <input
         type="text"
         className="c-search-bar__input"
