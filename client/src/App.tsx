@@ -3,6 +3,7 @@ import { Switch, Route } from "react-router-dom";
 
 /* Pages */
 import { HomePage } from "pages/home.page";
+import { SearchPage } from "pages/search.page";
 
 /* Components */
 import { Header } from "components/header.component";
@@ -15,7 +16,8 @@ export function App() {
       <div className="o-site-layout">
         <Header />
         <Switch>
-          <Route path="/" component={HomePage} />
+          <Route exact path="/" component={HomePage} />
+          <Route path="/search" component={SearchPage} />
         </Switch>
         <Footer />
       </div>
