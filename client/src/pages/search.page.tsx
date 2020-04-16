@@ -2,30 +2,30 @@ import React, { FC, useContext, useEffect } from "react";
 import axios from "axios";
 
 import { getUrlAndParams } from "apis/youtube.api";
+import { SearchContext } from "contexts/search.context";
 import { VideosContext } from "contexts/videos.context";
+import { VideoList } from "components/video-list.component";
 
 export const SearchPage: FC = () => { 
   // State
-  const { setVideos } = useContext(VideosContext);
-  
+  const { videos, setVideos } = useContext(VideosContext);
+  const { searchText } = useContext(SearchContext);
+
   // Functions
+  // Effect to fetch videos on mount
   useEffect(() => {
-    const toSearch = getSearchQuery() as string;
-    const [url, params] = getUrlAndParams(toSearch);
+    const [url, params] = getUrlAndParams(searchText);
 
     axios.get(url, { params })
-      .then(res => setVideos && setVideos(res.data.items))
+      .then(res => {
+        setVideos && setVideos(res.data.items);
+      })
       .catch(err => console.log("Error from search page:", err));
-  }, [setVideos]);
-
-  // FROM: https://stackoverflow.com/a/43220620
-  function getSearchQuery() {
-    const params = new URLSearchParams(window.location.search);
-    return params.get("query");
-  }
-
+  }, [setVideos, searchText]);
 
   return (
-    <div></div>
+      videos.length <= 0
+        ? <div>Loading...</div>
+        : <VideoList videos={videos} />
   );
 };

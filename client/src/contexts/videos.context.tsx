@@ -4,9 +4,9 @@ import { IYouTubeVideo } from "apis/youtube.api";
 /* Referenced: https://github.com/piotrwitek/react-redux-typescript-guide#themecontext */
 // Create Context
 interface IVideosContext {
-  videos: IYouTubeVideo[],
-  clearVideos?: () => void,
-  setVideos?: (videos: IYouTubeVideo[]) => void,
+  videos: IYouTubeVideo[];
+  clearVideos?: () => void;
+  setVideos?: (videos: IYouTubeVideo[]) => void;
 }
 export const VideosContext = createContext<IVideosContext>({ videos: [] });
 

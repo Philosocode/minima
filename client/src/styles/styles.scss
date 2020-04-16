@@ -11,12 +11,13 @@
 // 4. Elements
 
 // 5. Objects
-@import "objects/objects.layout";
+@import "objects/objects.site-layout";
 
 // 6. Components
 @import "components/components.footer";
 @import "components/components.header";
 @import "components/components.search-bar";
+@import "components/components.video-list";
 
 // 7. Tools
 @import "tools/tools.respond";

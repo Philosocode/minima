@@ -1,39 +1,42 @@
-import React, { useState, FC, ChangeEvent, KeyboardEvent } from "react";
-import { Redirect } from "react-router-dom";
+import React, { useContext, useState, FC, ChangeEvent, KeyboardEvent } from "react";
+import { withRouter, RouteComponentProps } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { SearchContext } from "contexts/search.context";
 
-export const SearchBar: FC = () => {
+const _SearchBar: FC<RouteComponentProps> = ({ history }) => {
   // State
-  const [searchText, setSearchText] = useState("");
-  const [shouldRedirect, setShouldRedirect] = useState(false);
+  // searchBarText: text local to the search bar
+  // searchText: query text to use when searching YouTube
+  const [ searchBarText, setSearchBarText ] = useState("");
+  const { setSearchText } = useContext(SearchContext);
 
   let searchClasses = "c-search-bar__clear";
-  if (searchText.length > 0) searchClasses += " c-search-bar__clear--show";
+  if (searchBarText.length > 0) searchClasses += " c-search-bar__clear--show";
 
   // Functions
-  function handleChange(ev: ChangeEvent<HTMLInputElement>) {
-    setSearchText(ev.target.value);
+  function handleChange(ev: ChangeEvent<HTMLInputElement>) {    
+    setSearchBarText(ev.target.value);
   }
 
   function handleSearchClear() {
-    setSearchText("");
+    setSearchBarText("");
   }
 
   function handleSubmit(ev: KeyboardEvent<HTMLInputElement>) {
     if (ev.key !== "Enter") return;
-    if (!searchText) return;
+    if (!searchBarText) return;
 
-    setShouldRedirect(true);
+    setSearchText && setSearchText(searchBarText);
+    history.push(`/search?query=${searchBarText}`);
   } 
 
   return (
     <div className="c-search-bar__container">
-      { shouldRedirect &&  <Redirect to={`/search?query=${searchText}`} /> }
       <input
         type="text"
         className="c-search-bar__input"
-        value={searchText}
+        value={searchBarText}
         onChange={handleChange}
         onKeyPress={handleSubmit}
       />
@@ -41,3 +44,5 @@ export const SearchBar: FC = () => {
     </div>
   )
 }
+
+export const SearchBar = withRouter(_SearchBar);

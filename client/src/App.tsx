@@ -9,18 +9,21 @@ import { SearchPage } from "pages/search.page";
 import { Header } from "components/header.component";
 import { Footer } from "components/footer.component";
 import { VideosProvider } from "contexts/videos.context";
+import { SearchProvider } from "contexts/search.context";
 
 export function App() {
   return (
     <VideosProvider>
-      <div className="o-site-layout">
-        <Header />
-        <Switch>
-          <Route exact path="/" component={HomePage} />
-          <Route path="/search" component={SearchPage} />
-        </Switch>
-        <Footer />
-      </div>
+      <SearchProvider>
+        <div className="o-site-layout">
+          <Header />
+          <Switch>
+            <Route exact path="/" component={HomePage} />
+            <Route path="/search" component={SearchPage} />
+          </Switch>
+          <Footer />
+        </div>
+      </SearchProvider>
     </VideosProvider>
   );
 }
