@@ -1,7 +1,7 @@
 import React, { FC, useContext, useEffect } from "react";
 import axios from "axios";
 
-import { getUrlAndParams } from "apis/youtube.api";
+import { getSearchUrlAndParams } from "apis/youtube.api";
 import { SearchContext } from "contexts/search.context";
 import { VideosContext } from "contexts/videos.context";
 import { VideoList } from "components/video-list.component";
@@ -14,7 +14,7 @@ export const SearchPage: FC = () => {
   // Functions
   // Effect to fetch videos on mount
   useEffect(() => {
-    const [url, params] = getUrlAndParams(searchText);
+    const [url, params] = getSearchUrlAndParams(searchText);
 
     axios.get(url, { params })
       .then(res => {

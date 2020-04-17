@@ -26,12 +26,34 @@ export interface IYouTubeVideo {
   }
 }
 
-export function getUrlAndParams(query: string, searchType: SearchType = "video", numResults: number = 20): [string, object] {
+export function getSearchUrlAndParams(query: string, searchType: SearchType = "video", numResults: number = 6): [string, object] {
   const params = {
     part: "snippet",
     key: API_KEY,
-    query: query,
-    maxResults: numResults
+    q: query,
+    maxResults: numResults,
+    type: searchType
+  };
+
+  let url;
+  switch (searchType) {
+    case "video": 
+      url = BASE_URL + "/search";
+      break;
+    default: 
+      url = BASE_URL + "/search"
+  }
+
+  return [url, params]
+}
+
+export function getVideoUrlAndParams(query: string, searchType: SearchType = "video", numResults: number = 6): [string, object] {
+  const params = {
+    part: "id",
+    key: API_KEY,
+    q: query,
+    maxResults: numResults,
+    type: searchType
   };
 
   let url;

@@ -26,9 +26,10 @@ const _SearchBar: FC<RouteComponentProps> = ({ history }) => {
   function handleSubmit(ev: KeyboardEvent<HTMLInputElement>) {
     if (ev.key !== "Enter") return;
     if (!searchBarText) return;
+    if (!setSearchText) return;
 
-    setSearchText && setSearchText(searchBarText);
-    history.push(`/search?query=${searchBarText}`);
+    setSearchText(searchBarText);
+    history.push(`/search?q=${searchBarText}`);
   } 
 
   return (
