@@ -60,7 +60,14 @@ export function getVideo(videoId: string): Promise<IYouTubeVideo> {
 
   return new Promise((resolve, reject) => {
     axios.get(url, { params })
-      .then(res => resolve(res.data.items[0]))
+      .then(res => {
+        if (res.data.items.length <= 0) {
+          reject("ERROR: Video not found.")
+        } 
+        else {
+          resolve(res.data.items[0])
+        }
+      })
       .catch(err => reject(err));
   });
 }

@@ -20,8 +20,8 @@ export function App() {
           <Header />
           <Switch>
             <Route exact path="/" component={HomePage} />
-            <Route path="/search" component={SearchPage} />
-            <Route path="/watch?v=:videoId" component={VideoPage} />
+            <Route exact path="/search" component={SearchPage} />
+            <Route exact path="/watch/:videoId" component={VideoPage} />
           </Switch>
           <Footer />
         </div>
