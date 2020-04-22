@@ -1,6 +1,7 @@
 import React, { FC, useState, useEffect } from "react";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import { getVideo, IYouTubeVideo, getCommentsForVideo, ICommentsResponse } from "apis/youtube.api";
+import { linkify } from "helpers/helpers";
 
 interface IRouteParams {
   videoId: string;
@@ -34,17 +35,16 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
   function renderVideoPageContent() {
     if (!videoData) return;
 
-    const { title, publishedAt, channelId, channelTitle } = videoData.snippet;
-    const description = videoData.snippet.description.replace("\n", " ");
-    console.log("Description", description);
+    const { title, description, publishedAt, channelId, channelTitle } = videoData.snippet;
+    const formattedDescription = linkify(description);
 
     return (
       <div>
         <h3>{title}</h3>
-        <p className="c-video__description">{description}</p>
+        <p dangerouslySetInnerHTML={{__html: formattedDescription}} className="c-video__description"></p>
         <p>Published: {publishedAt}</p>
         <p>Channel: {channelTitle} [{channelId}]</p>
-        <button onClick={loadComments}>Load Comments</button>
+        <br />
       </div>
     )
   }
