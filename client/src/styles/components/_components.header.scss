@@ -3,17 +3,16 @@
     display: flex;
       flex-direction: row;
       align-items: center;
-    padding-top: 2rem;
+    height: 6.6rem;
   }
 
   &__logo {
     color: $color-black;
-    margin-left: 5rem;
     font-size: 2rem;
     font-weight: bold;
+    position: absolute;
     text-decoration: none;
     transition: color 0.1s ease;
-    position: absolute;
 
     &:hover { color: lighten($color-black, 30) }
   }
