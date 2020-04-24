@@ -1,6 +1,8 @@
 import React, { FC, useState, useEffect } from "react";
 import { withRouter, RouteComponentProps } from "react-router-dom";
+
 import { getVideo, IYouTubeVideo, getCommentsForVideo, ICommentsResponse } from "apis/youtube.api";
+import { CommentThread } from "components/comment-thread.component";
 import { linkify } from "helpers/helpers";
 
 interface IRouteParams {
@@ -32,21 +34,28 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
     return <div>Loading...</div>
   }
 
-  function renderVideoPageContent() {
-    if (!videoData) return;
+  function renderVideoContent() {
+    if (!videoData) return renderLoading();
 
     const { title, description, publishedAt, channelId, channelTitle } = videoData.snippet;
     const formattedDescription = linkify(description);
 
     return (
-      <div>
+      <>
         <h3>{title}</h3>
+        <hr/>
         <p dangerouslySetInnerHTML={{__html: formattedDescription}} className="c-video__description"></p>
         <p>Published: {publishedAt}</p>
         <p>Channel: {channelTitle} [{channelId}]</p>
-        <br />
-      </div>
+        <hr />
+      </>
     )
+  }
+
+  function renderComments() {
+    if (commentsData) {
+      return commentsData.items.map(thread => <CommentThread thread={thread} />);
+    }
   }
 
   return (
@@ -59,11 +68,9 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
           allowFullScreen
         />
       </div>
-      {
-        videoData 
-          ? renderVideoPageContent()
-          : renderLoading()
-      }
+      <div className="c-video__details">{ renderVideoContent() }</div>
+      <div className="c-comments__container">{ renderComments() }</div>
+      <button onClick={loadComments}>Load Comments</button>
     </div>
   );
 };

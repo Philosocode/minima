@@ -39,7 +39,7 @@ export interface ICommentsResponse {
   }
 }
 
-interface ICommentThread {
+export interface ICommentThread {
   id: string;
   replies?: IComment[];
   snippet: {
@@ -48,7 +48,7 @@ interface ICommentThread {
   }
 }
 
-interface IComment {
+export interface IComment {
   id: string;
   snippet: {
     authorChannelId: { value: string; };
