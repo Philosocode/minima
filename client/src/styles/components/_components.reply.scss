@@ -1,0 +1,16 @@
+.c-reply {
+  &__list {
+    display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    margin-left: 10rem;
+    margin-top: 2rem;
+  }
+
+  &__toggle {
+    border: 1px solid #777;
+    border-radius: 5px;
+    width: 10rem;
+    text-transform: uppercase;
+  }
+}

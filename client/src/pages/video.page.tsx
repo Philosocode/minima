@@ -43,10 +43,10 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
     return (
       <>
         <h3>{title}</h3>
-        <hr/>
-        <p dangerouslySetInnerHTML={{__html: formattedDescription}} className="c-video__description"></p>
         <p>Published: {publishedAt}</p>
         <p>Channel: {channelTitle} [{channelId}]</p>
+        <hr/>
+        <p dangerouslySetInnerHTML={{__html: formattedDescription}} className="c-video__description"></p>
         <hr />
       </>
     )

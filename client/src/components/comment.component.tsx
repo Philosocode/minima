@@ -3,25 +3,44 @@ import { Link } from "react-router-dom";
 
 import { IComment } from "apis/youtube.api";
 
+type CommentType = "comment" | "reply";
+
 interface IProps {
-  comment: IComment
+  comment: IComment;
+  type: CommentType;
 }
 
-export const Comment: FC<IProps> = ({ comment }) => { 
-  const { snippet } = comment;
+export const Comment: FC<IProps> = ({ comment, type }) => {
+  const {
+    authorChannelId,
+    authorDisplayName,
+    authorProfileImageUrl,
+    likeCount,
+    publishedAt,
+    textDisplay,
+    updatedAt,
+  } = comment.snippet;
+
+  let containerClass = "c-comment__container";
+  if (type === "reply") containerClass += " c-comment__container--reply";
 
   return (
-    <div className="c-comment__container">
+    <div className={containerClass}>
       <div className="c-comment__thumbnail">
-        <img src={snippet.authorProfileImageUrl} alt={snippet.authorDisplayName} />
+        <img src={authorProfileImageUrl} alt={authorDisplayName} />
       </div>
       <div className="c-comment__text">
         <div className="c-comment__author">
-          <Link to={`channel/${snippet.authorChannelId.value}`}>{snippet.authorDisplayName}</Link>
+          <Link to={`channel/${authorChannelId.value}`}>{authorDisplayName}</Link>
         </div>
-        <div className="c-comment__date">{snippet.publishedAt}</div>
-        <p className="c-comment">{snippet.textOriginal}</p>
+        {
+          publishedAt === updatedAt 
+            ? <div className="c-comment__published">Published: {publishedAt}</div>
+            : <div className="c-comment__updated">Updated: {updatedAt}</div>
+        }
+        <p dangerouslySetInnerHTML={{__html: textDisplay}} className="c-comment__description"></p>
+        <div className="c-comment__likes">Likes: {likeCount}</div>
       </div>
     </div>
-  )
- };
+  );
+};

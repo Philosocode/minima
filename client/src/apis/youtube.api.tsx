@@ -41,7 +41,9 @@ export interface ICommentsResponse {
 
 export interface ICommentThread {
   id: string;
-  replies?: IComment[];
+  replies?: {
+    comments: IComment[];
+  }
   snippet: {
     topLevelComment: IComment;
     totalReplyCount: number;
@@ -108,7 +110,7 @@ export function getVideo(videoId: string): Promise<IYouTubeVideo> {
   });
 }
 
-export function getCommentsForVideo(videoId: string, maxNumComments=50): Promise<ICommentsResponse> {
+export function getCommentsForVideo(videoId: string, maxNumComments=100): Promise<ICommentsResponse> {
   const url = BASE_URL + "/commentThreads";
   const PART = "id,replies,snippet";
   const params = {
