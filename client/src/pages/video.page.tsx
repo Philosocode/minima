@@ -3,7 +3,7 @@ import { withRouter, RouteComponentProps } from "react-router-dom";
 
 import { getVideo, IYouTubeVideo, getCommentsForVideo, ICommentsResponse } from "apis/youtube.api";
 import { CommentThread } from "components/comment-thread.component";
-import { linkify } from "helpers/helpers";
+import { VideoDescription } from "components/video-description.component";
 
 interface IRouteParams {
   videoId: string;
@@ -38,7 +38,6 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
     if (!videoData) return renderLoading();
 
     const { title, description, publishedAt, channelId, channelTitle } = videoData.snippet;
-    const formattedDescription = linkify(description);
 
     return (
       <>
@@ -46,7 +45,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
         <p>Published: {publishedAt}</p>
         <p>Channel: {channelTitle} [{channelId}]</p>
         <hr/>
-        <p dangerouslySetInnerHTML={{__html: formattedDescription}} className="c-video__description"></p>
+        <VideoDescription desc={description} />
         <hr />
       </>
     )
