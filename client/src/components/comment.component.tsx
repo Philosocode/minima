@@ -41,7 +41,7 @@ export const Comment: FC<IProps> = ({ comment, type }) => {
             : <div className="c-comment__updated">Updated: {updatedAt}</div>
         }
         <p dangerouslySetInnerHTML={{__html: textDisplay}} className="c-comment__description"></p>
-        <div className="c-comment__likes"><FontAwesomeIcon icon={faThumbsUp} className="c-comment__like-icon" /> {likeCount}</div>
+        <div className="c-comment__likes"><FontAwesomeIcon icon={faThumbsUp} className="c-comment__like-icon" /> {likeCount.toLocaleString()}</div>
       </div>
     </div>
   );
