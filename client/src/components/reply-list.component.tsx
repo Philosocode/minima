@@ -11,9 +11,10 @@ interface IProps {
 
 export const ReplyList: FC<IProps> = ({ topLevelCommentId, totalReplyCount }) => { 
   const [replies, setReplies] = useState<IComment[]>([]);
+  const [nextPageToken, setNextPageToken] = useState<string>();
   const [showingReplies, toggleShowingReplies] = useToggle(false);
   const [hasMoreReplies, setHasMoreReplies] = useState(true);
-  const [nextPageToken, setNextPageToken] = useState<string>();
+  const [isLoading, toggleIsLoading] = useToggle(false);
 
   function handleShowReplies() {
     loadReplies();
@@ -23,7 +24,9 @@ export const ReplyList: FC<IProps> = ({ topLevelCommentId, totalReplyCount }) =>
   async function loadReplies() {
     if (hasMoreReplies) {
       try {
+        toggleIsLoading();
         const res = await getRepliesForCommentThread(topLevelCommentId, nextPageToken);
+        toggleIsLoading();
 
         // A nextPageToken means there are more replies to load
         if (res.nextPageToken) {
@@ -63,7 +66,7 @@ export const ReplyList: FC<IProps> = ({ topLevelCommentId, totalReplyCount }) =>
     <div className="c-reply__list">
       { renderReplyToggle() }
       { showingReplies && replies.map(c => <Comment key={c.id} comment={c} type="reply" />) }
-      { showingReplies && hasMoreReplies && <div className="c-video__show-toggle" onClick={loadReplies}>Show More</div> }
+      { !isLoading && showingReplies && hasMoreReplies && <div className="c-video__show-toggle" onClick={loadReplies}>Show More</div> }
     </div>
   )
  };
