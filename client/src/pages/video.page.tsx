@@ -15,7 +15,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
   const [threads, setThreads] = useState<ICommentThread[]>([]);
   const [nextPageToken, setNextPageToken] = useState<string>();
   const [pageInfo, setPageInfo] = useState<IPageInfo>();
-  const [hasComments, setHasComments] = useState(true);
+  const [hasMoreComments, setHasMoreComments] = useState(true);
 
   const { videoId } = match.params;
   const videoUrl = `https://www.youtube.com/embed/${videoId}?vq=medium`;
@@ -36,7 +36,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
         if (nextPageToken) {
           setNextPageToken(nextPageToken);
         } else {
-          setHasComments(false);
+          setHasMoreComments(false);
         }
 
         const updatedThreads = threads.concat(items);
@@ -83,7 +83,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
       </div>
       <div className="c-video__details">{ renderVideoContent() }</div>
       <div className="c-comments__container">{ renderCommentThreads() }</div>
-      { hasComments && <div className="c-video__show-toggle" onClick={loadCommentThreads}>Load Comments</div> }
+      { hasMoreComments && <div className="c-video__show-toggle" onClick={loadCommentThreads}>Load Comments</div> }
     </div>
   );
 };

@@ -10,14 +10,27 @@ interface IProps {
 }
 
 export const ReplyList: FC<IProps> = ({ topLevelCommentId, totalReplyCount }) => { 
-  const [showingReplies, toggleShowingReplies] = useToggle(false);
   const [replies, setReplies] = useState<IComment[]>([]);
-  const [hasReplies, setHasReplies] = useState(true);
+  const [showingReplies, toggleShowingReplies] = useToggle(false);
+  const [hasMoreReplies, setHasMoreReplies] = useState(true);
+  const [nextPageToken, setNextPageToken] = useState<string>();
+
+  function handleShowReplies() {
+    loadReplies();
+    toggleShowingReplies();
+  }
 
   async function loadReplies() {
-    if (replies.length < totalReplyCount) {
+    if (hasMoreReplies) {
       try {
-        const res = await getRepliesForCommentThread(topLevelCommentId);
+        const res = await getRepliesForCommentThread(topLevelCommentId, nextPageToken);
+
+        // A nextPageToken means there are more replies to load
+        if (res.nextPageToken) {
+          setNextPageToken(res.nextPageToken);
+        } else {
+          setHasMoreReplies(false);
+        }
   
         // Comments are from newest to oldest, but for replies, we want oldest to newest
         const newComments = res.items.reverse();
@@ -28,12 +41,10 @@ export const ReplyList: FC<IProps> = ({ topLevelCommentId, totalReplyCount }) =>
         console.log("ERROR:", err);
       }
     }
-
-    toggleShowingReplies();
   }
 
   function renderReplyToggle() {
-    let functionToCall: typeof toggleShowingReplies | typeof loadReplies;
+    let functionToCall: () => void;
     let text: string;
 
     if (showingReplies) {
@@ -41,7 +52,7 @@ export const ReplyList: FC<IProps> = ({ topLevelCommentId, totalReplyCount }) =>
       text = "↑ Hide Replies";
     }
     else {
-      functionToCall = loadReplies;
+      functionToCall = handleShowReplies;
       text = `↓ Show ${totalReplyCount} Replies`;
     }
     
@@ -52,6 +63,7 @@ export const ReplyList: FC<IProps> = ({ topLevelCommentId, totalReplyCount }) =>
     <div className="c-reply__list">
       { renderReplyToggle() }
       { showingReplies && replies.map(c => <Comment key={c.id} comment={c} type="reply" />) }
+      { showingReplies && hasMoreReplies && <div className="c-video__show-toggle" onClick={loadReplies}>Show More</div> }
     </div>
   )
  };

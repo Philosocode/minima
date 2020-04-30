@@ -170,21 +170,14 @@ export function getCommentThreadsForVideo(videoId: string, pageInfo?: IPageInfo,
   });
 }
 
-export function getRepliesForCommentThread(threadId: string, pageInfo?: IPageInfo, nextPageToken?: string): Promise<ICommentsResponse> {
+export function getRepliesForCommentThread(threadId: string, nextPageToken?: string): Promise<ICommentsResponse> {
   const url = BASE_URL + "/comments";
   const part = "id,snippet";
   const MAX_NUM_COMMENTS = 100;
-  
-  let numCommentsToFetch = MAX_NUM_COMMENTS;
-  const totalResults = pageInfo?.totalResults
-
-  if (totalResults && totalResults < MAX_NUM_COMMENTS) {
-    numCommentsToFetch = totalResults;
-  }
 
   const params: ICommentsParams = {
     key: API_KEY,
-    maxResults: numCommentsToFetch,
+    maxResults: MAX_NUM_COMMENTS,
     pageToken: nextPageToken,
     part: part,
     parentId: threadId
@@ -193,6 +186,8 @@ export function getRepliesForCommentThread(threadId: string, pageInfo?: IPageInf
   return new Promise((resolve, reject) => {
     axios.get(url, { params })
       .then(res => {
+        console.log(res);
+        
         if (res.data.items.length <= 0) {
           reject("ERROR: Couldn't load comments.");
         }
