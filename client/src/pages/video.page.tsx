@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from "react";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 
-import { getVideo, IYouTubeVideo, getCommentsForVideo, ICommentsResponse } from "apis/youtube.api";
+import { getVideo, IYouTubeVideo, getCommentsForVideo, ICommentThread, IPageInfo } from "apis/youtube.api";
 import { CommentThread } from "components/comment-thread.component";
 import { VideoDescription } from "components/video-description.component";
 
@@ -12,7 +12,11 @@ interface IRouteParams {
 const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => { 
   // State
   const [videoData, setVideoData] = useState<IYouTubeVideo>();
-  const [commentsData, setCommentsData] = useState<ICommentsResponse>();
+  const [threads, setThreads] = useState<ICommentThread[]>([]);
+  const [nextPageToken, setNextPageToken] = useState<string>();
+  const [pageInfo, setPageInfo] = useState<IPageInfo>();
+  const [hasComments, setHasComments] = useState(true);
+
   const { videoId } = match.params;
   const videoUrl = `https://www.youtube.com/embed/${videoId}?vq=medium`;
   
@@ -25,8 +29,21 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
   }, [videoId]);
 
   function loadComments() {
-    getCommentsForVideo(videoId)
-      .then(res => setCommentsData(res))
+    getCommentsForVideo(videoId, pageInfo, nextPageToken)
+      .then(res => {
+        console.log(res);
+        const { nextPageToken, items, pageInfo } = res;
+
+        if (nextPageToken) {
+          setNextPageToken(nextPageToken);
+        } else {
+          setHasComments(false);
+        }
+
+        const updatedThreads = threads.concat(items);
+        setThreads(updatedThreads);
+        setPageInfo(pageInfo);
+      })
       .catch(err => console.log(err));
   }
 
@@ -52,11 +69,10 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
   }
 
   function renderComments() {
-    if (commentsData) {
-      return commentsData.items.map(thread => <CommentThread thread={thread} />);
-    }
+    if (threads)
+      return threads.map(t => <CommentThread key={t.id} thread={t} />);
   }
-
+  
   return (
     <div>
       <div className="c-video__container">
@@ -69,7 +85,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
       </div>
       <div className="c-video__details">{ renderVideoContent() }</div>
       <div className="c-comments__container">{ renderComments() }</div>
-      <button onClick={loadComments}>Load Comments</button>
+      { hasComments && <button onClick={loadComments}>Load Comments</button> }
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const BASE_URL = "https://www.googleapis.com/youtube/v3";
-export const API_KEY = process.env.REACT_APP_YOUTUBE_API_KEY;
+export const API_KEY = process.env.REACT_APP_YOUTUBE_API_KEY as string;
 
 /* TYPES */
 type SearchType = "video" | "playlist" | "channel";
@@ -30,13 +30,23 @@ export interface IYouTubeVideo {
   }
 }
 
+interface ICommentsParams {
+  part: string,
+  videoId: string,
+  key: string,
+  maxResults: number,
+  pageToken: string | undefined
+}
+
 export interface ICommentsResponse {
   items: ICommentThread[];
   nextPageToken: string;
-  pageInfo: {
-    totalResults: number;
-    resultsPerPage: number;
-  }
+  pageInfo: IPageInfo;
+}
+
+export interface IPageInfo {
+  totalResults: number;
+  resultsPerPage: number;
 }
 
 export interface ICommentThread {
@@ -89,11 +99,11 @@ export function getSearchUrlAndParams(query: string, searchType: SearchType = "v
 
 export function getVideo(videoId: string): Promise<IYouTubeVideo> {
   const url = BASE_URL + "/videos";
-  const VIDEO_PART = "snippet,statistics";
+  const videoPart = "snippet,statistics";
   const params = {
     id: videoId,
-    part: VIDEO_PART,
     key: API_KEY,
+    part: videoPart
   };
 
   return new Promise((resolve, reject) => {
@@ -110,14 +120,24 @@ export function getVideo(videoId: string): Promise<IYouTubeVideo> {
   });
 }
 
-export function getCommentsForVideo(videoId: string, maxNumComments=100): Promise<ICommentsResponse> {
+export function getCommentsForVideo(videoId: string, pageInfo?: IPageInfo, nextPageToken?: string): Promise<ICommentsResponse> {
   const url = BASE_URL + "/commentThreads";
-  const PART = "id,replies,snippet";
-  const params = {
-    part: PART,
-    videoId: videoId,
+  const commentPart = "id,replies,snippet";
+  const MAX_NUM_COMMENTS = 100;
+  
+  let numCommentsToFetch = MAX_NUM_COMMENTS;
+  const totalResults = pageInfo?.totalResults
+
+  if (totalResults && totalResults < MAX_NUM_COMMENTS) {
+    numCommentsToFetch = totalResults;
+  }
+
+  const params: ICommentsParams = {
     key: API_KEY,
-    maxResults: maxNumComments
+    maxResults: numCommentsToFetch,
+    pageToken: nextPageToken,
+    part: commentPart,
+    videoId: videoId,
   };
 
   return new Promise((resolve, reject) => {

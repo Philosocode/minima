@@ -1,5 +1,7 @@
 import React, { FC } from "react";
 import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 
 import { IComment } from "apis/youtube.api";
 
@@ -39,7 +41,7 @@ export const Comment: FC<IProps> = ({ comment, type }) => {
             : <div className="c-comment__updated">Updated: {updatedAt}</div>
         }
         <p dangerouslySetInnerHTML={{__html: textDisplay}} className="c-comment__description"></p>
-        <div className="c-comment__likes">Likes: {likeCount}</div>
+        <div className="c-comment__likes"><FontAwesomeIcon icon={faThumbsUp} className="c-comment__like-icon" /> {likeCount}</div>
       </div>
     </div>
   );

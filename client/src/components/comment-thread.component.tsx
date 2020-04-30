@@ -22,11 +22,11 @@ export const CommentThread: FC<IProps> = ({ thread }) => {
 
     return (
       <div className="c-reply__list">
-        <button className="c-reply__toggle" onClick={toggleShowReplies}>
+        <div className="c-video__show-toggle" onClick={toggleShowReplies}>
           {showReplies ? "Hide" : "Show"} Replies
-        </button>
+        </div>
         {
-          showReplies && thread.replies.comments.map(c => <Comment comment={c} type="reply" />)
+          showReplies && thread.replies.comments.map(c => <Comment key={c.id} comment={c} type="reply" />)
         }
       </div>
     );
