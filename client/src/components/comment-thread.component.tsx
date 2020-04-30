@@ -14,30 +14,38 @@ export const CommentThread: FC<IProps> = ({ thread }) => {
 
   const { topLevelComment, totalReplyCount } = thread.snippet;
 
-  function renderReplies() {
-    if (totalReplyCount <= 0) return;
+  async function loadReplies() {
+    if (replies.length < totalReplyCount) {
+      try {
+        const res = await getRepliesForCommentThread(thread.id);
+  
+        // Comments are from newest to oldest, but for replies, we want oldest to newest
+        const newComments = res.items.reverse();
+  
+        setReplies(replies.concat(newComments));
+      }
+      catch (err) {
+        console.log("ERROR:", err);
+      }
+    }
 
+    toggleShowReplies();
+  }
+
+  function renderReplies() {
     return (
       <div className="c-reply__list">
-        <div className="c-video__show-toggle" onClick={loadReplies}>
-          {showReplies ? "↑ Hide Replies" : `↓ Show ${totalReplyCount} Replies`}
-        </div>
-        {
-          showReplies && replies.map(c => <Comment key={c.id} comment={c} type="reply" />)
-        }
+        { renderReplyToggle() }
+        { showReplies && replies.map(c => <Comment key={c.id} comment={c} type="reply" />) }
       </div>
     );
   }
 
-  function loadReplies() {
-    getRepliesForCommentThread(thread.id)
-      .then(res => {
-        // Comments are from newest to oldest, but for replies, we want oldest to newest
-        const newComments = res.items.reverse();
-        setReplies(replies.concat(newComments));
-        toggleShowReplies();
-      })
-      .catch(err => console.log(err));
+  function renderReplyToggle() {
+    if (showReplies)
+      return <div className="c-video__show-toggle" onClick={toggleShowReplies}>↑ Hide Replies</div>
+    else
+      return <div className="c-video__show-toggle" onClick={loadReplies}>↓ Show {totalReplyCount} Replies</div>;
   }
 
   return (

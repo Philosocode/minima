@@ -28,8 +28,8 @@ export const Comment: FC<IProps> = ({ comment, type }) => {
 
   return (
     <div className={containerClass}>
-      <div className="c-comment__thumbnail">
-        <img src={authorProfileImageUrl} alt={authorDisplayName} />
+      <div>
+        <img className="c-comment__image" src={authorProfileImageUrl} alt={authorDisplayName} />
       </div>
       <div className="c-comment__text">
         <div className="c-comment__author">
