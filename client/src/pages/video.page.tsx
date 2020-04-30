@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from "react";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 
-import { getVideo, IYouTubeVideo, getCommentsForVideo, ICommentThread, IPageInfo } from "apis/youtube.api";
+import { getVideo, IYouTubeVideo, getCommentThreadsForVideo, ICommentThread, IPageInfo } from "apis/youtube.api";
 import { CommentThread } from "components/comment-thread.component";
 import { VideoDescription } from "components/video-description.component";
 
@@ -28,10 +28,9 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
       .catch(err => console.log(err));
   }, [videoId]);
 
-  function loadComments() {
-    getCommentsForVideo(videoId, pageInfo, nextPageToken)
+  function loadCommentThreads() {
+    getCommentThreadsForVideo(videoId, pageInfo, nextPageToken)
       .then(res => {
-        console.log(res);
         const { nextPageToken, items, pageInfo } = res;
 
         if (nextPageToken) {
@@ -51,6 +50,10 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
     return <div>Loading...</div>
   }
 
+  function renderCommentThreads() {
+    return threads.map(t => <CommentThread key={t.id} thread={t} />);
+  }
+
   function renderVideoContent() {
     if (!videoData) return renderLoading();
 
@@ -67,11 +70,6 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
       </>
     )
   }
-
-  function renderComments() {
-    if (threads)
-      return threads.map(t => <CommentThread key={t.id} thread={t} />);
-  }
   
   return (
     <div>
@@ -84,8 +82,8 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
         />
       </div>
       <div className="c-video__details">{ renderVideoContent() }</div>
-      <div className="c-comments__container">{ renderComments() }</div>
-      { hasComments && <button onClick={loadComments}>Load Comments</button> }
+      <div className="c-comments__container">{ renderCommentThreads() }</div>
+      { hasComments && <button onClick={loadCommentThreads}>Load Comments</button> }
     </div>
   );
 };

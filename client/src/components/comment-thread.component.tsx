@@ -1,35 +1,43 @@
 import React, { FC, useState } from "react";
 
-import { ICommentThread } from "apis/youtube.api";
+import { ICommentThread, IComment, getRepliesForCommentThread } from "apis/youtube.api";
 import { Comment } from "components/comment.component";
+import { useToggle } from "hooks/use-toggle.hook";
 
 interface IProps {
   thread: ICommentThread;
 }
 
 export const CommentThread: FC<IProps> = ({ thread }) => { 
-  const [showReplies, setShowReplies] = useState(false);
+  const [showReplies, toggleShowReplies] = useToggle(false);
+  const [replies, setReplies] = useState<IComment[]>([]);
 
-  const { topLevelComment } = thread.snippet;
-
-  function toggleShowReplies() {
-    if (showReplies) setShowReplies(false);
-    else setShowReplies(true);
-  }
+  const { topLevelComment, totalReplyCount } = thread.snippet;
 
   function renderReplies() {
-    if (!thread.replies) return;
+    if (totalReplyCount <= 0) return;
 
     return (
       <div className="c-reply__list">
-        <div className="c-video__show-toggle" onClick={toggleShowReplies}>
+        <div className="c-video__show-toggle" onClick={loadReplies}>
           {showReplies ? "Hide" : "Show"} Replies
         </div>
         {
-          showReplies && thread.replies.comments.map(c => <Comment key={c.id} comment={c} type="reply" />)
+          showReplies && replies.map(c => <Comment key={c.id} comment={c} type="reply" />)
         }
       </div>
     );
+  }
+
+  function loadReplies() {
+    getRepliesForCommentThread(thread.id)
+      .then(res => {
+        // Comments are from newest to oldest, but for replies, we want oldest to newest
+        const newComments = res.items.reverse();
+        setReplies(replies.concat(newComments));
+        toggleShowReplies();
+      })
+      .catch(err => console.log(err));
   }
 
   return (

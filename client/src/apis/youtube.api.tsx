@@ -11,6 +11,7 @@ interface IThumbnail {
   url: string;
 }
 
+/* INTERFACES */
 export interface IYouTubeVideo {
   id: {
     kind: string;
@@ -30,16 +31,31 @@ export interface IYouTubeVideo {
   }
 }
 
+interface ICommentThreadsParams {
+  part: string;
+  videoId: string;
+  key: string;
+  maxResults: number;
+  order: string;
+  pageToken: string | undefined;
+}
+
+export interface ICommentThreadsResponse {
+  items: ICommentThread[];
+  nextPageToken: string;
+  pageInfo: IPageInfo;
+}
+
 interface ICommentsParams {
-  part: string,
-  videoId: string,
-  key: string,
-  maxResults: number,
-  pageToken: string | undefined
+  part: string;
+  parentId: string;
+  key: string;
+  maxResults: number;
+  pageToken: string | undefined;
 }
 
 export interface ICommentsResponse {
-  items: ICommentThread[];
+  items: IComment[];
   nextPageToken: string;
   pageInfo: IPageInfo;
 }
@@ -51,9 +67,6 @@ export interface IPageInfo {
 
 export interface ICommentThread {
   id: string;
-  replies?: {
-    comments: IComment[];
-  }
   snippet: {
     topLevelComment: IComment;
     totalReplyCount: number;
@@ -99,11 +112,11 @@ export function getSearchUrlAndParams(query: string, searchType: SearchType = "v
 
 export function getVideo(videoId: string): Promise<IYouTubeVideo> {
   const url = BASE_URL + "/videos";
-  const videoPart = "snippet,statistics";
+  const part = "snippet,statistics";
   const params = {
     id: videoId,
     key: API_KEY,
-    part: videoPart
+    part: part
   };
 
   return new Promise((resolve, reject) => {
@@ -120,9 +133,46 @@ export function getVideo(videoId: string): Promise<IYouTubeVideo> {
   });
 }
 
-export function getCommentsForVideo(videoId: string, pageInfo?: IPageInfo, nextPageToken?: string): Promise<ICommentsResponse> {
+export function getCommentThreadsForVideo(videoId: string, pageInfo?: IPageInfo, nextPageToken?: string): Promise<ICommentThreadsResponse> {
   const url = BASE_URL + "/commentThreads";
-  const commentPart = "id,replies,snippet";
+  const part = "id,snippet";
+  const MAX_NUM_COMMENTS = 100;
+  
+  let numCommentsToFetch = MAX_NUM_COMMENTS;
+  const totalResults = pageInfo?.totalResults
+
+  if (totalResults && totalResults < MAX_NUM_COMMENTS) {
+    numCommentsToFetch = totalResults;
+  }
+
+  const params: ICommentThreadsParams = {
+    key: API_KEY,
+    maxResults: numCommentsToFetch,
+    pageToken: nextPageToken,
+    part: part,
+    videoId: videoId,
+    order: "relevance"
+  };
+
+  return new Promise((resolve, reject) => {
+    axios.get(url, { params })
+      .then(res => {
+        console.log(res);
+        
+        if (res.data.items.length <= 0) {
+          reject("ERROR: Couldn't load comments.");
+        }
+        else {
+          resolve(res.data);
+        }
+      })
+      .catch(err => reject(err));
+  });
+}
+
+export function getRepliesForCommentThread(threadId: string, pageInfo?: IPageInfo, nextPageToken?: string): Promise<ICommentsResponse> {
+  const url = BASE_URL + "/comments";
+  const part = "id,snippet";
   const MAX_NUM_COMMENTS = 100;
   
   let numCommentsToFetch = MAX_NUM_COMMENTS;
@@ -136,8 +186,8 @@ export function getCommentsForVideo(videoId: string, pageInfo?: IPageInfo, nextP
     key: API_KEY,
     maxResults: numCommentsToFetch,
     pageToken: nextPageToken,
-    part: commentPart,
-    videoId: videoId,
+    part: part,
+    parentId: threadId
   };
 
   return new Promise((resolve, reject) => {
