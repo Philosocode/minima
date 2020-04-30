@@ -20,7 +20,7 @@ export const CommentThread: FC<IProps> = ({ thread }) => {
     return (
       <div className="c-reply__list">
         <div className="c-video__show-toggle" onClick={loadReplies}>
-          {showReplies ? "Hide" : "Show"} Replies
+          {showReplies ? "↑ Hide Replies" : `↓ Show ${totalReplyCount} Replies`}
         </div>
         {
           showReplies && replies.map(c => <Comment key={c.id} comment={c} type="reply" />)

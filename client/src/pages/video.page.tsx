@@ -83,7 +83,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
       </div>
       <div className="c-video__details">{ renderVideoContent() }</div>
       <div className="c-comments__container">{ renderCommentThreads() }</div>
-      { hasComments && <button onClick={loadCommentThreads}>Load Comments</button> }
+      { hasComments && <div className="c-video__show-toggle" onClick={loadCommentThreads}>Load Comments</div> }
     </div>
   );
 };
