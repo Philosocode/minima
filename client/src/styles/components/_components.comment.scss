@@ -4,6 +4,7 @@
       flex-direction: row;
     text-align: left;
     margin-top: 2rem;
+    margin-bottom: 1rem;
   }
 
   &__image {
@@ -14,5 +15,9 @@
 
   &__like-icon {
     color: #777;
+  }
+
+  &__thread {
+    margin-bottom: 3rem;
   }
 }
