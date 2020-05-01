@@ -3,6 +3,7 @@ import React, { FC, useState } from "react";
 import { IComment, getRepliesForCommentThread } from "apis/youtube.api";
 import { Comment } from "components/comment.component";
 import { useToggle } from "hooks/use-toggle.hook";
+import { Loader } from "./loader.component";
 
 interface IProps {
   topLevelCommentId: string;
@@ -14,7 +15,7 @@ export const ReplyList: FC<IProps> = ({ topLevelCommentId, totalReplyCount }) =>
   const [nextPageToken, setNextPageToken] = useState<string>();
   const [showingReplies, toggleShowingReplies] = useToggle(false);
   const [hasMoreReplies, setHasMoreReplies] = useState(true);
-  const [isLoading, toggleIsLoading] = useToggle(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   function handleShowReplies() {
     loadReplies();
@@ -24,9 +25,9 @@ export const ReplyList: FC<IProps> = ({ topLevelCommentId, totalReplyCount }) =>
   async function loadReplies() {
     if (hasMoreReplies) {
       try {
-        toggleIsLoading();
+        setIsLoading(true);
         const res = await getRepliesForCommentThread(topLevelCommentId, nextPageToken);
-        toggleIsLoading();
+        setIsLoading(false);
 
         // A nextPageToken means there are more replies to load
         if (res.nextPageToken) {
@@ -62,11 +63,19 @@ export const ReplyList: FC<IProps> = ({ topLevelCommentId, totalReplyCount }) =>
     return <div className="c-video__show-toggle" onClick={functionToCall}>{text}</div>;
   }
 
+  function renderShowMoreReplies() {
+    if (isLoading)
+      return <Loader />;
+
+    if (showingReplies && hasMoreReplies)
+      return <div className="c-video__show-toggle" onClick={loadReplies}>Show More</div>;
+  }
+
   return (
     <div className="c-reply__list">
       { renderReplyToggle() }
       { showingReplies && replies.map(c => <Comment key={c.id} comment={c} type="reply" />) }
-      { !isLoading && showingReplies && hasMoreReplies && <div className="c-video__show-toggle" onClick={loadReplies}>Show More</div> }
+      { renderShowMoreReplies() }
     </div>
   )
  };
