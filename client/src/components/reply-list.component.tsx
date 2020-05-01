@@ -65,7 +65,7 @@ export const ReplyList: FC<IProps> = ({ topLevelCommentId, totalReplyCount }) =>
 
   function renderShowMoreReplies() {
     if (isLoading)
-      return <Loader />;
+      return <Loader position="left" />;
 
     if (showingReplies && hasMoreReplies)
       return <div className="c-video__show-toggle" onClick={loadReplies}>Show More</div>;

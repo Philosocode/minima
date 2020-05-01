@@ -3,6 +3,7 @@ import { withRouter, RouteComponentProps } from "react-router-dom";
 
 import { getVideo, IYouTubeVideo, getCommentThreadsForVideo, ICommentThread, IPageInfo } from "apis/youtube.api";
 import { CommentThread } from "components/comment-thread.component";
+import { Loader } from "components/loader.component";
 import { VideoDescription } from "components/video-description.component";
 
 interface IRouteParams {
@@ -16,6 +17,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
   const [nextPageToken, setNextPageToken] = useState<string>();
   const [pageInfo, setPageInfo] = useState<IPageInfo>();
   const [hasMoreComments, setHasMoreComments] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { videoId } = match.params;
   const videoUrl = `https://www.youtube.com/embed/${videoId}?vq=medium`;
@@ -28,26 +30,20 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
       .catch(err => console.log(err));
   }, [videoId]);
 
-  function loadCommentThreads() {
-    getCommentThreadsForVideo(videoId, pageInfo, nextPageToken)
-      .then(res => {
-        const { nextPageToken, items, pageInfo } = res;
+  async function loadCommentThreads() {
+    setIsLoading(true);
+    const res = await getCommentThreadsForVideo(videoId, pageInfo, nextPageToken);
+    setIsLoading(false);
 
-        if (nextPageToken) {
-          setNextPageToken(nextPageToken);
-        } else {
-          setHasMoreComments(false);
-        }
+    if (res.nextPageToken) {
+      setNextPageToken(nextPageToken);
+    } else {
+      setHasMoreComments(false);
+    }
 
-        const updatedThreads = threads.concat(items);
-        setThreads(updatedThreads);
-        setPageInfo(pageInfo);
-      })
-      .catch(err => console.log(err));
-  }
-
-  function renderLoading() {
-    return <div>Loading...</div>
+    const updatedThreads = threads.concat(res.items);
+    setThreads(updatedThreads);
+    setPageInfo(res.pageInfo);
   }
 
   function renderCommentThreads() {
@@ -55,7 +51,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
   }
 
   function renderVideoContent() {
-    if (!videoData) return renderLoading();
+    if (!videoData) return <div>Loading...</div>;
 
     const { title, description, publishedAt, channelId, channelTitle } = videoData.snippet;
 
@@ -70,6 +66,14 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
       </>
     )
   }
+
+  function renderLoadComments() {
+    if (isLoading) 
+      return <Loader position="centered" />;
+
+    if (hasMoreComments) 
+      return <div className="c-video__show-toggle" onClick={loadCommentThreads}>Load Comments</div>
+  }
   
   return (
     <div>
@@ -83,7 +87,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
       </div>
       <div className="c-video__details">{ renderVideoContent() }</div>
       <div className="c-comments__container">{ renderCommentThreads() }</div>
-      { hasMoreComments && <div className="c-video__show-toggle" onClick={loadCommentThreads}>Load Comments</div> }
+      { renderLoadComments() }
     </div>
   );
 };
