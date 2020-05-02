@@ -7,6 +7,16 @@
     margin-bottom: 1rem;
   }
 
+  &__author {
+    color: #333;
+    font-weight: bold;
+    text-decoration: none;
+  }
+
+  &__description {
+    font-size: 1.6rem;
+  }
+
   &__image {
     border-radius: 1rem;
     margin-right: 1rem;
@@ -15,6 +25,10 @@
 
   &__like-icon {
     color: #777;
+  }
+
+  &__published-at {
+    margin-left: 5px;
   }
 
   &__thread {

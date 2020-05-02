@@ -1,4 +1,3 @@
-
 // FROM: https://www.skptricks.com/2018/01/convert-text-urls-into-links-using-javascript.html
 export function linkify(text: string): string {
   const exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/ig;

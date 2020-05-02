@@ -1,5 +1,6 @@
 import React, { FC, useState, useEffect } from "react";
 import { withRouter, RouteComponentProps } from "react-router-dom";
+import { format, parseISO } from "date-fns";
 
 import { getVideo, IYouTubeVideo, getCommentThreadsForVideo, ICommentThread, IPageInfo } from "apis/youtube.api";
 import { CommentThread } from "components/comment-thread.component";
@@ -54,11 +55,13 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
     if (!videoData) return <div>Loading...</div>;
 
     const { title, description, publishedAt, channelId, channelTitle } = videoData.snippet;
+    // e.g. December 6th, 2019
+    const formattedPublishedAt = format(parseISO(publishedAt), "PPP");
 
     return (
       <>
         <h3>{title}</h3>
-        <p>Published: {publishedAt}</p>
+        <p>Published: {formattedPublishedAt}</p>
         <p>Channel: {channelTitle} [{channelId}]</p>
         <hr/>
         <VideoDescription desc={description} />

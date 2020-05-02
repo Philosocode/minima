@@ -21,7 +21,7 @@ export interface IYouTubeVideo {
     channelId: string;
     channelTitle: string;
     description: string;
-    publishedAt: Date;
+    publishedAt: string;
     thumbnails: {
       default: IThumbnail;
       medium: IThumbnail;
@@ -81,10 +81,10 @@ export interface IComment {
     authorDisplayName: string;
     authorProfileImageUrl: string;
     likeCount: number;
-    publishedAt: Date;
+    publishedAt: string;
     textDisplay: string;
     textOriginal: string;
-    updatedAt: Date;
+    updatedAt: string;
   }
 }
 
