@@ -64,7 +64,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
         <p>Published: {formattedPublishedAt}</p>
         <p>Channel: {channelTitle} [{channelId}]</p>
         <hr/>
-        <ToggleText containerClass="" text={description} />
+        <ToggleText text={description} />
         <hr />
       </>
     )

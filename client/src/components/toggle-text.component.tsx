@@ -4,7 +4,7 @@ import { linkify } from "helpers/helpers";
 
 interface IProps {
   text: string;
-  containerClass?: string;
+  hoverUnderline?: boolean;
   showMoreLabel?: string;
   showLessLabel?: string;
 }
@@ -50,8 +50,11 @@ export class ToggleText extends Component<IProps, IState> {
     const text = this.state.isExpanded 
       ? this.props.showLessLabel ?? "SHOW LESS"
       : this.props.showMoreLabel ?? "SHOW MORE";
+    
+    let textClasses = "c-link-text c-link-text--bold";
+    if (this.props.hoverUnderline) textClasses += " c-link-text--hover-underline";
 
-    return <div className="c-link-text c-link-text--bold" onClick={this.toggleIsExpanded}>{ text }</div>
+    return <div className={textClasses} onClick={this.toggleIsExpanded}>{ text }</div>
   }
 
   toggleIsExpanded = () => {

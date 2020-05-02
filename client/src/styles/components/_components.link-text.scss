@@ -1,6 +1,7 @@
 .c-link-text {
   color: #555;
   cursor: pointer;
+  display: inline-block;
   transition: color 0.1s ease;
   
   &:hover {
@@ -8,5 +9,5 @@
   }
 
   &--bold { font-weight: bold; }
-  &--underline { text-decoration: underline; }
+  &--hover-underline { &:hover { text-decoration: underline; } }
 }

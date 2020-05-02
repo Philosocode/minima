@@ -43,7 +43,7 @@ export const Comment: FC<IProps> = ({ comment, type }) => {
           <Link className="c-comment__author" to={`channel/${authorChannelId.value}`}>{authorDisplayName}</Link>
           <span className="c-comment__published-at">{formattedPublishedAt} ago { commentWasUpdated && "(edited)"}</span>
         </div>
-        <ToggleText text={textDisplay} showMoreLabel="Read More" showLessLabel="Read Less" />
+        <ToggleText text={textDisplay} showMoreLabel="Read More" showLessLabel="Read Less" hoverUnderline />
         <div className="c-comment__likes"><FontAwesomeIcon icon={faThumbsUp} className="c-comment__like-icon" /> {likeCount.toLocaleString()}</div>
       </div>
     </div>
