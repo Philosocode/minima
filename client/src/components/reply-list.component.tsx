@@ -60,7 +60,7 @@ export const ReplyList: FC<IProps> = ({ topLevelCommentId, totalReplyCount }) =>
       text = `↓ Show ${totalReplyCount} Replies`;
     }
     
-    return <div className="c-video__show-toggle" onClick={functionToCall}>{text}</div>;
+    return <div className="c-link-text c-link-text--bold" onClick={functionToCall}>{text}</div>;
   }
 
   function renderShowMoreReplies() {
@@ -68,7 +68,7 @@ export const ReplyList: FC<IProps> = ({ topLevelCommentId, totalReplyCount }) =>
       return <Loader position="left" />;
 
     if (showingReplies && hasMoreReplies)
-      return <div className="c-video__show-toggle" onClick={loadReplies}>Show More</div>;
+      return <div className="c-link-text c-link-text--bold" onClick={loadReplies}>Show More</div>;
   }
 
   return (

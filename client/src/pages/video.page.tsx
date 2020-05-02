@@ -64,7 +64,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
         <p>Published: {formattedPublishedAt}</p>
         <p>Channel: {channelTitle} [{channelId}]</p>
         <hr/>
-        <ToggleText text={description} />
+        <ToggleText containerClass="" text={description} />
         <hr />
       </>
     )
@@ -75,7 +75,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
       return <Loader position="centered" />;
 
     if (hasMoreComments) 
-      return <div className="c-video__show-toggle" onClick={loadCommentThreads}>Load Comments</div>
+      return <div className="c-link-text c-link-text--bold" onClick={loadCommentThreads}>LOAD COMMENTS</div>
   }
   
   return (

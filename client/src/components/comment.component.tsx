@@ -5,6 +5,7 @@ import { faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import { formatDistanceToNow, parseISO } from "date-fns";
 
 import { IComment } from "apis/youtube.api";
+import { ToggleText } from "./toggle-text.component";
 
 type CommentType = "comment" | "reply";
 
@@ -42,7 +43,7 @@ export const Comment: FC<IProps> = ({ comment, type }) => {
           <Link className="c-comment__author" to={`channel/${authorChannelId.value}`}>{authorDisplayName}</Link>
           <span className="c-comment__published-at">{formattedPublishedAt} ago { commentWasUpdated && "(edited)"}</span>
         </div>
-        <p dangerouslySetInnerHTML={{__html: textDisplay}} className="c-comment__description"></p>
+        <ToggleText text={textDisplay} showMoreLabel="Read More" showLessLabel="Read Less" />
         <div className="c-comment__likes"><FontAwesomeIcon icon={faThumbsUp} className="c-comment__like-icon" /> {likeCount.toLocaleString()}</div>
       </div>
     </div>

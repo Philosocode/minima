@@ -4,6 +4,9 @@ import { linkify } from "helpers/helpers";
 
 interface IProps {
   text: string;
+  containerClass?: string;
+  showMoreLabel?: string;
+  showLessLabel?: string;
 }
 
 interface IState {
@@ -45,10 +48,10 @@ export class ToggleText extends Component<IProps, IState> {
 
   getShowMoreToggle = () => {
     const text = this.state.isExpanded 
-      ? "Show Less"
-      : "Show More";
+      ? this.props.showLessLabel ?? "SHOW LESS"
+      : this.props.showMoreLabel ?? "SHOW MORE";
 
-    return <div className="c-video__show-toggle" onClick={this.toggleIsExpanded}>{ text }</div>
+    return <div className="c-link-text c-link-text--bold" onClick={this.toggleIsExpanded}>{ text }</div>
   }
 
   toggleIsExpanded = () => {
@@ -59,10 +62,10 @@ export class ToggleText extends Component<IProps, IState> {
 
   render() {
     return (
-      <>
-        <p className="c-video__description" dangerouslySetInnerHTML={{ __html: this.getTextToShow() }}></p>
+      <div className="c-toggle-text">
+        <p className="c-toggle-text__text" dangerouslySetInnerHTML={{ __html: this.getTextToShow() }}></p>
         { this.getShowMoreToggle() }
-      </>
+      </div>
     )
   }
 }
