@@ -5,7 +5,6 @@ import { faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import { formatDistanceToNow, parseISO } from "date-fns";
 
 import { IComment } from "apis/youtube.api";
-import { ToggleText } from "./toggle-text.component";
 
 type CommentType = "comment" | "reply";
 
@@ -24,26 +23,24 @@ export const Comment: FC<IProps> = ({ comment, type }) => {
     textDisplay,
     updatedAt,
   } = comment.snippet;
-
-  let containerClass = "c-comment__container";
-  if (type === "reply") containerClass += " c-comment__container--reply";
+  
+  const formattedPublishedAt = formatDistanceToNow(parseISO(updatedAt));
 
   let commentWasUpdated = false;
   if (updatedAt !== publishedAt) commentWasUpdated = true;
 
-  const formattedPublishedAt = formatDistanceToNow(parseISO(updatedAt));
 
   return (
-    <div className={containerClass}>
+    <div className="c-comment__container">
       <div>
-        <img className="c-comment__image" src={authorProfileImageUrl} alt={authorDisplayName} />
+        <img className={`c-comment__image ${type === "reply" && "c-comment__image--small"}`} src={authorProfileImageUrl} alt={authorDisplayName} />
       </div>
-      <div className="c-comment__text">
+      <div>
         <div>
           <Link className="c-comment__author" to={`channel/${authorChannelId.value}`}>{authorDisplayName}</Link>
           <span className="c-comment__published-at">{formattedPublishedAt} ago { commentWasUpdated && "(edited)"}</span>
         </div>
-        <ToggleText text={textDisplay} showMoreLabel="Read More" showLessLabel="Read Less" hoverUnderline />
+        <p dangerouslySetInnerHTML={{__html: textDisplay}} className="c-comment__text"></p>
         <div className="c-comment__likes"><FontAwesomeIcon icon={faThumbsUp} className="c-comment__like-icon" /> {likeCount.toLocaleString()}</div>
       </div>
     </div>
