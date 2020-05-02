@@ -5,7 +5,7 @@ import { format, parseISO } from "date-fns";
 import { getVideo, IYouTubeVideo, getCommentThreadsForVideo, ICommentThread, IPageInfo } from "apis/youtube.api";
 import { CommentThread } from "components/comment-thread.component";
 import { Loader } from "components/loader.component";
-import { VideoDescription } from "components/video-description.component";
+import { ToggleText } from "components/toggle-text.component";
 
 interface IRouteParams {
   videoId: string;
@@ -64,7 +64,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
         <p>Published: {formattedPublishedAt}</p>
         <p>Channel: {channelTitle} [{channelId}]</p>
         <hr/>
-        <VideoDescription desc={description} />
+        <ToggleText text={description} />
         <hr />
       </>
     )
