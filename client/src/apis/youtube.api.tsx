@@ -5,13 +5,60 @@ export const API_KEY = process.env.REACT_APP_YOUTUBE_API_KEY as string;
 
 /* TYPES */
 type SearchType = "video" | "playlist" | "channel";
-interface IThumbnail {
-  height: number;
-  width: number;
-  url: string;
-}
 
 /* INTERFACES */
+export interface IComment {
+  id: string;
+  snippet: {
+    authorChannelId: { value: string; };
+    authorChannelUrl: string;
+    authorDisplayName: string;
+    authorProfileImageUrl: string;
+    likeCount: number;
+    publishedAt: string;
+    textDisplay: string;
+    textOriginal: string;
+    updatedAt: string;
+  }
+}
+
+interface ICommentsParams {
+  part: string;
+  parentId: string;
+  key: string;
+  maxResults: number;
+  pageToken: string | undefined;
+}
+
+export interface ICommentsResponse {
+  items: IComment[];
+  nextPageToken: string;
+  pageInfo: IPageInfo;
+}
+
+export interface ICommentThread {
+  id: string;
+  snippet: {
+    topLevelComment: IComment;
+    totalReplyCount: number;
+  }
+}
+
+interface ICommentThreadsParams {
+  part: string;
+  videoId: string;
+  key: string;
+  maxResults: number;
+  order: string;
+  pageToken: string | undefined;
+}
+
+export interface ICommentThreadsResponse {
+  items: ICommentThread[];
+  nextPageToken: string;
+  pageInfo: IPageInfo;
+}
+
 export interface IVideo {
   id: {
     kind: string;
@@ -19,6 +66,17 @@ export interface IVideo {
   };
   snippet: IVideoSnippet;
   statistics: IVideoStatistics;
+}
+
+export interface IPageInfo {
+  totalResults: number;
+  resultsPerPage: number;
+}
+
+interface IThumbnail {
+  height: number;
+  width: number;
+  url: string;
 }
 
 interface IVideoSnippet {
@@ -39,63 +97,6 @@ export interface IVideoStatistics {
   dislikeCount: string;
   likeCount: string;
   viewCount: string;
-}
-
-interface ICommentThreadsParams {
-  part: string;
-  videoId: string;
-  key: string;
-  maxResults: number;
-  order: string;
-  pageToken: string | undefined;
-}
-
-export interface ICommentThreadsResponse {
-  items: ICommentThread[];
-  nextPageToken: string;
-  pageInfo: IPageInfo;
-}
-
-interface ICommentsParams {
-  part: string;
-  parentId: string;
-  key: string;
-  maxResults: number;
-  pageToken: string | undefined;
-}
-
-export interface ICommentsResponse {
-  items: IComment[];
-  nextPageToken: string;
-  pageInfo: IPageInfo;
-}
-
-export interface IPageInfo {
-  totalResults: number;
-  resultsPerPage: number;
-}
-
-export interface ICommentThread {
-  id: string;
-  snippet: {
-    topLevelComment: IComment;
-    totalReplyCount: number;
-  }
-}
-
-export interface IComment {
-  id: string;
-  snippet: {
-    authorChannelId: { value: string; };
-    authorChannelUrl: string;
-    authorDisplayName: string;
-    authorProfileImageUrl: string;
-    likeCount: number;
-    publishedAt: string;
-    textDisplay: string;
-    textOriginal: string;
-    updatedAt: string;
-  }
 }
 
 /* FUNCTIONS */
