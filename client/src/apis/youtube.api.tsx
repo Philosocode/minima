@@ -12,23 +12,33 @@ interface IThumbnail {
 }
 
 /* INTERFACES */
-export interface IYouTubeVideo {
+export interface IVideo {
   id: {
     kind: string;
     videoId: string;
   };
-  snippet: {
-    channelId: string;
-    channelTitle: string;
-    description: string;
-    publishedAt: string;
-    thumbnails: {
-      default: IThumbnail;
-      medium: IThumbnail;
-      high: IThumbnail;
-    },
-    title: string;
-  }
+  snippet: IVideoSnippet;
+  statistics: IVideoStatistics;
+}
+
+interface IVideoSnippet {
+  channelId: string;
+  channelTitle: string;
+  description: string;
+  publishedAt: string;
+  thumbnails: {
+    default: IThumbnail;
+    medium: IThumbnail;
+    high: IThumbnail;
+  };
+  title: string;
+}
+
+export interface IVideoStatistics {
+  commentCount: string;
+  dislikeCount: string;
+  likeCount: string;
+  viewCount: string;
 }
 
 interface ICommentThreadsParams {
@@ -110,7 +120,7 @@ export function getSearchUrlAndParams(query: string, searchType: SearchType = "v
   return [url, params]
 }
 
-export function getVideo(videoId: string): Promise<IYouTubeVideo> {
+export function getVideo(videoId: string): Promise<IVideo> {
   const url = BASE_URL + "/videos";
   const part = "snippet,statistics";
   const params = {

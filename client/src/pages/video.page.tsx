@@ -2,7 +2,7 @@ import React, { FC, useState, useEffect } from "react";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import { format, parseISO } from "date-fns";
 
-import { getVideo, IYouTubeVideo, getCommentThreadsForVideo, ICommentThread, IPageInfo } from "apis/youtube.api";
+import { getVideo, IVideo, getCommentThreadsForVideo, ICommentThread, IPageInfo } from "apis/youtube.api";
 import { CommentThread } from "components/comment-thread.component";
 import { Loader } from "components/loader.component";
 import { ToggleText } from "components/toggle-text.component";
@@ -13,7 +13,7 @@ interface IRouteParams {
 
 const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => { 
   // State
-  const [videoData, setVideoData] = useState<IYouTubeVideo>();
+  const [videoData, setVideoData] = useState<IVideo>();
   const [threads, setThreads] = useState<ICommentThread[]>([]);
   const [nextPageToken, setNextPageToken] = useState<string>();
   const [pageInfo, setPageInfo] = useState<IPageInfo>();
@@ -54,15 +54,19 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
   function renderVideoContent() {
     if (!videoData) return <div>Loading...</div>;
 
+    console.log(videoData);
+    
+
     const { title, description, publishedAt, channelId, channelTitle } = videoData.snippet;
+
     // e.g. December 6th, 2019
     const formattedPublishedAt = format(parseISO(publishedAt), "PPP");
 
     return (
       <>
-        <h3>{title}</h3>
-        <p>Published: {formattedPublishedAt}</p>
-        <p>Channel: {channelTitle} [{channelId}]</p>
+        <h3 className="c-video__title">{title}</h3>
+        <p className="c-video__published">Published: {formattedPublishedAt}</p>
+        <p className="c-video__channel">Channel: {channelTitle} [{channelId}]</p>
         <hr/>
         <ToggleText text={description} />
         <hr />

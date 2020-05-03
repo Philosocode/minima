@@ -1,9 +1,9 @@
 import React, { FC } from "react";
 import { Link } from "react-router-dom";
-import { IYouTubeVideo } from "apis/youtube.api";
+import { IVideo } from "apis/youtube.api";
 
 interface IProps {
-  video: IYouTubeVideo
+  video: IVideo
 }
 
 export const VideoThumbnail: FC<IProps> = ({ video }) => {

@@ -1,9 +1,9 @@
 import React, { FC } from "react";
-import { IYouTubeVideo } from "apis/youtube.api";
+import { IVideo } from "apis/youtube.api";
 import { VideoThumbnail } from "./video-thumbnail.component";
 
 interface IProps {
-  videos: IYouTubeVideo[]
+  videos: IVideo[]
 }
 
 export const VideoList: FC<IProps> = ({ videos }) => {

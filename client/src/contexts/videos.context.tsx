@@ -1,22 +1,22 @@
 import React, { Component, createContext } from "react";
-import { IYouTubeVideo } from "apis/youtube.api";
+import { IVideo } from "apis/youtube.api";
 
 import { parseHtmlEntities } from "helpers/helpers";
 
 /* Referenced: https://github.com/piotrwitek/react-redux-typescript-guide#themecontext */
 // Create Context
 interface IVideosContext {
-  videos: IYouTubeVideo[];
-  currentVideo?: IYouTubeVideo;
+  videos: IVideo[];
+  currentVideo?: IVideo;
   clearVideos?: () => void;
-  setVideos?: (videos: IYouTubeVideo[]) => void;
+  setVideos?: (videos: IVideo[]) => void;
 }
 export const VideosContext = createContext<IVideosContext>({ videos: [] });
 
 // Create Provider
 interface IState {
-  videos: IYouTubeVideo[],
-  currentVideo?: IYouTubeVideo
+  videos: IVideo[],
+  currentVideo?: IVideo
 };
 export class VideosProvider extends Component<{}, IState> {
   state = {
@@ -27,7 +27,7 @@ export class VideosProvider extends Component<{}, IState> {
     this.setState({ videos: [] });
   }
 
-  setVideos = (videos: IYouTubeVideo[]) => {
+  setVideos = (videos: IVideo[]) => {
     // Decode HTML entities in title
     videos.forEach(video => {
       video.snippet.title = parseHtmlEntities(video.snippet.title);
@@ -36,7 +36,7 @@ export class VideosProvider extends Component<{}, IState> {
     this.setState({ videos });
   }
 
-  setCurrentVideo = (video: IYouTubeVideo) => {
+  setCurrentVideo = (video: IVideo) => {
     this.setState({ currentVideo: video });
   }
 
