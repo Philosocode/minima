@@ -5,6 +5,7 @@ import { Switch, Route } from "react-router-dom";
 import { HomePage } from "pages/home.page";
 import { SearchPage } from "pages/search.page";
 import { VideoPage } from "pages/video.page";
+import { NotFoundPage } from "pages/not-found.page";
 
 /* Components */
 import { Header } from "components/header.component";
@@ -22,6 +23,7 @@ export function App() {
             <Route exact path="/" component={HomePage} />
             <Route exact path="/search" component={SearchPage} />
             <Route exact path="/watch/:videoId" component={VideoPage} />
+            <Route component={NotFoundPage} />
           </Switch>
           <Footer />
         </div>
