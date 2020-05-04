@@ -2,10 +2,11 @@ import React, { FC, useState, useEffect } from "react";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import { format, parseISO } from "date-fns";
 
-import { getVideo, IVideo, getCommentThreadsForVideo, ICommentThread, IPageInfo } from "apis/youtube.api";
+import { IVideo, ICommentThread, IPageInfo, getChannelInfo, getCommentThreadsForVideo, getVideo } from "apis/youtube.api";
 import { CommentThread } from "components/comment-thread.component";
 import { Loader } from "components/loader.component";
 import { ToggleText } from "components/toggle-text.component";
+import { Video } from "components/video.component";
 
 interface IRouteParams {
   videoId: string;
@@ -21,14 +22,20 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const { videoId } = match.params;
-  const videoUrl = `https://www.youtube.com/embed/${videoId}?vq=medium`;
+  const videoUrl = `https://www.youtube.com/embed/${videoId}`;
   
   // Functions
   // Effect to fetch videos on mount
   useEffect(() => {
     getVideo(videoId)
-      .then(res => setVideoData(res))
+      .then(res => {
+        setVideoData(res)
+        getChannelInfo(res.snippet.channelId)
+          .then(res2 => console.log(res2))
+          .catch(err => console.log(err));
+      })
       .catch(err => console.log(err));
+    
   }, [videoId]);
 
   async function loadCommentThreads() {
@@ -54,9 +61,6 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
   function renderVideoContent() {
     if (!videoData) return <div>Loading...</div>;
 
-    console.log(videoData);
-    
-
     const { title, description, publishedAt, channelId, channelTitle } = videoData.snippet;
 
     // e.g. December 6th, 2019
@@ -68,7 +72,13 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
         <p className="c-video__published">Published: {formattedPublishedAt}</p>
         <p className="c-video__channel">Channel: {channelTitle} [{channelId}]</p>
         <hr/>
-        <ToggleText text={description} />
+        <div className="c-video__description">
+          <div className="c-video__uploader">
+            <div className="c-video__uploader-image">{}</div>
+            <div className="c-video__subscribers">{}</div>
+          </div>
+          <ToggleText text={description} />
+        </div>
         <hr />
       </>
     )
@@ -84,14 +94,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
   
   return (
     <div>
-      <div className="c-video__container">
-        <iframe className="c-video__iframe"
-          src={videoUrl}
-          frameBorder="0"
-          title={videoId}
-          allowFullScreen
-        />
-      </div>
+      <Video videoId={videoId} videoUrl={videoUrl} />
       <div className="c-video__details">{ renderVideoContent() }</div>
       <div className="c-comments__container">{ renderCommentThreads() }</div>
       { renderLoadComments() }

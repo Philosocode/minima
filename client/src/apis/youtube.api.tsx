@@ -7,6 +7,24 @@ export const API_KEY = process.env.REACT_APP_YOUTUBE_API_KEY as string;
 type SearchType = "video" | "playlist" | "channel";
 
 /* INTERFACES */
+export interface IChannel {
+  id: string;
+  snippet: IChannelSnippet;
+}
+
+export interface IChannelsResponse {
+  items: IChannel[];
+  pageInfo: IPageInfo;
+}
+
+interface IChannelSnippet {
+  customUrl: string;
+  description: string;
+  thumbnails: IThumbnails;
+  publishedAt: string;
+  title: string;
+}
+
 export interface IComment {
   id: string;
   snippet: {
@@ -73,6 +91,12 @@ export interface IPageInfo {
   resultsPerPage: number;
 }
 
+interface IThumbnails {
+  default: IThumbnail;
+  medium: IThumbnail;
+  high: IThumbnail;
+}
+
 interface IThumbnail {
   height: number;
   width: number;
@@ -84,11 +108,7 @@ interface IVideoSnippet {
   channelTitle: string;
   description: string;
   publishedAt: string;
-  thumbnails: {
-    default: IThumbnail;
-    medium: IThumbnail;
-    high: IThumbnail;
-  };
+  thumbnails: IThumbnails;
   title: string;
 }
 
@@ -99,7 +119,7 @@ export interface IVideoStatistics {
   viewCount: string;
 }
 
-/* FUNCTIONS */
+/* API FUNCTIONS */
 export function getSearchUrlAndParams(query: string, searchType: SearchType = "video", numResults: number = 6): [string, object] {
   const params = {
     part: "snippet",
@@ -143,6 +163,32 @@ export function getVideo(videoId: string): Promise<IVideo> {
       .catch(err => reject(err));
   });
 }
+
+export function getChannelInfo(channelId: string): Promise<IChannelsResponse> {
+  const url = BASE_URL + "/channels";
+  const part = "id,snippet";
+
+  const params = {
+    key: API_KEY,
+    id: channelId,
+    part: part,
+  };
+
+  return new Promise((resolve, reject) => {
+    axios.get(url, { params })
+      .then(res => {
+        console.log(res);
+        
+        if (res.data.items.length <= 0) {
+          reject("ERROR: Couldn't load comments.");
+        }
+        else {
+          resolve(res.data);
+        }
+      })
+      .catch(err => reject(err));
+  });
+};
 
 export function getCommentThreadsForVideo(videoId: string, pageInfo?: IPageInfo, nextPageToken?: string): Promise<ICommentThreadsResponse> {
   const url = BASE_URL + "/commentThreads";

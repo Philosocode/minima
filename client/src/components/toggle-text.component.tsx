@@ -51,7 +51,7 @@ export class ToggleText extends Component<IProps, IState> {
       ? this.props.showLessLabel ?? "SHOW LESS"
       : this.props.showMoreLabel ?? "SHOW MORE";
     
-    let textClasses = "c-link-text c-link-text--bold";
+    let textClasses = "c-toggle-text__toggle c-link-text c-link-text--bold";
     if (this.props.hoverUnderline) textClasses += " c-link-text--hover-underline";
 
     return <div className={textClasses} onClick={this.toggleIsExpanded}>{ text }</div>
@@ -65,10 +65,10 @@ export class ToggleText extends Component<IProps, IState> {
 
   render() {
     return (
-      <div className="c-toggle-text">
+      <>
         <p className="c-toggle-text__text" dangerouslySetInnerHTML={{ __html: this.getTextToShow() }}></p>
         { this.getShowMoreToggle() }
-      </div>
+      </>
     )
   }
 }

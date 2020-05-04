@@ -1,3 +1,8 @@
+// FROM: https://howchoo.com/g/nwywodhkndm/how-to-turn-an-object-into-query-string-parameters-in-javascript#using-map-and-join
+export function getQueryStringFromObject(params: { [key: string] : string } ) {  
+  return "?" + Object.keys(params).map(key => key + '=' + params[key]).join('&');
+}
+
 // FROM: https://www.skptricks.com/2018/01/convert-text-urls-into-links-using-javascript.html
 export function linkify(text: string): string {
   const exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/ig;
