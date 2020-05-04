@@ -6,7 +6,7 @@ import { IVideo, ICommentThread, IPageInfo, getChannelInfo, getCommentThreadsFor
 import { CommentThread } from "components/comment-thread.component";
 import { Loader } from "components/loader.component";
 import { ToggleText } from "components/toggle-text.component";
-import { Video } from "components/video.component";
+import { VideoPlayer } from "components/video-player.component";
 
 interface IRouteParams {
   videoId: string;
@@ -94,7 +94,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
   
   return (
     <div>
-      <Video videoId={videoId} videoUrl={videoUrl} />
+      <VideoPlayer videoId={videoId} videoUrl={videoUrl} />
       <div className="c-video__details">{ renderVideoContent() }</div>
       <div className="c-comments__container">{ renderCommentThreads() }</div>
       { renderLoadComments() }

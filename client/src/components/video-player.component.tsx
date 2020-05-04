@@ -6,7 +6,7 @@ interface IProps {
   videoUrl: string;
 }
 
-export const Video: FC<IProps> = ({ videoUrl, videoId }) => { 
+export const VideoPlayer: FC<IProps> = ({ videoUrl, videoId }) => { 
   const params = {
     rel: "0",
     modestbranding: "1"
