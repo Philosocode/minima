@@ -1,8 +1,8 @@
 import React, { FC, useState, useEffect } from "react";
-import { withRouter, RouteComponentProps } from "react-router-dom";
+import { RouteComponentProps, Link, withRouter } from "react-router-dom";
 import { format, parseISO } from "date-fns";
 
-import { IVideo, ICommentThread, IPageInfo, getChannelInfo, getCommentThreadsForVideo, getVideo } from "apis/youtube.api";
+import { IChannel, ICommentThread, IPageInfo, IVideo, getChannelDetails, getCommentThreadsForVideo, getVideoDetails } from "apis/youtube.api";
 import { CommentThread } from "components/comment-thread.component";
 import { Loader } from "components/loader.component";
 import { ToggleText } from "components/toggle-text.component";
@@ -15,6 +15,7 @@ interface IRouteParams {
 const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => { 
   // State
   const [videoData, setVideoData] = useState<IVideo>();
+  const [channelData, setChannelData] = useState<IChannel>();
   const [threads, setThreads] = useState<ICommentThread[]>([]);
   const [nextPageToken, setNextPageToken] = useState<string>();
   const [pageInfo, setPageInfo] = useState<IPageInfo>();
@@ -27,15 +28,19 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
   // Functions
   // Effect to fetch videos on mount
   useEffect(() => {
-    getVideo(videoId)
-      .then(res => {
-        setVideoData(res)
-        getChannelInfo(res.snippet.channelId)
-          .then(res2 => console.log(res2))
-          .catch(err => console.log(err));
-      })
-      .catch(err => console.log(err));
-    
+    async function fetchData() {
+      try {
+        const videoRes = await getVideoDetails(videoId);
+        setVideoData(videoRes);
+
+        const channelRes = await getChannelDetails(videoRes.snippet.channelId);
+        setChannelData(channelRes.items[0]);
+      }
+      catch (err) {
+        console.log(err);
+      }
+    }
+    fetchData();
   }, [videoId]);
 
   async function loadCommentThreads() {
@@ -58,27 +63,37 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
     return threads.map(t => <CommentThread key={t.id} thread={t} />);
   }
 
-  function renderVideoContent() {
-    if (!videoData) return <div>Loading...</div>;
+  function renderVideoDetails() {
+    if (!channelData || !videoData) return <div>Loading...</div>;
 
-    const { title, description, publishedAt, channelId, channelTitle } = videoData.snippet;
+    const { title, description, publishedAt, channelId, channelTitle } = videoData.snippet; 
+    const uploaderImageUrl = channelData.snippet.thumbnails.default.url;
+    const { subscriberCount } = channelData.statistics;
 
     // e.g. December 6th, 2019
     const formattedPublishedAt = format(parseISO(publishedAt), "PPP");
 
+    const channelUrl = `/channel/${channelId}`;
+
     return (
       <>
         <h3 className="c-video__title">{title}</h3>
-        <p className="c-video__published">Published: {formattedPublishedAt}</p>
-        <p className="c-video__channel">Channel: {channelTitle} [{channelId}]</p>
         <hr/>
+
         <div className="c-video__description">
           <div className="c-video__uploader">
-            <div className="c-video__uploader-image">{}</div>
-            <div className="c-video__subscribers">{}</div>
+            <Link to={channelUrl} className="c-channel__image-container">
+              <img className="c-channel__image c-channel__image--small" src={uploaderImageUrl} alt={channelTitle} />
+            </Link>
+            <div className="c-video__uploader-text">
+              <Link to={channelUrl} className="c-channel__name">{channelTitle}</Link>
+              <h3 className="c-channel__subscriber-count">{subscriberCount} subscribers</h3>
+            </div>
           </div>
+          <p className="c-video__published">Published: {formattedPublishedAt}</p>
           <ToggleText text={description} />
         </div>
+
         <hr />
       </>
     )
@@ -95,7 +110,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
   return (
     <div>
       <VideoPlayer videoId={videoId} videoUrl={videoUrl} />
-      <div className="c-video__details">{ renderVideoContent() }</div>
+      <div className="c-video__details">{ renderVideoDetails() }</div>
       <div className="c-comments__container">{ renderCommentThreads() }</div>
       { renderLoadComments() }
     </div>

@@ -29,17 +29,16 @@ export const Comment: FC<IProps> = ({ comment, type }) => {
   let commentWasUpdated = false;
   if (updatedAt !== publishedAt) commentWasUpdated = true;
 
+  const channelUrl = `channel/${authorChannelId.value}`;
 
   return (
     <div className="c-comment__container">
+      <Link to={channelUrl}>
+        <img className={`c-channel__image ${type === "reply" ? "c-channel__image--small" : ""}`} src={authorProfileImageUrl} alt={authorDisplayName} />
+      </Link>
       <div>
-        <img className={`c-comment__image ${type === "reply" && "c-comment__image--small"}`} src={authorProfileImageUrl} alt={authorDisplayName} />
-      </div>
-      <div>
-        <div>
-          <Link className="c-comment__author" to={`channel/${authorChannelId.value}`}>{authorDisplayName}</Link>
-          <span className="c-comment__published-at">{formattedPublishedAt} ago { commentWasUpdated && "(edited)"}</span>
-        </div>
+        <Link className="c-channel__name" to={channelUrl}>{authorDisplayName}</Link>
+        <span className="c-comment__published-at">{formattedPublishedAt} ago { commentWasUpdated && "(edited)"}</span>
         <p dangerouslySetInnerHTML={{__html: textDisplay}} className="c-comment__text"></p>
         <div className="c-comment__likes"><FontAwesomeIcon icon={faThumbsUp} className="c-comment__like-icon" /> {likeCount.toLocaleString()}</div>
       </div>

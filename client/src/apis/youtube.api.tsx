@@ -10,6 +10,7 @@ type SearchType = "video" | "playlist" | "channel";
 export interface IChannel {
   id: string;
   snippet: IChannelSnippet;
+  statistics: IChannelStatistics;
 }
 
 export interface IChannelsResponse {
@@ -23,6 +24,12 @@ interface IChannelSnippet {
   thumbnails: IThumbnails;
   publishedAt: string;
   title: string;
+}
+
+interface IChannelStatistics {
+  subscriberCount: string;
+  videoCount: string;
+  viewCount: string;
 }
 
 export interface IComment {
@@ -141,7 +148,7 @@ export function getSearchUrlAndParams(query: string, searchType: SearchType = "v
   return [url, params]
 }
 
-export function getVideo(videoId: string): Promise<IVideo> {
+export function getVideoDetails(videoId: string): Promise<IVideo> {
   const url = BASE_URL + "/videos";
   const part = "snippet,statistics";
   const params = {
@@ -164,14 +171,14 @@ export function getVideo(videoId: string): Promise<IVideo> {
   });
 }
 
-export function getChannelInfo(channelId: string): Promise<IChannelsResponse> {
+export function getChannelDetails(channelId: string): Promise<IChannelsResponse> {
   const url = BASE_URL + "/channels";
-  const part = "id,snippet";
+  const part = "id,snippet,statistics";
 
   const params = {
     key: API_KEY,
     id: channelId,
-    part: part,
+    part: part
   };
 
   return new Promise((resolve, reject) => {

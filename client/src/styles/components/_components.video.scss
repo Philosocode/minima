@@ -18,8 +18,23 @@
     width: 100%;
   }
 
+  &__published {
+    text-align: left;
+  }
+
   &__title {
     font-size: 3rem;
     text-align: left;
+  }
+
+  &__uploader {
+    display: flex;
+    text-decoration: none;
+  }
+
+  &__uploader-text {
+    display: flex;
+      flex-direction: column;
+      justify-content: center;
   }
 }

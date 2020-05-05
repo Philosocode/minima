@@ -7,23 +7,6 @@
     margin-bottom: 1rem;
   }
 
-  &__author {
-    color: #333;
-    font-weight: bold;
-    text-decoration: none;
-  }
-
-  &__image {
-    border-radius: 1.2rem;
-    margin-right: 1.4rem;
-    width: 8rem;
-
-    &--small {
-      border-radius: 7px;
-      width: 5rem;
-    }
-  }
-
   &__like-icon {
     color: #999;
   }
