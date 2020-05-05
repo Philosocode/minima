@@ -1,3 +1,8 @@
+// FROM: https://stackoverflow.com/a/17663871
+export function addCommasToNumber(num: number | string) {
+  return Number(num).toLocaleString();
+}
+
 // FROM: https://howchoo.com/g/nwywodhkndm/how-to-turn-an-object-into-query-string-parameters-in-javascript#using-map-and-join
 export function getQueryStringFromObject(params: { [key: string] : string } ) {  
   return "?" + Object.keys(params).map(key => key + '=' + params[key]).join('&');

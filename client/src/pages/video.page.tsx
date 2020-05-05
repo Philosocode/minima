@@ -7,6 +7,7 @@ import { CommentThread } from "components/comment-thread.component";
 import { Loader } from "components/loader.component";
 import { ToggleText } from "components/toggle-text.component";
 import { VideoPlayer } from "components/video-player.component";
+import { addCommasToNumber } from "helpers/helpers";
 
 interface IRouteParams {
   videoId: string;
@@ -26,9 +27,8 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
   const videoUrl = `https://www.youtube.com/embed/${videoId}`;
   
   // Functions
-  // Effect to fetch videos on mount
   useEffect(() => {
-    async function fetchData() {
+    async function fetchVideoAndChannelData() {
       try {
         const videoRes = await getVideoDetails(videoId);
         setVideoData(videoRes);
@@ -40,7 +40,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
         console.log(err);
       }
     }
-    fetchData();
+    fetchVideoAndChannelData();
   }, [videoId]);
 
   async function loadCommentThreads() {
@@ -87,13 +87,12 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
             </Link>
             <div className="c-video__uploader-text">
               <Link to={channelUrl} className="c-channel__name">{channelTitle}</Link>
-              <h3 className="c-channel__subscriber-count">{subscriberCount} subscribers</h3>
+              <h3 className="c-channel__subscriber-count">{ addCommasToNumber(subscriberCount)} subscribers</h3>
             </div>
           </div>
           <p className="c-video__published">Published: {formattedPublishedAt}</p>
           <ToggleText text={description} />
         </div>
-
         <hr />
       </>
     )
