@@ -66,37 +66,64 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
   function renderVideoDetails() {
     if (!channelData || !videoData) return <div>Loading...</div>;
 
-    const { title, description, publishedAt, channelId, channelTitle } = videoData.snippet; 
-    const uploaderImageUrl = channelData.snippet.thumbnails.default.url;
-    const { subscriberCount } = channelData.statistics;
+    const { title, publishedAt } = videoData.snippet; 
 
     // e.g. December 6th, 2019
     const formattedPublishedAt = format(parseISO(publishedAt), "PPP");
+
+    return (
+      <>
+        <h3 className="c-video__title">{title}</h3>
+        <p className="c-video__published">Published: {formattedPublishedAt}</p>
+        <hr/>
+      </>
+    )
+  }
+
+  function renderVideoDescription() {
+    if (!channelData || !videoData) return <div>Loading...</div>;
+
+    const { description, channelId, channelTitle } = videoData.snippet; 
+
+    const uploaderImageUrl = channelData.snippet.thumbnails.default.url;
+    const { subscriberCount } = channelData.statistics;
 
     const channelUrl = `/channel/${channelId}`;
 
     return (
       <>
-        <h3 className="c-video__title">{title}</h3>
-        <hr/>
-
-        <div className="c-video__description">
-          <div className="c-video__uploader">
-            <Link to={channelUrl} className="c-channel__image-container">
-              <img className="c-channel__image c-channel__image--small" src={uploaderImageUrl} alt={channelTitle} />
-            </Link>
-            <div className="c-video__uploader-text">
-              <Link to={channelUrl} className="c-channel__name">{channelTitle}</Link>
-              <h3 className="c-channel__subscriber-count">{ addCommasToNumber(subscriberCount)} subscribers</h3>
-            </div>
+        <div className="c-video__uploader">
+          <Link to={channelUrl} className="c-channel__image-container">
+            <img className="c-channel__image c-channel__image--smaller" src={uploaderImageUrl} alt={channelTitle} />
+          </Link>
+          <div className="c-video__uploader-text">
+            <Link to={channelUrl} className="c-channel__name">{channelTitle}</Link>
+            <h3 className="c-channel__subscriber-count">{ addCommasToNumber(subscriberCount)} subscribers</h3>
           </div>
-          <p className="c-video__published">Published: {formattedPublishedAt}</p>
-          <ToggleText text={description} />
         </div>
-        <hr />
+        <ToggleText text={description} />
+        <hr/>
       </>
-    )
+    );
   }
+
+  /*
+  <div className="c-video__description">
+
+    <div className="c-video__uploader">
+      <Link to={channelUrl} className="c-channel__image-container">
+        <img className="c-channel__image c-channel__image--small" src={uploaderImageUrl} alt={channelTitle} />
+      </Link>
+      <div className="c-video__uploader-text">
+        <Link to={channelUrl} className="c-channel__name">{channelTitle}</Link>
+        <h3 className="c-channel__subscriber-count">{ addCommasToNumber(subscriberCount)} subscribers</h3>
+      </div>
+    </div>
+
+    <ToggleText text={description} />
+  </div>
+  <hr />
+  */
 
   function renderLoadComments() {
     if (isLoading) 
@@ -110,6 +137,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
     <div>
       <VideoPlayer videoId={videoId} videoUrl={videoUrl} />
       <div className="c-video__details">{ renderVideoDetails() }</div>
+      <div className="c-video__description">{ renderVideoDescription() }</div>
       <div className="c-comments__container">{ renderCommentThreads() }</div>
       { renderLoadComments() }
     </div>
