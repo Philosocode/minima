@@ -63,6 +63,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
   function renderCommentThreads() {
     return (
       <div className="c-comments__container">
+        { threads.length > 0 && <h2 className="c-comments__total">{videoData?.statistics.commentCount} Comments</h2> }
         { threads.map(t => <CommentThread key={t.id} thread={t} />) }
       </div>
     )
