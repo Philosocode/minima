@@ -1,0 +1,20 @@
+:root {
+  --progress-bar-percentage: 0%
+}
+
+.c-progress-bar__container {
+  border: 1px solid royalblue;
+  border-radius: 1rem;
+  height: 1.1rem;
+  margin-top: 7px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.c-progress-bar {
+  background-color: royalblue;
+  border-radius: 7px;
+  width: var(--progress-bar-percentage);
+  height: 100%;
+  transition: width .5s ease;
+}

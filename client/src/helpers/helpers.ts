@@ -3,6 +3,23 @@ export function addCommasToNumber(num: number | string) {
   return Number(num).toLocaleString();
 }
 
+export function getAbbreviatedNumber(num: number | string): string {
+  const fullValue = Number(num);
+
+  /* Less than a thousand */
+  if (fullValue <= 999) {
+    return fullValue.toString();
+  }
+  
+  /* Thousands */
+  if (fullValue <= 999999) {
+    return `${Math.floor(fullValue / 1000)}K`;
+  }
+
+  /* Millions */
+  return `${Math.floor(fullValue / 1000000)}M`;
+}
+
 // FROM: https://howchoo.com/g/nwywodhkndm/how-to-turn-an-object-into-query-string-parameters-in-javascript#using-map-and-join
 export function getQueryStringFromObject(params: { [key: string] : string } ) {  
   return "?" + Object.keys(params).map(key => key + '=' + params[key]).join('&');

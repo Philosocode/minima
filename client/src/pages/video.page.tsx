@@ -4,10 +4,11 @@ import { format, parseISO } from "date-fns";
 
 import { IChannel, ICommentThread, IPageInfo, IVideo, getChannelDetails, getCommentThreadsForVideo, getVideoDetails } from "apis/youtube.api";
 import { CommentThread } from "components/comment-thread.component";
+import { LikesBar } from "components/likes-bar.component";
 import { Loader } from "components/loader.component";
 import { ToggleText } from "components/toggle-text.component";
 import { VideoPlayer } from "components/video-player.component";
-import { addCommasToNumber } from "helpers/helpers";
+import { addCommasToNumber, getAbbreviatedNumber } from "helpers/helpers";
 
 interface IRouteParams {
   videoId: string;
@@ -60,70 +61,59 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
   }
 
   function renderCommentThreads() {
-    return threads.map(t => <CommentThread key={t.id} thread={t} />);
+    return (
+      <div className="c-comments__container">
+        { threads.map(t => <CommentThread key={t.id} thread={t} />) }
+      </div>
+    )
   }
 
   function renderVideoDetails() {
     if (!channelData || !videoData) return <div>Loading...</div>;
 
-    const { title, publishedAt } = videoData.snippet; 
-
-    // e.g. December 6th, 2019
-    const formattedPublishedAt = format(parseISO(publishedAt), "PPP");
-
-    return (
-      <>
-        <h3 className="c-video__title">{title}</h3>
-        <p className="c-video__published">Published: {formattedPublishedAt}</p>
-        <hr/>
-      </>
-    )
-  }
-
-  function renderVideoDescription() {
-    if (!channelData || !videoData) return <div>Loading...</div>;
-
-    const { description, channelId, channelTitle } = videoData.snippet; 
+    const { title, publishedAt, channelId, channelTitle } = videoData.snippet; 
+    const { likeCount, dislikeCount, viewCount } = videoData.statistics;
 
     const uploaderImageUrl = channelData.snippet.thumbnails.default.url;
     const { subscriberCount } = channelData.statistics;
 
     const channelUrl = `/channel/${channelId}`;
 
+    // e.g. December 6th, 2019
+    const formattedPublishDate = format(parseISO(publishedAt), "PPP");
+
     return (
-      <>
+      <div className="c-video__details">
+        <h2 className="c-video__title">{title}</h2>
         <div className="c-video__uploader">
           <Link to={channelUrl} className="c-channel__image-container">
             <img className="c-channel__image c-channel__image--smaller" src={uploaderImageUrl} alt={channelTitle} />
           </Link>
           <div className="c-video__uploader-text">
             <Link to={channelUrl} className="c-channel__name">{channelTitle}</Link>
-            <h3 className="c-channel__subscriber-count">{ addCommasToNumber(subscriberCount)} subscribers</h3>
+            <h3 className="c-channel__subscriber-count">{ getAbbreviatedNumber(subscriberCount)} subscribers</h3>
           </div>
         </div>
-        <ToggleText text={description} />
-        <hr/>
-      </>
-    );
+        <div className="c-video__details-text">
+          <div className="c-video__published">{formattedPublishDate}</div>
+          <div className="c-video__views">{addCommasToNumber(viewCount)} views</div>
+        </div>
+        <LikesBar likes={+likeCount} dislikes={+dislikeCount} />        
+      </div>
+    )
   }
 
-  /*
-  <div className="c-video__description">
+  function renderVideoDescription() {
+    if (!channelData || !videoData) return <div>Loading...</div>;
 
-    <div className="c-video__uploader">
-      <Link to={channelUrl} className="c-channel__image-container">
-        <img className="c-channel__image c-channel__image--small" src={uploaderImageUrl} alt={channelTitle} />
-      </Link>
-      <div className="c-video__uploader-text">
-        <Link to={channelUrl} className="c-channel__name">{channelTitle}</Link>
-        <h3 className="c-channel__subscriber-count">{ addCommasToNumber(subscriberCount)} subscribers</h3>
+    const { description } = videoData.snippet; 
+
+    return (
+      <div className="c-video__description">
+        <ToggleText text={description} />
       </div>
-    </div>
-
-    <ToggleText text={description} />
-  </div>
-  <hr />
-  */
+    );
+  }
 
   function renderLoadComments() {
     if (isLoading) 
@@ -134,13 +124,15 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
   }
   
   return (
-    <div>
+    <>
       <VideoPlayer videoId={videoId} videoUrl={videoUrl} />
-      <div className="c-video__details">{ renderVideoDetails() }</div>
-      <div className="c-video__description">{ renderVideoDescription() }</div>
-      <div className="c-comments__container">{ renderCommentThreads() }</div>
+      { renderVideoDetails() }
+      <hr/>
+      { renderVideoDescription() }
+      <hr/>
+      { renderCommentThreads() }
       { renderLoadComments() }
-    </div>
+    </>
   );
 };
 
