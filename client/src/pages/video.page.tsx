@@ -91,7 +91,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
           </Link>
           <div className="c-video__uploader-text">
             <Link to={channelUrl} className="c-channel__name">{channelTitle}</Link>
-            <h3 className="c-channel__subscriber-count">{ getAbbreviatedNumber(subscriberCount)} subscribers</h3>
+            <h3 className="c-channel__subscriber-count">{getAbbreviatedNumber(subscriberCount)} subscribers</h3>
           </div>
         </div>
         <div className="c-video__details-text">

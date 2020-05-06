@@ -47,6 +47,8 @@ export class ToggleText extends Component<IProps, IState> {
   }
 
   getShowMoreToggle = () => {
+    if (this.getExcerpt(this.state.fullText) === this.state.fullText) return;
+
     const text = this.state.isExpanded 
       ? this.props.showLessLabel ?? "SHOW LESS"
       : this.props.showMoreLabel ?? "SHOW MORE";
