@@ -39,7 +39,12 @@ const _SearchBar: FC<RouteComponentProps> = ({ history }) => {
   }
   
   function handleRedirect(searchType: SearchType) {
-    if (searchType === "video") history.push(`/search?q=${searchInputText}`);
+    let baseUrl: string = searchType;
+
+    if (searchType === "general") baseUrl = "search";
+    else if (searchType === "video") baseUrl = "watch";
+
+    history.push(`/${baseUrl}/${searchInputText}`);
   }
 
   function getExplicitSearchType(): SearchType {
