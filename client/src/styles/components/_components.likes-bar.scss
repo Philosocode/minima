@@ -11,6 +11,10 @@
   &__likes, &__dislikes {
     color: #333;
     display: inline-block;
+
+    & svg {
+      color: #777;
+    }
   }
 
   &__values {

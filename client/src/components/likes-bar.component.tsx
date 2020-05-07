@@ -16,7 +16,7 @@ export const LikesBar: FC<IProps> = ({ likes, dislikes }) => {
     <div className="c-likes-bar__container">
       <div className="c-likes-bar__values">
         <div className="c-likes-bar__likes"><FontAwesomeIcon icon={faThumbsUp} /> { getAbbreviatedNumber(likes) }</div>
-        <div className="c-likes-bar__dislikes"><FontAwesomeIcon icon={faThumbsDown} />{ getAbbreviatedNumber(dislikes) }</div>
+        <div className="c-likes-bar__dislikes"><FontAwesomeIcon icon={faThumbsDown} /> { getAbbreviatedNumber(dislikes) }</div>
       </div>
       <ProgressBar percentage={percentage} />
     </div>
