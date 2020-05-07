@@ -1,132 +1,13 @@
 import axios from "axios";
 
+import { IChannelsResponse, ICommentsResponse, ICommentThreadsResponse, IPageInfo, IVideo } from "shared/interfaces/youtube.interface";
+
 export const BASE_URL = "https://www.googleapis.com/youtube/v3";
 export const API_KEY = process.env.REACT_APP_YOUTUBE_API_KEY as string;
 
-/* TYPES */
-type SearchType = "video" | "playlist" | "channel";
-
-/* INTERFACES */
-export interface IChannel {
-  id: string;
-  snippet: IChannelSnippet;
-  statistics: IChannelStatistics;
-}
-
-export interface IChannelsResponse {
-  items: IChannel[];
-  pageInfo: IPageInfo;
-}
-
-interface IChannelSnippet {
-  customUrl: string;
-  description: string;
-  thumbnails: IThumbnails;
-  publishedAt: string;
-  title: string;
-}
-
-interface IChannelStatistics {
-  subscriberCount: string;
-  videoCount: string;
-  viewCount: string;
-}
-
-export interface IComment {
-  id: string;
-  snippet: {
-    authorChannelId: { value: string; };
-    authorChannelUrl: string;
-    authorDisplayName: string;
-    authorProfileImageUrl: string;
-    likeCount: number;
-    publishedAt: string;
-    textDisplay: string;
-    textOriginal: string;
-    updatedAt: string;
-  }
-}
-
-interface ICommentsParams {
-  part: string;
-  parentId: string;
-  key: string;
-  maxResults: number;
-  pageToken: string | undefined;
-}
-
-export interface ICommentsResponse {
-  items: IComment[];
-  nextPageToken: string;
-  pageInfo: IPageInfo;
-}
-
-export interface ICommentThread {
-  id: string;
-  snippet: {
-    topLevelComment: IComment;
-    totalReplyCount: number;
-  }
-}
-
-interface ICommentThreadsParams {
-  part: string;
-  videoId: string;
-  key: string;
-  maxResults: number;
-  order: string;
-  pageToken: string | undefined;
-}
-
-export interface ICommentThreadsResponse {
-  items: ICommentThread[];
-  nextPageToken: string;
-  pageInfo: IPageInfo;
-}
-
-export interface IVideo {
-  id: {
-    kind: string;
-    videoId: string;
-  };
-  snippet: IVideoSnippet;
-  statistics: IVideoStatistics;
-}
-
-export interface IPageInfo {
-  totalResults: number;
-  resultsPerPage: number;
-}
-
-interface IThumbnails {
-  default: IThumbnail;
-  medium: IThumbnail;
-  high: IThumbnail;
-}
-
-interface IThumbnail {
-  height: number;
-  width: number;
-  url: string;
-}
-
-interface IVideoSnippet {
-  channelId: string;
-  channelTitle: string;
-  description: string;
-  publishedAt: string;
-  thumbnails: IThumbnails;
-  title: string;
-}
-
-export interface IVideoStatistics {
-  commentCount: string;
-  dislikeCount: string;
-  likeCount: string;
-  viewCount: string;
-}
 
 /* API FUNCTIONS */
+type SearchType = "video" | "playlist" | "channel";
 export function getSearchUrlAndParams(query: string, searchType: SearchType = "video", numResults: number = 6): [string, object] {
   const params = {
     part: "snippet",
@@ -147,6 +28,7 @@ export function getSearchUrlAndParams(query: string, searchType: SearchType = "v
 
   return [url, params]
 }
+
 
 export function getVideoDetails(videoId: string): Promise<IVideo> {
   const url = BASE_URL + "/videos";
@@ -170,6 +52,7 @@ export function getVideoDetails(videoId: string): Promise<IVideo> {
       .catch(err => reject(err));
   });
 }
+
 
 export function getChannelDetails(channelId: string): Promise<IChannelsResponse> {
   const url = BASE_URL + "/channels";
@@ -197,6 +80,15 @@ export function getChannelDetails(channelId: string): Promise<IChannelsResponse>
   });
 };
 
+
+interface ICommentThreadsParams {
+  part: string;
+  videoId: string;
+  key: string;
+  maxResults: number;
+  order: string;
+  pageToken: string | undefined;
+}
 export function getCommentThreadsForVideo(videoId: string, pageInfo?: IPageInfo, nextPageToken?: string): Promise<ICommentThreadsResponse> {
   const url = BASE_URL + "/commentThreads";
   const part = "id,snippet";
@@ -234,6 +126,14 @@ export function getCommentThreadsForVideo(videoId: string, pageInfo?: IPageInfo,
   });
 }
 
+
+interface ICommentsParams {
+  part: string;
+  parentId: string;
+  key: string;
+  maxResults: number;
+  pageToken: string | undefined;
+}
 export function getRepliesForCommentThread(threadId: string, nextPageToken?: string): Promise<ICommentsResponse> {
   const url = BASE_URL + "/comments";
   const part = "id,snippet";

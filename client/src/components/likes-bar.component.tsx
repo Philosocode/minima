@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp, faThumbsDown } from "@fortawesome/free-solid-svg-icons";
-import { getAbbreviatedNumber } from "helpers/helpers";
+import { getAbbreviatedNumber } from "shared/helpers";
 import { ProgressBar } from "./progress-bar.component";
 
 interface IProps {

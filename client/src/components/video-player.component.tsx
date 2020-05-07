@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { getQueryStringFromObject } from "helpers/helpers";
+import { getQueryStringFromObject } from "shared/helpers";
 
 interface IProps {
   videoId: string;

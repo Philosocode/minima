@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { linkify } from "helpers/helpers";
+import { linkify } from "shared/helpers";
 
 interface IProps {
   text: string;

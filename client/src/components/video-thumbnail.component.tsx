@@ -1,6 +1,7 @@
 import React, { FC } from "react";
 import { Link } from "react-router-dom";
-import { IVideo } from "apis/youtube.api";
+
+import { IVideo } from "shared/interfaces/youtube.interface";
 
 interface IProps {
   video: IVideo

@@ -1,6 +1,7 @@
 import React, { FC, useState } from "react";
 
-import { IComment, getRepliesForCommentThread } from "apis/youtube.api";
+import { IComment } from "shared/interfaces/youtube.interface";
+import { getRepliesForCommentThread } from "apis/youtube.api";
 import { Comment } from "components/comment.component";
 import { useToggle } from "hooks/use-toggle.hook";
 import { Loader } from "./loader.component";

@@ -1,7 +1,7 @@
 import React, { Component, createContext } from "react";
-import { IVideo } from "apis/youtube.api";
 
-import { parseHtmlEntities } from "helpers/helpers";
+import { IVideo } from "shared/interfaces/youtube.interface";
+import { parseHtmlEntities } from "shared/helpers";
 
 /* Referenced: https://github.com/piotrwitek/react-redux-typescript-guide#themecontext */
 // Create Context

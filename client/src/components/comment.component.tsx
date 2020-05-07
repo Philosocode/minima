@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import { formatDistanceToNow, parseISO } from "date-fns";
 
-import { IComment } from "apis/youtube.api";
+import { IComment } from "shared/interfaces/youtube.interface";
 
 type CommentType = "comment" | "reply";
 

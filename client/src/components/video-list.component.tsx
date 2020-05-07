@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { IVideo } from "apis/youtube.api";
+import { IVideo } from "shared/interfaces/youtube.interface";
 import { VideoThumbnail } from "./video-thumbnail.component";
 
 interface IProps {

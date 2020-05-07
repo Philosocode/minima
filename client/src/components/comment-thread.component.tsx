@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 
-import { ICommentThread } from "apis/youtube.api";
+import { ICommentThread } from "shared/interfaces/youtube.interface";
 import { Comment } from "components/comment.component";
 import { ReplyList } from "components/reply-list.component";
 

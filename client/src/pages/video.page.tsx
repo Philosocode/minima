@@ -2,13 +2,14 @@ import React, { FC, useState, useEffect } from "react";
 import { RouteComponentProps, Link, withRouter } from "react-router-dom";
 import { format, parseISO } from "date-fns";
 
-import { IChannel, ICommentThread, IPageInfo, IVideo, getChannelDetails, getCommentThreadsForVideo, getVideoDetails } from "apis/youtube.api";
+import { IChannel, ICommentThread, IPageInfo, IVideo } from "shared/interfaces/youtube.interface";
+import { getChannelDetails, getCommentThreadsForVideo, getVideoDetails } from "apis/youtube.api";
 import { CommentThread } from "components/comment-thread.component";
 import { LikesBar } from "components/likes-bar.component";
 import { Loader } from "components/loader.component";
 import { ToggleText } from "components/toggle-text.component";
 import { VideoPlayer } from "components/video-player.component";
-import { addCommasToNumber, getAbbreviatedNumber } from "helpers/helpers";
+import { addCommasToNumber, getAbbreviatedNumber } from "shared/helpers";
 
 interface IRouteParams {
   videoId: string;
