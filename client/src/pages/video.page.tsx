@@ -14,7 +14,7 @@ interface IRouteParams {
   videoId: string;
 }
 
-const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => { 
+const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match, history }) => { 
   // State
   const [videoData, setVideoData] = useState<IVideo>();
   const [channelData, setChannelData] = useState<IChannel>();
@@ -38,11 +38,11 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
         setChannelData(channelRes.items[0]);
       }
       catch (err) {
-        console.log(err);
+        history.push("/not-found");
       }
     }
     fetchVideoAndChannelData();
-  }, [videoId]);
+  }, [history, videoId]);
 
   async function loadCommentThreads() {
     setIsLoading(true);
