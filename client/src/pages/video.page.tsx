@@ -36,6 +36,8 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match, history }) =
 
         const channelRes = await getChannelDetails(videoRes.snippet.channelId);
         setChannelData(channelRes.items[0]);
+
+        document.title = videoRes.snippet.title;
       }
       catch (err) {
         history.push("/not-found");
