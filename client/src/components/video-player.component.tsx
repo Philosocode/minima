@@ -12,6 +12,7 @@ export const VideoPlayer: FC<IProps> = ({ videoUrl, videoId }) => {
       modestbranding: "1"
     }
   
+    // e.g. rel=0&modestbranding=1
     const queryString = getQueryStringFromObject(params);
   
     // e.g. youtube.com/embed/<videoId>?rel=0&modestbranding=1
