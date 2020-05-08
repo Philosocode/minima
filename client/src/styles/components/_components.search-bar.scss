@@ -29,6 +29,6 @@
     transition: opacity $animation-settings, visibility $animation-settings;
     visibility: hidden;
 
-    &--show { opacity: 1; visibility: visible; }
+    &.is-showing { opacity: 1; visibility: visible; }
   }
 }

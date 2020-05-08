@@ -9,9 +9,6 @@ const _SearchBar: FC<RouteComponentProps> = ({ history }) => {
   // State
   const [ searchInputText, setSearchInputText ] = useState("");
 
-  let searchClasses = "c-search-bar__clear";
-  if (searchInputText.length > 0) searchClasses += " c-search-bar__clear--show";
-
   // Functions
   function handleChange(ev: ChangeEvent<HTMLInputElement>) {    
     setSearchInputText(ev.target.value);
@@ -22,6 +19,7 @@ const _SearchBar: FC<RouteComponentProps> = ({ history }) => {
   }
 
   function handleSubmit(ev: KeyboardEvent<HTMLInputElement>) {
+    // Trigger on Enter key when 1+ characters have been entered
     if (ev.key !== "Enter") return;
     if (!searchInputText) return;
 
@@ -36,15 +34,6 @@ const _SearchBar: FC<RouteComponentProps> = ({ history }) => {
     }
 
     handleRedirect("general");
-  }
-  
-  function handleRedirect(searchType: SearchType) {
-    let baseUrl: string = searchType;
-
-    if (searchType === "general") baseUrl = "search";
-    else if (searchType === "video") baseUrl = "watch";
-
-    history.push(`/${baseUrl}/${searchInputText}`);
   }
 
   function getExplicitSearchType(): SearchType {
@@ -64,7 +53,7 @@ const _SearchBar: FC<RouteComponentProps> = ({ history }) => {
   }
 
   function getInferredSearchType(): SearchType {
-    // SEE: https://webapps.stackexchange.com/a/101153
+    // Referenced: https://webapps.stackexchange.com/a/101153
     if (searchInputText.match(/^[0-9A-Za-z_-]{10}[048AEIMQUYcgkosw]$/)) {
       return "video";
     }
@@ -82,6 +71,24 @@ const _SearchBar: FC<RouteComponentProps> = ({ history }) => {
     }
   }
 
+  function handleRedirect(searchType: SearchType) {
+    let baseUrl: string = searchType;
+
+    if (searchType === "general") baseUrl = "search";
+    else if (searchType === "video") baseUrl = "watch";
+
+    history.push(`/${baseUrl}/${searchInputText}`);
+  }
+
+  function getSearchClearClasses() {
+    let searchClasses = "c-search-bar__clear";
+    if (searchInputText.length > 0) {
+      searchClasses += " is-showing";
+    }
+
+    return searchClasses;
+  }
+
   return (
     <div className="c-search-bar__container">
       <input
@@ -91,7 +98,7 @@ const _SearchBar: FC<RouteComponentProps> = ({ history }) => {
         onChange={handleChange}
         onKeyPress={handleSubmit}
       />
-      <FontAwesomeIcon className={searchClasses} icon={faTimes} onClick={handleSearchClear} />
+      <FontAwesomeIcon className={getSearchClearClasses()} icon={faTimes} onClick={handleSearchClear} />
     </div>
   )
 }
