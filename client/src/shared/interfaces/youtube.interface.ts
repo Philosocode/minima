@@ -103,6 +103,11 @@ export interface IVideo {
   statistics: IVideoStatistics;
 }
 
+export interface IVideosResponse {
+  items: IVideo[];
+  pageInfo: IPageInfo;
+}
+
 interface IVideoSnippet {
   channelId: string;
   channelTitle: string;

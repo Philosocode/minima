@@ -1,0 +1,19 @@
+.c-video-player {
+  $video-width: 80%;
+
+  &__container {
+    overflow: hidden;
+    padding-top: calc(0.5625 * #{$video-width});
+    position: relative;
+    margin: 0 auto;
+    width: $video-width;
+  }
+
+  &__iframe {
+    height: 100%;
+    position: absolute;
+      top: 0;
+      left: 0;
+    width: 100%;
+  }
+}

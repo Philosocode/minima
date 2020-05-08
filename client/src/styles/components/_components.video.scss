@@ -1,15 +1,4 @@
 .c-video {
-  $video-width: 80%;
-
-  &__container {
-    height: 0;
-    overflow: hidden;
-    padding-top: calc(0.5625 * #{$video-width});
-    position: relative;
-    margin: 0 auto;
-    width: $video-width;
-  }
-
   &__details {
     display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -20,14 +9,6 @@
   &__details-text {
     grid-row: 2;
     grid-column: 2;
-  }
-
-  &__iframe {
-    height: 100%;
-    position: absolute;
-      top: 0;
-      left: 0;
-    width: 100%;
   }
 
   &__title {

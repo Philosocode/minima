@@ -1,12 +1,10 @@
 import axios from "axios";
 
-import { IChannelsResponse, ICommentsResponse, ICommentThreadsResponse, IPageInfo, IVideo } from "shared/interfaces/youtube.interface";
+import { IChannelsResponse, ICommentsResponse, ICommentThreadsResponse, IPageInfo, IVideo, IVideosResponse } from "shared/interfaces/youtube.interface";
 
 export const BASE_URL = "https://www.googleapis.com/youtube/v3";
 export const API_KEY = process.env.REACT_APP_YOUTUBE_API_KEY as string;
 
-
-/* API FUNCTIONS */
 type SearchType = "video" | "playlist" | "channel";
 export function getSearchUrlAndParams(query: string, searchType: SearchType = "video", numResults: number = 6): [string, object] {
   const params = {
@@ -29,57 +27,17 @@ export function getSearchUrlAndParams(query: string, searchType: SearchType = "v
   return [url, params]
 }
 
-
-export function getVideoDetails(videoId: string): Promise<IVideo> {
-  const url = BASE_URL + "/videos";
-  const part = "snippet,statistics";
-  const params = {
-    id: videoId,
-    key: API_KEY,
-    part: part
-  };
-
-  return new Promise((resolve, reject) => {
-    axios.get(url, { params })
-      .then(res => {
-        if (res.data.items.length <= 0) {
-          reject("ERROR: Video not found.")
-        } 
-        else {
-          resolve(res.data.items[0])
-        }
-      })
-      .catch(err => reject(err));
-  });
-}
-
-
 export function getChannelDetails(channelId: string): Promise<IChannelsResponse> {
   const url = BASE_URL + "/channels";
   const part = "id,snippet,statistics";
-
   const params = {
     key: API_KEY,
     id: channelId,
     part: part
   };
 
-  return new Promise((resolve, reject) => {
-    axios.get(url, { params })
-      .then(res => {
-        console.log(res);
-        
-        if (res.data.items.length <= 0) {
-          reject("ERROR: Couldn't load comments.");
-        }
-        else {
-          resolve(res.data);
-        }
-      })
-      .catch(err => reject(err));
-  });
+  return makeApiRequest<IChannelsResponse>(url, params);
 };
-
 
 interface ICommentThreadsParams {
   part: string;
@@ -94,8 +52,8 @@ export function getCommentThreadsForVideo(videoId: string, pageInfo?: IPageInfo,
   const part = "id,snippet";
   const MAX_NUM_COMMENTS = 100;
   
+  const totalResults = pageInfo?.totalResults;
   let numCommentsToFetch = MAX_NUM_COMMENTS;
-  const totalResults = pageInfo?.totalResults
 
   if (totalResults && totalResults < MAX_NUM_COMMENTS) {
     numCommentsToFetch = totalResults;
@@ -110,22 +68,8 @@ export function getCommentThreadsForVideo(videoId: string, pageInfo?: IPageInfo,
     order: "relevance"
   };
 
-  return new Promise((resolve, reject) => {
-    axios.get(url, { params })
-      .then(res => {
-        console.log(res);
-        
-        if (res.data.items.length <= 0) {
-          reject("ERROR: Couldn't load comments.");
-        }
-        else {
-          resolve(res.data);
-        }
-      })
-      .catch(err => reject(err));
-  });
+  return makeApiRequest<ICommentThreadsResponse>(url, params);
 }
-
 
 interface ICommentsParams {
   part: string;
@@ -147,18 +91,37 @@ export function getRepliesForCommentThread(threadId: string, nextPageToken?: str
     parentId: threadId
   };
 
-  return new Promise((resolve, reject) => {
-    axios.get(url, { params })
-      .then(res => {
-        console.log(res);
-        
-        if (res.data.items.length <= 0) {
-          reject("ERROR: Couldn't load comments.");
-        }
-        else {
-          resolve(res.data);
-        }
-      })
-      .catch(err => reject(err));
-  });
+  return makeApiRequest<ICommentsResponse>(url, params);
+}
+
+export function getVideoDetails(videoId: string): Promise<IVideo> {
+  const url = BASE_URL + "/videos";
+  const part = "snippet,statistics";
+  const params = {
+    id: videoId,
+    key: API_KEY,
+    part: part
+  };
+
+  return makeApiRequest<IVideosResponse>(url, params)
+    .then(videosRes => videosRes.items[0])
+    .catch(err => {
+      throw new Error(err);
+    });
+}
+
+async function makeApiRequest<IResponseType>(url: string, params: object): Promise<IResponseType> {
+  try {
+    const res = await axios.get(url, { params });
+
+    if (res.status !== 200) {
+      throw new Error("ERROR: Failed to fetch data.");
+    }
+    else {
+      return res.data;
+    }
+  }
+  catch(err) {
+    throw new Error(err);
+  }
 }
