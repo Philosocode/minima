@@ -34,22 +34,24 @@ export const ToggleText: FC<IProps> = ({ text, showLessLabel, showMoreLabel }) =
       : excerpt;
   }
 
-  function getShowMoreToggle() {
+  function getToggleLabel() {
     if (excerpt === fullText) return;
   
-    const toggleLabel = isExpanded 
+    return isExpanded 
       ? showLessLabel ?? "SHOW LESS"
       : showMoreLabel ?? "SHOW MORE";
-    
-    let textClasses = "c-toggle-text__toggle c-link-text c-link-text--bold";
-  
-    return <div className={textClasses} onClick={toggleIsExpanded}>{ toggleLabel }</div>
   }
 
   return (
     <div className="o-container">
       <p className="c-toggle-text__text" dangerouslySetInnerHTML={{ __html: getTextToShow() }}></p>
-      { getShowMoreToggle() }
+      {
+        excerpt !== fullText && (
+          <div className="c-toggle-text__toggle c-link-text c-link-text--bold" onClick={toggleIsExpanded}>
+            { getToggleLabel() }
+          </div>
+        )
+      }
     </div>
   )
 }
