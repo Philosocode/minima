@@ -4,6 +4,10 @@
 }
 
 .c-comment {
+  &--top-level {
+    margin-bottom: $spacing-large;
+  }
+  
   &__container {
     display: flex;
       flex-direction: row;
@@ -31,9 +35,5 @@
   &__text {
     margin-top: 8px;
     margin-bottom: 1.5rem;
-  }
-
-  &__thread {
-    margin-bottom: 4rem;
   }
 }
