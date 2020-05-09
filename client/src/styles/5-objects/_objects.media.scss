@@ -1,0 +1,12 @@
+.o-media {
+  display: flex;
+    flex-direction: row;
+
+  &__img {
+    margin-right: 1.4rem;
+  }
+
+  &__body {
+    text-align: left;
+  }
+}

@@ -1,40 +1,49 @@
 @import-normalize;
 
 // 1. Settings
-@import "settings/settings.colors";
-@import "settings/settings.spacing";
-@import "settings/settings.typography";
+@import "1-settings/settings.colors";
+@import "1-settings/settings.spacing";
+@import "1-settings/settings.typography";
+@import "1-settings/settings.global";
 
 // 2. Tools
-@import "tools/tools.respond";
+@import "2-tools/tools.respond";
 
 // 3. Generics
-@import "generics/generics.base";
+@import "3-generics/generics.box-sizing";
+@import "3-generics/generics.reset";
+@import "3-generics/generics.shared";
 
 // 4. Elements
-@import "elements/elements.a";
+@import "4-elements/elements.a";
+@import "4-elements/elements.body";
+@import "4-elements/elements.headings";
+@import "4-elements/elements.html";
 
 // 5. Objects
-@import "objects/objects.container";
-@import "objects/objects.list";
-@import "objects/objects.site-layout";
+@import "5-objects/objects.container";
+@import "5-objects/objects.list";
+@import "5-objects/objects.media";
+@import "5-objects/objects.site-layout";
+@import "5-objects/objects.text-container";
 
 // 6. Components
-@import "components/components.channel";
-@import "components/components.comment";
-@import "components/components.footer";
-@import "components/components.header";
-@import "components/components.likes-bar";
-@import "components/components.loader";
-@import "components/components.reply";
-@import "components/components.search-bar";
-@import "components/components.link-text";
-@import "components/components.progress-bar";
-@import "components/components.toggle-text";
-@import "components/components.video";
-@import "components/components.video-list";
-@import "components/components.video-player";
-@import "components/components.video-thumbnail";
+@import "6-components/components.channel";
+@import "6-components/components.comment";
+@import "6-components/components.footer";
+@import "6-components/components.header";
+@import "6-components/components.icon";
+@import "6-components/components.likes-bar";
+@import "6-components/components.loader";
+@import "6-components/components.reply";
+@import "6-components/components.search-bar";
+@import "6-components/components.link-text";
+@import "6-components/components.progress-bar";
+@import "6-components/components.toggle-text";
+@import "6-components/components.video";
+@import "6-components/components.video-list";
+@import "6-components/components.video-player";
+@import "6-components/components.video-thumbnail";
 
 // 7. Trumps
-@import "trumps/trumps.margin";
+@import "7-trumps/trumps.margin";

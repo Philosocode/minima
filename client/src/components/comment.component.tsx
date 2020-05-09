@@ -24,23 +24,30 @@ export const Comment: FC<IProps> = ({ comment, type }) => {
     updatedAt,
   } = comment.snippet;
   
+  const channelUrl = `channel/${authorChannelId.value}`;
   const formattedPublishedAt = formatDistanceToNow(parseISO(updatedAt));
 
   let commentWasUpdated = false;
   if (updatedAt !== publishedAt) commentWasUpdated = true;
 
-  const channelUrl = `channel/${authorChannelId.value}`;
+  function getChannelImageClasses() {
+    let classes = "o-media__img c-channel__image";
+    if (type === "reply") classes += "c-channel__image--small";
+
+    return classes;
+  }
 
   return (
-    <div className="c-comment__container">
+    <div className="o-media c-comment__container">
       <Link to={channelUrl}>
-        <img className={`c-channel__image ${type === "reply" ? "c-channel__image--small" : ""}`} src={authorProfileImageUrl} alt={authorDisplayName} />
+        <img className={getChannelImageClasses()} src={authorProfileImageUrl} alt={authorDisplayName} />
       </Link>
-      <div>
+      
+      <div className="o-media__body">
         <Link className="c-channel__name" to={channelUrl}>{authorDisplayName}</Link>
-        <span className="c-comment__published-at">{formattedPublishedAt} ago { commentWasUpdated && "(edited)"}</span>
+        <span className="c-comment__date">{formattedPublishedAt} ago { commentWasUpdated && "(edited)"}</span>
         <p dangerouslySetInnerHTML={{__html: textDisplay}} className="c-comment__text"></p>
-        <div className="c-comment__likes"><FontAwesomeIcon icon={faThumbsUp} className="c-comment__like-icon" /> {likeCount.toLocaleString()}</div>
+        <div className="c-comment__likes"><FontAwesomeIcon icon={faThumbsUp} className="c-icon" /> {likeCount.toLocaleString()}</div>
       </div>
     </div>
   );
