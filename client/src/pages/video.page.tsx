@@ -90,13 +90,13 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match, history }) =
       <div className="c-video__details">
         <h2 className="c-video__title">{title}</h2>
 
-        <div className="o-media c-video__uploader">
+        <div className="o-media c-uploader">
 
           <Link to={channelUrl} className="o-media__image">
             <img className="c-channel__image c-channel__image--small" src={uploaderImageUrl} alt={channelTitle} />
           </Link>
 
-          <div className="o-media__body">
+          <div className="o-media__body o-media__body--center-vertically">
             <Link to={channelUrl} className="c-channel__name">{channelTitle}</Link>
             <h3 className="c-channel__subscriber-count">{getAbbreviatedNumber(subscriberCount)} subscribers</h3>
           </div>

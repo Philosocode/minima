@@ -4,5 +4,6 @@
 
   &__body {
     text-align: left;
+    &--center-vertically { align-self: center; }
   }
 }

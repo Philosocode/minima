@@ -16,17 +16,4 @@
     grid-column: 1 / -1;
     text-align: left;
   }
-
-  &__uploader {
-    display: flex;
-      flex-direction: row;
-    grid-row: 2;
-    text-decoration: none;
-  }
-
-  &__uploader-text {
-    display: flex;
-      flex-direction: column;
-      justify-content: center;
-  }
 }
