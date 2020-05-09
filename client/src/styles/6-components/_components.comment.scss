@@ -9,23 +9,23 @@
   }
   
   &__container {
-    margin-top: 2rem;
-    margin-bottom: 1rem;
+    margin-top: $spacing-medium;
+    margin-bottom: $spacing-small;
   }
 
   &__date {
-    color: #999;
+    color: $color-grey-7;
     font-size: 0.8em;
     font-weight: bold;
     margin-left: 8px;
   }
 
   &__likes {
-    color: #777;
+    color: $color-grey-7;
   }
 
-  &__text {
-    margin-top: 8px;
-    margin-bottom: 1.5rem;
+  &__content {
+    margin-top: $spacing-tiny;
+    margin-bottom: $spacing-small;
   }
 }

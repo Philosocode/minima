@@ -1,3 +1,5 @@
+import { formatDistanceToNow, parseISO } from "date-fns";
+
 // FROM: https://stackoverflow.com/a/17663871
 export function addCommasToNumber(num: number | string) {
   return Number(num).toLocaleString();
@@ -18,6 +20,10 @@ export function getAbbreviatedNumber(num: number | string): string {
 
   /* Millions */
   return `${Math.floor(fullValue / 1000000)}M`;
+}
+
+export function getFormattedDateFromToday(dateString: string) {
+  return formatDistanceToNow(parseISO(dateString));
 }
 
 // FROM: https://howchoo.com/g/nwywodhkndm/how-to-turn-an-object-into-query-string-parameters-in-javascript#using-map-and-join
