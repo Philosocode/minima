@@ -10,6 +10,7 @@ import { Loader } from "components/loader.component";
 import { ToggleText } from "components/toggle-text.component";
 import { VideoPlayer } from "components/video-player.component";
 import { addCommasToNumber, getAbbreviatedNumber } from "shared/helpers";
+import { Divider } from "components/divider.component";
 
 interface IRouteParams {
   videoId: string;
@@ -136,9 +137,9 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match, history }) =
     <>
       <VideoPlayer videoId={videoId} videoUrl={videoUrl} />
       { renderVideoDetails() }
-      <hr/>
+      <Divider />
       { renderVideoDescription() }
-      <hr/>
+      <Divider />
       { renderCommentThreads() }
       { renderLoadComments() }
     </>
