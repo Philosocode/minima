@@ -1,16 +1,14 @@
 import React, { FC, useState, useEffect } from "react";
-import { RouteComponentProps, Link, withRouter } from "react-router-dom";
-import { format, parseISO } from "date-fns";
+import { RouteComponentProps, withRouter } from "react-router-dom";
 
 import { IChannel, ICommentThread, IPageInfo, IVideo } from "shared/interfaces/youtube.interface";
 import { getChannelDetails, getCommentThreadsForVideo, getVideoDetails } from "apis/youtube.api";
 import { CommentThread } from "components/comment-thread.component";
-import { LikesBar } from "components/likes-bar.component";
 import { Loader } from "components/loader.component";
-import { ToggleText } from "components/toggle-text.component";
 import { VideoPlayer } from "components/video-player.component";
-import { addCommasToNumber, getAbbreviatedNumber } from "shared/helpers";
 import { Divider } from "components/divider.component";
+import { VideoDetails } from "components/video-details.component";
+import { VideoDescription } from "components/video-description";
 
 interface IRouteParams {
   videoId: string;
@@ -73,72 +71,25 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match, history }) =
     )
   }
 
-  function renderVideoDetails() {
-    if (!channelData || !videoData) return <div>Loading...</div>;
-
-    const { title, publishedAt, channelId, channelTitle } = videoData.snippet; 
-    const { likeCount, dislikeCount, viewCount } = videoData.statistics;
-
-    const uploaderImageUrl = channelData.snippet.thumbnails.default.url;
-    const { subscriberCount } = channelData.statistics;
-
-    const channelUrl = `/channel/${channelId}`;
-
-    // e.g. December 6th, 2019
-    const formattedPublishDate = format(parseISO(publishedAt), "PPP");
-
-    return (
-      <div className="c-video__details">
-        <h2 className="c-video__title">{title}</h2>
-
-        <div className="o-media c-uploader">
-
-          <Link to={channelUrl} className="o-media__image">
-            <img className="c-channel__image c-channel__image--small" src={uploaderImageUrl} alt={channelTitle} />
-          </Link>
-
-          <div className="o-media__body o-media__body--center-vertically">
-            <Link to={channelUrl} className="c-channel__name">{channelTitle}</Link>
-            <h3 className="c-channel__subscriber-count">{getAbbreviatedNumber(subscriberCount)} subscribers</h3>
-          </div>
-          
-        </div>
-
-        <div className="c-video__details-text">
-          <div className="c-video__published">{formattedPublishDate}</div>
-          <div className="c-video__views">{addCommasToNumber(viewCount)} views</div>
-        </div>
-        <LikesBar likes={+likeCount} dislikes={+dislikeCount} />        
-      </div>
-    )
-  }
-
-  function renderVideoDescription() {
-    if (!channelData || !videoData) return <div>Loading...</div>;
-
-    const { description } = videoData.snippet; 
-
-    return (
-      <div className="c-video__description">
-        <ToggleText text={description} />
-      </div>
-    );
-  }
-
   function renderLoadComments() {
-    if (isLoading) 
+    if (isLoading) {
       return <Loader position="centered" />;
+    }
 
-    if (hasMoreComments) 
+    if (hasMoreComments) {
       return <div className="c-link-text c-link-text--bold" onClick={loadCommentThreads}>LOAD COMMENTS</div>
+    }
   }
-  
+
+  if (!channelData || !videoData) {
+    return <Loader position="centered" />;
+  }
   return (
     <>
       <VideoPlayer videoId={videoId} videoUrl={videoUrl} />
-      { renderVideoDetails() }
+      <VideoDetails videoData={videoData} channelData={channelData} />
       <Divider />
-      { renderVideoDescription() }
+      <VideoDescription description={videoData.snippet.description} />
       <Divider />
       { renderCommentThreads() }
       { renderLoadComments() }

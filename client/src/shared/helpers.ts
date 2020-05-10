@@ -1,4 +1,4 @@
-import { formatDistanceToNow, parseISO } from "date-fns";
+import { format, formatDistanceToNow, parseISO } from "date-fns";
 
 // FROM: https://stackoverflow.com/a/17663871
 export function addCommasToNumber(num: number | string) {
@@ -24,6 +24,11 @@ export function getAbbreviatedNumber(num: number | string): string {
 
 export function getFormattedDateFromToday(dateString: string) {
   return formatDistanceToNow(parseISO(dateString));
+}
+
+type DateFormat = "PPP";
+export function getFormattedDate(dateToFormat: string, dateFormat: DateFormat) {
+  return format(parseISO(dateToFormat), dateFormat);
 }
 
 // FROM: https://howchoo.com/g/nwywodhkndm/how-to-turn-an-object-into-query-string-parameters-in-javascript#using-map-and-join
