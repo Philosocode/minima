@@ -4,6 +4,7 @@ import { ICommentThread, IPageInfo } from "shared/interfaces/youtube.interface";
 import { getCommentThreadsForVideo } from "apis/youtube.api";
 import { Loader } from "components/loader.component";
 import { Thread } from "components/thread.component";
+import { addCommasToNumber } from "shared/helpers";
 
 interface IProps {
   numComments: string;
@@ -47,13 +48,13 @@ export const ThreadList: FC<IProps> = ({ numComments, videoId }) => {
       : `LOAD MORE COMMENTS`;
 
     if (hasMoreComments) {
-      return <div className="c-link-text c-link-text--bold" onClick={loadCommentThreads}>{loadMoreText}</div>
+      return <div className="c-link-text c-link-text--centered" onClick={loadCommentThreads}>{loadMoreText}</div>
     }
   }
 
   return (
-    <div className="o-list c-thread__list">
-      { threads.length > 0 && <h2 className="c-comments__total">{numComments} Comments</h2> }
+    <div className="o-list">
+      { threads.length > 0 && <h2 className="c-comment__total">{addCommasToNumber(numComments)} Comments</h2> }
       { renderThreads() }
       { renderLoadCommentsButton() }
     </div>

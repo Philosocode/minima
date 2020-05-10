@@ -1,14 +1,12 @@
 .c-link-text {
-  color: #555;
+  color: $color-grey-5;
   cursor: pointer;
   display: inline-block;
   font-family: $font-primary;
+  font-weight: bold;
   transition: color 0.1s ease;
   
-  &:hover {
-    color: #888;
-  }
+  &:hover { color: $color-grey-7; }
 
-  &--bold { font-weight: bold; }
-  &--hover-underline { &:hover { text-decoration: underline; } }
+  &--centered { margin: 0 auto; }
 }

@@ -27,19 +27,26 @@ export const Comment: FC<IProps> = ({ comment, type }) => {
   const channelUrl = `channel/${authorChannelId.value}`;
   const formattedDate = getFormattedDateFromToday(publishedAt);
 
-  function commentWasUpdated() {
+  function commentWasUpdated(): boolean {
     return updatedAt !== publishedAt;    
   }
 
-  function getChannelImageClasses() {
+  function getChannelImageClasses(): string {
     let classes = "c-channel__image";
     if (type === "reply") classes += " c-channel__image--tiny";
 
     return classes;
   }
 
+  function getContainerClasses(): string {
+    let classes = "o-media c-comment__container";
+    if (type === "reply") classes += " c-comment__container--reply"
+
+    return classes;
+  }
+
   return (
-    <div className="o-media c-comment__container">
+    <div className={getContainerClasses()}>
 
       <Link to={channelUrl} className="o-media__image">
         <img className={getChannelImageClasses()} src={authorProfileImageUrl} alt={authorDisplayName} />

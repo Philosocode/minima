@@ -1,15 +1,29 @@
-.c-comments__total {
-  text-align: left;
-  margin: 2rem auto;
+.c-comment__list {
+  margin-left: 9rem;
+  margin-top: $spacing-small;
+}
+
+.c-comment__container--reply {
+  margin-top: $spacing-medium;
+  margin-bottom: $spacing-medium;
+
+  // First reply is below the "Show More/Less" toggle
+  &:nth-child(2) {
+    margin-top: $spacing-small;
+  }
+
+  // Decrease the space below the last reply
+  // Last reply might be above a "Load More Comments" button, so check last 2 children
+  &:last-child,
+  &:nth-last-child(2) {
+    margin-bottom: $spacing-tiny;
+  }
 }
 
 .c-comment {
-  &--top-level {
-    margin-bottom: $spacing-large;
-  }
-  
-  &__container {
-    margin-top: $spacing-medium;
+  &__content {
+    margin-top: $spacing-tiny;
+    margin-bottom: $spacing-small;
   }
 
   &__date {
@@ -23,8 +37,8 @@
     color: $color-grey-7;
   }
 
-  &__content {
-    margin-top: $spacing-tiny;
+  &__total {
+    margin-top: $spacing-small;
     margin-bottom: $spacing-small;
   }
 }

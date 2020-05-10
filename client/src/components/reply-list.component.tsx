@@ -61,19 +61,20 @@ export const ReplyList: FC<IProps> = ({ topLevelCommentId, totalReplyCount }) =>
       text = `↓ Show ${totalReplyCount} Replies`;
     }
     
-    return <div className="c-link-text c-link-text--bold" onClick={functionToCall}>{text}</div>;
+    return <div className="c-link-text" onClick={functionToCall}>{text}</div>;
   }
 
   function renderShowMoreReplies() {
-    if (isLoading)
+    if (isLoading) {
       return <Loader position="left" />;
-
-    if (showingReplies && hasMoreReplies)
-      return <div className="c-link-text c-link-text--bold" onClick={loadReplies}>Show More</div>;
+    }
+    if (showingReplies && hasMoreReplies) {
+      return <div className="c-link-text" onClick={loadReplies}>Load More Replies</div>;
+    }
   }
 
   return (
-    <div className="c-reply__list">
+    <div className="c-comment__list">
       { renderReplyToggle() }
       { showingReplies && replies.map(c => <Comment key={c.id} comment={c} type="reply" />) }
       { renderShowMoreReplies() }

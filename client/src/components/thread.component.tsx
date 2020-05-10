@@ -10,10 +10,11 @@ interface IProps {
 
 export const Thread: FC<IProps> = ({ thread }) => {
   const { topLevelComment, totalReplyCount } = thread.snippet;
-
+  
   return (
-    <div className="o-container u-margin-bottom--large">
+    <div className="o-container c-thread__container">
       <Comment comment={topLevelComment} type="comment" />
+
       {totalReplyCount > 0 && (
         <ReplyList
           topLevelCommentId={topLevelComment.id}
