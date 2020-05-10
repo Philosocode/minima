@@ -19,19 +19,24 @@ export const ThreadList: FC<IProps> = ({ numComments, videoId }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   async function loadCommentThreads() {
-    setIsLoading(true);
-    const res = await getCommentThreadsForVideo(videoId, pageInfo, nextPageToken);
-    setIsLoading(false);
-
-    if (res.nextPageToken) {
-      setNextPageToken(res.nextPageToken);
-    } else {
-      setHasMoreComments(false);
+    try {
+      setIsLoading(true);
+      const res = await getCommentThreadsForVideo(videoId, pageInfo, nextPageToken);
+      setIsLoading(false);
+  
+      if (res.nextPageToken) {
+        setNextPageToken(res.nextPageToken);
+      } else {
+        setHasMoreComments(false);
+      }
+  
+      const updatedThreads = threads.concat(res.items);
+      setThreads(updatedThreads);
+      setPageInfo(res.pageInfo);
     }
-
-    const updatedThreads = threads.concat(res.items);
-    setThreads(updatedThreads);
-    setPageInfo(res.pageInfo);
+    catch(err) {
+      console.log("ERROR:", err);
+    }
   }
 
   function renderThreads() {
@@ -47,16 +52,14 @@ export const ThreadList: FC<IProps> = ({ numComments, videoId }) => {
       ? `LOAD COMMENTS`
       : `LOAD MORE COMMENTS`;
 
-    if (hasMoreComments) {
-      return <div className="c-link-text c-link-text--centered" onClick={loadCommentThreads}>{loadMoreText}</div>
-    }
+    return <div className="c-link-text c-link-text--centered" onClick={loadCommentThreads}>{loadMoreText}</div>
   }
 
   return (
     <div className="o-list">
       { threads.length > 0 && <h2 className="c-comment__total">{addCommasToNumber(numComments)} Comments</h2> }
       { renderThreads() }
-      { renderLoadCommentsButton() }
+      { hasMoreComments && renderLoadCommentsButton() }
     </div>
   );
 };

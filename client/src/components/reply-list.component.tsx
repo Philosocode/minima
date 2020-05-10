@@ -24,27 +24,25 @@ export const ReplyList: FC<IProps> = ({ topLevelCommentId, totalReplyCount }) =>
   }
 
   async function loadReplies() {
-    if (hasMoreReplies) {
-      try {
-        setIsLoading(true);
-        const res = await getRepliesForCommentThread(topLevelCommentId, nextPageToken);
-        setIsLoading(false);
+    try {
+      setIsLoading(true);
+      const res = await getRepliesForCommentThread(topLevelCommentId, nextPageToken);
+      setIsLoading(false);
 
-        // A nextPageToken means there are more replies to load
-        if (res.nextPageToken) {
-          setNextPageToken(res.nextPageToken);
-        } else {
-          setHasMoreReplies(false);
-        }
-  
-        // Comments are from newest to oldest, but for replies, we want oldest to newest
-        const newComments = res.items.reverse();
-  
-        setReplies(replies.concat(newComments));
+      // A nextPageToken means there are more replies to load
+      if (res.nextPageToken) {
+        setNextPageToken(res.nextPageToken);
+      } else {
+        setHasMoreReplies(false);
       }
-      catch (err) {
-        console.log("ERROR:", err);
-      }
+
+      // Comments are from newest to oldest, but for replies, we want oldest to newest
+      const newComments = res.items.reverse();
+
+      setReplies(replies.concat(newComments));
+    }
+    catch (err) {
+      console.log("ERROR:", err);
     }
   }
 
@@ -77,7 +75,7 @@ export const ReplyList: FC<IProps> = ({ topLevelCommentId, totalReplyCount }) =>
     <div className="c-comment__list">
       { renderReplyToggle() }
       { showingReplies && replies.map(c => <Comment key={c.id} comment={c} type="reply" />) }
-      { renderShowMoreReplies() }
+      { hasMoreReplies && renderShowMoreReplies() }
     </div>
   )
  };
