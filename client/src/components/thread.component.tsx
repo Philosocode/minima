@@ -8,7 +8,7 @@ interface IProps {
   thread: ICommentThread;
 }
 
-export const CommentThread: FC<IProps> = ({ thread }) => {
+export const Thread: FC<IProps> = ({ thread }) => {
   const { topLevelComment, totalReplyCount } = thread.snippet;
 
   return (
