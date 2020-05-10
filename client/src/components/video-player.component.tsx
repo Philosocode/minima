@@ -20,15 +20,13 @@ export const VideoPlayer: FC<IProps> = ({ videoUrl, videoId }) => {
   }
 
   return (
-    <div className="o-container">
-      <div className="c-video-player__container">
-        <iframe className="c-video-player__iframe"
-          src={getIframeUrl()}
-          frameBorder="0"
-          title={videoId}
-          allowFullScreen
-        />
-      </div>
+    <div className="o-container c-video-player__container">
+      <iframe className="c-video-player__iframe"
+        src={getIframeUrl()}
+        frameBorder="0"
+        title={videoId}
+        allowFullScreen
+      />
     </div>
   );
  }

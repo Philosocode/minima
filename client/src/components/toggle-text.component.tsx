@@ -43,11 +43,11 @@ export const ToggleText: FC<IProps> = ({ text, showLessLabel, showMoreLabel }) =
   }
 
   return (
-    <div className="o-container">
+    <div className="o-text-container c-toggle-text__container">
       <p className="c-toggle-text__text" dangerouslySetInnerHTML={{ __html: getTextToShow() }}></p>
       {
         excerpt !== fullText && (
-          <div className="c-toggle-text__toggle c-link-text c-link-text--bold" onClick={toggleIsExpanded}>
+          <div className="c-link-text c-link-text--bold" onClick={toggleIsExpanded}>
             { getToggleLabel() }
           </div>
         )

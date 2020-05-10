@@ -1,10 +1,10 @@
 .c-toggle-text {
+  &__container {
+    margin-bottom: $spacing-small;
+  }
+
   &__text {
     white-space: pre-line;
     text-align: left;
-  }
-  
-  &__toggle {
-    display: inline-block;
   }
 }
