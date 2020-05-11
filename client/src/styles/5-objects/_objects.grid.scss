@@ -1,0 +1,25 @@
+.o-grid {
+  $gridGutterWidth: 5%;
+  $sidebarWidth: 15%;
+
+  &__container {
+    display: grid;
+      grid-template-columns: 
+        [full-start] $gridGutterWidth
+        [left-sidebar-start] $sidebarWidth
+        [left-sidebar-end center-start] 1fr
+        [center-end right-sidebar-start] $sidebarWidth
+        [right-sidebar-end] $gridGutterWidth
+        [full-end];
+  }
+
+  &__item {
+    &--full { grid-column: full-start / full-end; }
+    &--wide { grid-column: left-sidebar-start / right-sidebar-end; }
+    &--center { grid-column: center-start / center-end; }
+    &--left-sidebar { grid-column: left-sidebar-start / left-sidebar-end; }
+    &--right-sidebar { grid-column: right-sidebar-start / right-sidebar-end; }
+    &--left-to-center { grid-column: left-sidebar-start / center-end; }
+    &--center-to-right { grid-column: center-start / right-sidebar-end; }
+  }
+}

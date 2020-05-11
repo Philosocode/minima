@@ -21,6 +21,7 @@
 
 // 5. Objects
 @import "5-objects/objects.container";
+@import "5-objects/objects.grid";
 @import "5-objects/objects.list";
 @import "5-objects/objects.media";
 @import "5-objects/objects.site-layout";
@@ -32,6 +33,7 @@
 @import "6-components/components.divider";
 @import "6-components/components.footer";
 @import "6-components/components.header";
+@import "6-components/components.heading";
 @import "6-components/components.icon";
 @import "6-components/components.likes-bar";
 @import "6-components/components.loader";
@@ -42,6 +44,7 @@
 @import "6-components/components.toggle-text";
 @import "6-components/components.uploader";
 @import "6-components/components.video";
+@import "6-components/components.video-details";
 @import "6-components/components.video-list";
 @import "6-components/components.video-player";
 @import "6-components/components.video-thumbnail";

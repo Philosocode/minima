@@ -10,6 +10,7 @@ import { ThreadList } from "components/thread-list.component";
 import { VideoDetails } from "components/video-details.component";
 import { VideoDescription } from "components/video-description";
 import { VideoPlayer } from "components/video-player.component";
+import { VideoUploader } from "components/video-uploader.component";
 
 interface IRouteParams {
   videoId: string;
@@ -47,13 +48,20 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match, history }) =
   }
   return (
     <>
-      <div className="o-grid__full-item">
+      <div className="o-grid__item--full">
         <VideoPlayer videoId={videoId} videoUrl={videoUrl} />
       </div>
+
+      <div className="o-grid__item--wide">
+        <h2 className="c-heading--title c-heading--left-align c-video__title">{videoData.snippet.title}</h2>
+      </div>
       
-      <div className="o-grid__main-item">
+      <div className="o-grid__item--left-sidebar">
         <VideoDetails videoData={videoData} channelData={channelData} />
-        <Divider />
+      </div>
+
+      <div className="o-grid__item--center-to-right">
+        <VideoUploader channelData={channelData} />
         <VideoDescription description={videoData.snippet.description} />
         <Divider />
         <ThreadList numComments={videoData.statistics.commentCount} videoId={videoId}  />

@@ -1,0 +1,11 @@
+.c-heading {
+  font-family: $font-primary;
+
+  &--title {
+    font-size: 3rem;
+  }
+
+  &--left-align {
+    text-align: left;
+  }
+}
