@@ -1,6 +1,6 @@
 import React, { FC, useState } from "react";
 
-import { ICommentThread, IPageInfo } from "shared/interfaces/youtube.interface";
+import { ICommentThread } from "shared/interfaces/youtube.interface";
 import { getCommentThreadsForVideo } from "apis/youtube.api";
 import { Loader } from "components/loader.component";
 import { Thread } from "components/thread.component";
@@ -14,14 +14,13 @@ interface IProps {
 export const ThreadList: FC<IProps> = ({ numComments, videoId }) => {
   const [threads, setThreads] = useState<ICommentThread[]>([]);
   const [nextPageToken, setNextPageToken] = useState<string>();
-  const [pageInfo, setPageInfo] = useState<IPageInfo>();
   const [hasMoreComments, setHasMoreComments] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
   async function loadCommentThreads() {
     try {
       setIsLoading(true);
-      const res = await getCommentThreadsForVideo(videoId, pageInfo, nextPageToken);
+      const res = await getCommentThreadsForVideo(videoId, nextPageToken);
       setIsLoading(false);
   
       if (res.nextPageToken) {
@@ -32,7 +31,6 @@ export const ThreadList: FC<IProps> = ({ numComments, videoId }) => {
   
       const updatedThreads = threads.concat(res.items);
       setThreads(updatedThreads);
-      setPageInfo(res.pageInfo);
     }
     catch(err) {
       console.log("ERROR:", err);

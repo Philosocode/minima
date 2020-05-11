@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { IChannelsResponse, ICommentsResponse, ICommentThreadsResponse, IPageInfo, IVideo, IVideosResponse } from "shared/interfaces/youtube.interface";
+import { IChannelsResponse, ICommentsResponse, ICommentThreadsResponse, IVideo, IVideosResponse } from "shared/interfaces/youtube.interface";
 
 export const BASE_URL = "https://www.googleapis.com/youtube/v3";
 export const API_KEY = process.env.REACT_APP_YOUTUBE_API_KEY as string;
@@ -47,21 +47,14 @@ interface ICommentThreadsParams {
   order: string;
   pageToken: string | undefined;
 }
-export function getCommentThreadsForVideo(videoId: string, pageInfo?: IPageInfo, nextPageToken?: string): Promise<ICommentThreadsResponse> {
+export function getCommentThreadsForVideo(videoId: string, nextPageToken?: string): Promise<ICommentThreadsResponse> {
   const url = BASE_URL + "/commentThreads";
   const part = "id,snippet";
-  const MAX_NUM_COMMENTS = 100;
-  
-  const totalResults = pageInfo?.totalResults;
-  let numCommentsToFetch = MAX_NUM_COMMENTS;
-
-  if (totalResults && totalResults < MAX_NUM_COMMENTS) {
-    numCommentsToFetch = totalResults;
-  }
+  const MAX_NUM_THREADS = 100;
 
   const params: ICommentThreadsParams = {
     key: API_KEY,
-    maxResults: numCommentsToFetch,
+    maxResults: MAX_NUM_THREADS,
     pageToken: nextPageToken,
     part: part,
     videoId: videoId,
