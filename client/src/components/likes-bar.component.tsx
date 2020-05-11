@@ -1,6 +1,7 @@
 import React, { FC } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp, faThumbsDown } from "@fortawesome/free-solid-svg-icons";
+
 import { getAbbreviatedNumber } from "shared/helpers";
 import { ProgressBar } from "./progress-bar.component";
 
@@ -15,8 +16,8 @@ export const LikesBar: FC<IProps> = ({ likes, dislikes }) => {
   return (
     <div className="c-likes-bar__container">
       <div className="c-likes-bar__values">
-        <div className="c-likes-bar__likes"><FontAwesomeIcon icon={faThumbsUp} /> { getAbbreviatedNumber(likes) }</div>
-        <div className="c-likes-bar__dislikes"><FontAwesomeIcon icon={faThumbsDown} /> { getAbbreviatedNumber(dislikes) }</div>
+        <div className="c-icon"><FontAwesomeIcon icon={faThumbsUp} /> { getAbbreviatedNumber(likes) }</div>
+        <div className="c-icon"><FontAwesomeIcon icon={faThumbsDown} /> { getAbbreviatedNumber(dislikes) }</div>
       </div>
       <ProgressBar percentage={percentage} />
     </div>

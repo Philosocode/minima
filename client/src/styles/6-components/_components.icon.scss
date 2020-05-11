@@ -1,3 +1,7 @@
 .c-icon {
-  color: $color-grey-9;
+  color: $color-grey-5;
+
+  & svg {
+    color: $color-grey-7;
+  }
 }

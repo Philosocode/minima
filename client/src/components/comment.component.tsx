@@ -56,7 +56,7 @@ export const Comment: FC<IProps> = ({ comment, type }) => {
         <Link className="c-channel__name" to={channelUrl}>{authorDisplayName}</Link>
         <span className="c-comment__date">{formattedDate} ago { commentWasUpdated() && "(edited)"}</span>
         <p dangerouslySetInnerHTML={{__html: textDisplay}} className="o-text-container c-comment__content"></p>
-        <div className="c-comment__likes"><FontAwesomeIcon icon={faThumbsUp} className="c-icon" /> {likeCount.toLocaleString()}</div>
+        <div className="c-icon"><FontAwesomeIcon icon={faThumbsUp} /> {likeCount.toLocaleString()}</div>
       </div>
 
     </div>
