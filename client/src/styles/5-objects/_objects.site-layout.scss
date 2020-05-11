@@ -4,5 +4,25 @@
   padding-bottom: 3rem;
   position: relative;
   text-align: center;
-  width: 90%;
+}
+
+.o-grid {
+  $gridGutterWidth: 10%;
+
+  &__container {
+    display: grid;
+      grid-template-columns: 
+        [full-start] $gridGutterWidth
+        [main-start] 1fr
+        [main-end] $gridGutterWidth
+        [full-end];
+  }
+
+  &__full-item {
+    grid-column: full-start / full-end;
+  }
+
+  &__main-item {
+    grid-column: main-start / main-end;
+  }
 }

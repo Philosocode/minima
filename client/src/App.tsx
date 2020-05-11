@@ -17,7 +17,7 @@ export function App() {
   return (
     <VideosProvider>
       <SearchProvider>
-        <div className="o-site-layout">
+        <div className="o-site-layout o-grid__container">
           <Header />
           <Switch>
             <Route exact path="/" component={HomePage} />

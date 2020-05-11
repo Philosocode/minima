@@ -47,12 +47,17 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match, history }) =
   }
   return (
     <>
-      <VideoPlayer videoId={videoId} videoUrl={videoUrl} />
-      <VideoDetails videoData={videoData} channelData={channelData} />
-      <Divider />
-      <VideoDescription description={videoData.snippet.description} />
-      <Divider />
-      <ThreadList numComments={videoData.statistics.commentCount} videoId={videoId}  />
+      <div className="o-grid__full-item">
+        <VideoPlayer videoId={videoId} videoUrl={videoUrl} />
+      </div>
+      
+      <div className="o-grid__main-item">
+        <VideoDetails videoData={videoData} channelData={channelData} />
+        <Divider />
+        <VideoDescription description={videoData.snippet.description} />
+        <Divider />
+        <ThreadList numComments={videoData.statistics.commentCount} videoId={videoId}  />
+      </div>
     </>
   );
 };
