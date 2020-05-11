@@ -1,0 +1,29 @@
+.c-video-stats__container {
+  border: 1px solid $color-grey-9;
+  border-radius: 1rem;
+  box-shadow: $box-shadow-light;
+  padding: $spacing-small;
+  text-align: left;
+  width: 90%;
+}
+
+.c-video-stats {
+  &__row {
+    color: $color-grey-5;
+    display: flex;
+      justify-content: flex-start;
+
+    &:not(:last-child) {
+      margin-bottom: $spacing-small;
+    }
+  }
+
+  &__icon {
+    width: 2rem;
+    margin-right: $spacing-tiny;
+  }
+
+  &__text {
+    color: $color-grey-3;
+  }
+}

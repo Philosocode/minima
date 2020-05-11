@@ -2,6 +2,7 @@
 
 // 1. Settings
 @import "1-settings/settings.colors";
+@import "1-settings/settings.box-shadows";
 @import "1-settings/settings.spacing";
 @import "1-settings/settings.typography";
 @import "1-settings/settings.global";
@@ -44,9 +45,9 @@
 @import "6-components/components.toggle-text";
 @import "6-components/components.uploader";
 @import "6-components/components.video";
-@import "6-components/components.video-details";
 @import "6-components/components.video-list";
 @import "6-components/components.video-player";
+@import "6-components/components.video-stats";
 @import "6-components/components.video-thumbnail";
 
 // 7. Trumps

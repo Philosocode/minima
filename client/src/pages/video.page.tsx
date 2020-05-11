@@ -7,7 +7,7 @@ import { getChannelDetails, getVideoDetails } from "apis/youtube.api";
 import { Divider } from "components/divider.component";
 import { Loader } from "components/loader.component";
 import { ThreadList } from "components/thread-list.component";
-import { VideoDetails } from "components/video-details.component";
+import { VideoStats } from "components/video-stats.component";
 import { VideoDescription } from "components/video-description";
 import { VideoPlayer } from "components/video-player.component";
 import { VideoUploader } from "components/video-uploader.component";
@@ -57,7 +57,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match, history }) =
       </div>
       
       <div className="o-grid__item--left-sidebar">
-        <VideoDetails videoData={videoData} channelData={channelData} />
+        <VideoStats videoData={videoData} />
       </div>
 
       <div className="o-grid__item--center-to-right">
