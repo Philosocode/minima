@@ -1,9 +1,10 @@
 .c-video-player {
-  $video-width: 80%;
+  $video-width: 100%;
 
   &__container {
     overflow: hidden;
-    padding-top: calc(0.5625 * #{$video-width});
+    // preserve aspect ratio: padding-top: calc(0.5625 * #{$video-width});
+    padding-top: calc(0.46 * #{$video-width});
     position: relative;
     margin: 0 auto;
     width: $video-width;
