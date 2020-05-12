@@ -22,7 +22,7 @@ export function App() {
           <Switch>
             <Route exact path="/" component={HomePage} />
             <Route exact path="/search" component={SearchPage} />
-            <Route exact path="/watch/:videoId" render={() => <VideoPage />} />
+            <Route exact path="/watch" render={() => <VideoPage />} />
             <Route component={NotFoundPage} />
           </Switch>
           <Footer />

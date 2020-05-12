@@ -132,10 +132,7 @@ interface IThumbnail {
 // VIDEO
 /* ======== */
 export interface IVideo {
-  id: {
-    kind: string;
-    videoId: string;
-  };
+  id: string;
   snippet: IVideoSnippet;
   statistics: IVideoStatistics;
 }

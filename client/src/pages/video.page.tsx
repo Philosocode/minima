@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 
-import { IChannel, IVideo } from "shared/interfaces/youtube.interface";
+import { IChannel, IPlaylistItem, IVideo } from "shared/interfaces/youtube.interface";
 import { getChannelDetails, getVideoDetails, getVideosForPlaylist } from "apis/youtube.api";
 
 import { Divider } from "components/divider.component";
@@ -11,21 +11,34 @@ import { VideoStats } from "components/video-stats.component";
 import { VideoDescription } from "components/video-description";
 import { VideoPlayer } from "components/video-player.component";
 import { VideoUploader } from "components/video-uploader.component";
+import { getQueryParams } from "shared/helpers";
 
 interface IRouteParams {
   videoId: string;
 }
 
-const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match, history }) => { 
+const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }) => { 
   // State
   const [videoData, setVideoData] = useState<IVideo>();
   const [channelData, setChannelData] = useState<IChannel>();
-
-  const { videoId } = match.params;
+  const [playlistVideos, setPlaylistVideos] = useState<IPlaylistItem[]>([]);
   
   // Functions
   useEffect(() => {
-    async function fetchVideoAndChannelData() {
+    const queryParams = getQueryParams(location.search);
+
+    const videoId = queryParams.query["v"];
+    const playlistId = queryParams.query["list"];
+
+    if (typeof videoId === "string") {
+      fetchVideoAndChannelData(videoId);
+    } 
+    else {
+      history.push("/not-found");
+    }
+    if (typeof playlistId === "string") fetchPlaylistVideos(playlistId);
+
+    async function fetchVideoAndChannelData(videoId: string) {
       try {
         const videoRes = await getVideoDetails(videoId);
         setVideoData(videoRes);
@@ -39,16 +52,28 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match, history }) =
         history.push("/not-found");
       }
     }
-    fetchVideoAndChannelData();
-  }, [history, videoId]);
+
+    async function fetchPlaylistVideos(playlistId: string) {
+      if (typeof playlistId !== "string") return;
+
+      try {
+        const res = await getVideosForPlaylist(playlistId);
+        setPlaylistVideos(res);
+      }
+      catch (err) {
+        history.push("/not-found");
+      }
+    }
+  }, [history, location.search]);
 
   if (!channelData || !videoData) {
     return <Loader position="centered" />;
   }
+  
   return (
     <>
       <div className="o-grid__item--full">
-        <VideoPlayer videoId={videoId} />
+        <VideoPlayer videoId={videoData.id} />
       </div>
 
       <div className="o-grid__item--wide">
@@ -63,7 +88,11 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match, history }) =
         <VideoUploader channelData={channelData} />
         <VideoDescription description={videoData.snippet.description} />
         <Divider />
-        <ThreadList numComments={videoData.statistics.commentCount} videoId={videoId}  />
+        <ThreadList numComments={videoData.statistics.commentCount} videoId={videoData.id}  />
+      </div>
+
+      <div className="">
+        { playlistVideos.length > 0 && "FOUND VIDEOS" }
       </div>
     </>
   );

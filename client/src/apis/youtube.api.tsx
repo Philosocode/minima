@@ -79,7 +79,7 @@ interface IVideosForPlaylistParams {
   maxResults: number;
   pageToken?: string;
 }
-export async function getVideosForPlaylist(playlistId: string) {
+export async function getVideosForPlaylist(playlistId: string): Promise<IPlaylistItem[]> {
   const url = BASE_URL + "/playlistItems";
   const part = "id,snippet";
   const MAX_NUM_PLAYLISTS = 50;
@@ -144,7 +144,10 @@ export function getVideoDetails(videoId: string): Promise<IVideo> {
   };
 
   return makeApiRequest<IVideosResponse>(url, params)
-    .then(videosRes => videosRes.items[0])
+    .then(videosRes => {
+      console.log(videosRes);
+      return videosRes.items[0]
+    })
     .catch(err => {
       throw new Error(err);
     });

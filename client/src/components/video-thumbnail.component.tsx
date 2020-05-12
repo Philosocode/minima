@@ -8,7 +8,7 @@ interface IProps {
 }
 
 export const VideoThumbnail: FC<IProps> = ({ video }) => {
-  const videoUrl = `/watch?v=${video.id.videoId}`;
+  const videoUrl = `/watch?v=${video.id}`;
   // const channelUrl = `/channel/${video.snippet.channelId}`;
 
   return (
