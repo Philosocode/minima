@@ -1,4 +1,5 @@
 import { format, formatDistanceToNow, parseISO } from "date-fns";
+import { parseUrl } from "query-string";
 
 // FROM: https://stackoverflow.com/a/17663871
 export function addCommasToNumber(num: number | string) {
@@ -29,6 +30,10 @@ export function getFormattedDateFromToday(dateString: string) {
 type DateFormat = "PPP";
 export function getFormattedDate(dateToFormat: string, dateFormat: DateFormat) {
   return format(parseISO(dateToFormat), dateFormat);
+}
+
+export function getQueryParams(url: string){
+  return parseUrl(url);
 }
 
 // FROM: https://howchoo.com/g/nwywodhkndm/how-to-turn-an-object-into-query-string-parameters-in-javascript#using-map-and-join

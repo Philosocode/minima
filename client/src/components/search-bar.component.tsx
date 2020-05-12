@@ -2,6 +2,7 @@ import React, { useState, FC, ChangeEvent, KeyboardEvent } from "react";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { getQueryParams } from "shared/helpers";
 
 type SearchType = "video" | "channel" | "playlist" | "general" | "unknown";
 
@@ -22,6 +23,11 @@ const _SearchBar: FC<RouteComponentProps> = ({ history }) => {
     // Trigger on Enter key when 1+ characters have been entered
     if (ev.key !== "Enter") return;
     if (!searchInputText) return;
+
+    const queryParams = getQueryParams(searchInputText);
+    if (typeof queryParams.query.v == "string") {
+      return handleRedirect("video", queryParams.query.v);
+    }
 
     const explicitSearchType = getExplicitSearchType();
     if (explicitSearchType !== "unknown") {
@@ -71,13 +77,13 @@ const _SearchBar: FC<RouteComponentProps> = ({ history }) => {
     }
   }
 
-  function handleRedirect(searchType: SearchType) {
+  function handleRedirect(searchType: SearchType, term = searchInputText) {
     let baseUrl: string = searchType;
 
     if (searchType === "general") baseUrl = "search";
     else if (searchType === "video") baseUrl = "watch";
 
-    history.push(`/${baseUrl}/${searchInputText}`);
+    history.push(`/${baseUrl}/${term}`);
   }
 
   function getSearchClearClasses() {
