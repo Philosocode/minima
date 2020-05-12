@@ -6,21 +6,22 @@
   }
 
   &__input {
-    border: 1px solid #AAA;
+    border: 1px solid $color-grey-C;
     border-radius: 2px;
     height: 2.8rem;
     font-family: "Avenir", sans-serif;
     font-size: 1.6rem;
     padding: 1.8rem 1rem;
+    padding-right: 3.6rem;
     width: 100%;
 
-    &:focus { outline: 2px solid #AAA; }
+    &:focus { outline: 1px solid $color-grey-C; }
   }
 
   &__clear {
     $animation-settings: 0.1s linear;
 
-    color: #777;
+    color: $color-grey-7;
     cursor: pointer;
     font-size: 2rem;
     opacity: 0;
