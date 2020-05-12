@@ -2,7 +2,7 @@ import React, { FC, useState, useEffect } from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 
 import { IChannel, IVideo } from "shared/interfaces/youtube.interface";
-import { getChannelDetails, getVideoDetails } from "apis/youtube.api";
+import { getChannelDetails, getVideoDetails, getVideosForPlaylist } from "apis/youtube.api";
 
 import { Divider } from "components/divider.component";
 import { Loader } from "components/loader.component";
@@ -22,7 +22,6 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match, history }) =
   const [channelData, setChannelData] = useState<IChannel>();
 
   const { videoId } = match.params;
-  const videoUrl = `https://www.youtube.com/embed/${videoId}`;
   
   // Functions
   useEffect(() => {
@@ -49,7 +48,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match, history }) =
   return (
     <>
       <div className="o-grid__item--full">
-        <VideoPlayer videoId={videoId} videoUrl={videoUrl} />
+        <VideoPlayer videoId={videoId} />
       </div>
 
       <div className="o-grid__item--wide">

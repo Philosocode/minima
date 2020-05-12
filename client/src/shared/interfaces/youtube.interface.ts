@@ -76,6 +76,43 @@ export interface IPageInfo {
 
 
 /* ======== */
+// PLAYLISTS
+/* ======== */
+export interface IPlaylist {
+  id: string;
+  snippet: IVideoSnippet;
+}
+
+export interface IPlaylistsResponse {
+  items: IPlaylist[];
+  pageInfo: IPageInfo;
+}
+
+
+/* ======== */
+// PLAYLIST ITEMS
+/* ======== */
+export interface IPlaylistItem {
+  id: string;
+  snippet: IVideoSnippet;
+}
+
+export interface IPlaylistItemSnippet extends IVideoSnippet {
+  playlistId: string;
+  position: string;
+  resourceId: {
+    videoId: string;
+  }
+}
+
+export interface IPlaylistItemsResponse {
+  items: IPlaylistItem[];
+  nextPageToken?: string;
+  pageInfo: IPageInfo;
+}
+
+
+/* ======== */
 // THUMBNAIL
 /* ======== */
 interface IThumbnails {

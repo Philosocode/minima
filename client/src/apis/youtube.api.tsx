@@ -1,6 +1,14 @@
 import axios from "axios";
 
-import { IChannelsResponse, ICommentsResponse, ICommentThreadsResponse, IVideo, IVideosResponse } from "shared/interfaces/youtube.interface";
+import { 
+  IChannelsResponse, 
+  ICommentsResponse, 
+  ICommentThreadsResponse, 
+  IPlaylistItemsResponse,
+  IVideo, 
+  IVideosResponse,
+  IPlaylistItem, 
+} from "shared/interfaces/youtube.interface";
 
 export const BASE_URL = "https://www.googleapis.com/youtube/v3";
 export const API_KEY = process.env.REACT_APP_YOUTUBE_API_KEY as string;
@@ -62,6 +70,45 @@ export function getCommentThreadsForVideo(videoId: string, nextPageToken?: strin
   };
 
   return makeApiRequest<ICommentThreadsResponse>(url, params);
+}
+
+interface IVideosForPlaylistParams {
+  part: string;
+  playlistId: string;
+  key: string;
+  maxResults: number;
+  pageToken?: string;
+}
+export async function getVideosForPlaylist(playlistId: string) {
+  const url = BASE_URL + "/playlistItems";
+  const part = "id,snippet";
+  const MAX_NUM_PLAYLISTS = 50;
+
+  const params: IVideosForPlaylistParams = {
+    key: API_KEY,
+    maxResults: MAX_NUM_PLAYLISTS,
+    playlistId: playlistId,
+    part: part,
+  }
+
+  const videosForPlaylist: IPlaylistItem[] = [];
+
+  let hasNextPageToken = true;
+
+  while (hasNextPageToken) {
+    const res = await makeApiRequest<IPlaylistItemsResponse>(url, params);
+
+    videosForPlaylist.push(...res.items);
+
+    if (res.nextPageToken) {
+      params["pageToken"] = res.nextPageToken;
+    }
+    else {
+      hasNextPageToken = false;
+    }
+  }
+
+  return videosForPlaylist;
 }
 
 interface ICommentsParams {

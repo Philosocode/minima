@@ -3,12 +3,12 @@ import { getQueryStringFromObject } from "shared/helpers";
 
 interface IProps {
   videoId: string;
-  videoUrl: string;
 }
-export const VideoPlayer: FC<IProps> = ({ videoUrl, videoId }) => { 
+export const VideoPlayer: FC<IProps> = ({ videoId }) => { 
+  const videoUrl = `https://www.youtube.com/embed/${videoId}`;
+
   function getIframeUrl() {
     const params = {
-      autoplay: "1",
       rel: "0",
       modestbranding: "1"
     }
