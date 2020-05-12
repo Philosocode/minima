@@ -8,6 +8,7 @@ interface IProps {
 export const VideoPlayer: FC<IProps> = ({ videoUrl, videoId }) => { 
   function getIframeUrl() {
     const params = {
+      autoplay: "1",
       rel: "0",
       modestbranding: "1"
     }
