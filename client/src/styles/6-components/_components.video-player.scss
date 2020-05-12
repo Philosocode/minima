@@ -4,7 +4,7 @@
   &__container {
     overflow: hidden;
     // preserve aspect ratio: padding-top: calc(0.5625 * #{$video-width});
-    padding-top: calc(0.46 * #{$video-width});
+    padding-top: 83vh;
     position: relative;
     width: $video-width;
   }
