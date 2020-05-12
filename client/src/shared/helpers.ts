@@ -27,7 +27,7 @@ export function getFormattedDateFromToday(dateString: string) {
   return formatDistanceToNow(parseISO(dateString));
 }
 
-type DateFormat = "PPP";
+type DateFormat = "PPP" | "MMM io, yyyy";
 export function getFormattedDate(dateToFormat: string, dateFormat: DateFormat) {
   return format(parseISO(dateToFormat), dateFormat);
 }

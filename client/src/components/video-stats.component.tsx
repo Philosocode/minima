@@ -20,7 +20,7 @@ export const VideoStats: FC<IProps> = ({ videoData }) => {
   const roundedPercentage = roundToTwoDecimals(likesToDislikesPercentage);
 
   // e.g. December 6th, 2019
-  const formattedPublishDate = getFormattedDate(publishedAt, "PPP");
+  const formattedPublishDate = getFormattedDate(publishedAt, "MMM io, yyyy");
   
   return (
     <div className="c-video-stats__container">
