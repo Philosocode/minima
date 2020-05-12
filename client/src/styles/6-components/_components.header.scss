@@ -12,7 +12,7 @@
     display: flex;
       flex-direction: row;
       align-items: center;
-      height: 7.5rem;
+    height: $header-height;
     width: 100%;
   }
 
@@ -23,7 +23,7 @@
     // Header is using position: fixed and grid-column wasn't working
     // Manually align the logo with the left sidebar grid line (where contnet begins)
     position: absolute;
-      left: $gridGutterWidth;
+      left: $grid-gutter-width;
     text-decoration: none;
     transition: color 0.1s ease;
 

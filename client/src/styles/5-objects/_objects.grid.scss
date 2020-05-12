@@ -1,15 +1,12 @@
-$gridGutterWidth: 5%;
-$sidebarWidth: 20rem;
-
 .o-grid {
   &__container {
     display: grid;
       grid-template-columns: 
-        [full-start] $gridGutterWidth
-        [left-sidebar-start] $sidebarWidth
+        [full-start] $grid-gutter-width
+        [left-sidebar-start] $sidebar-width
         [left-sidebar-end center-start] 1fr
-        [center-end right-sidebar-start] $sidebarWidth
-        [right-sidebar-end] $gridGutterWidth
+        [center-end right-sidebar-start] $sidebar-width
+        [right-sidebar-end] $grid-gutter-width
         [full-end];
   }
 

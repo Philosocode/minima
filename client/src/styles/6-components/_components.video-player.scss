@@ -6,7 +6,6 @@
     // preserve aspect ratio: padding-top: calc(0.5625 * #{$video-width});
     padding-top: calc(0.46 * #{$video-width});
     position: relative;
-    margin: 0 auto;
     width: $video-width;
   }
 
