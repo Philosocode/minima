@@ -4,6 +4,7 @@ import { faCalendarDay, faEye, faThumbsUp, faThumbsDown } from "@fortawesome/fre
 
 import { IVideo } from "shared/interfaces/youtube.interface";
 import { getFormattedDate, addCommasToNumber } from "shared/helpers";
+import { ProgressBar } from "./progress-bar.component";
 
 interface IProps {
   videoData: IVideo;
@@ -12,6 +13,10 @@ interface IProps {
 export const VideoStats: FC<IProps> = ({ videoData }) => {
   const { publishedAt } = videoData.snippet; 
   const { likeCount, dislikeCount, viewCount } = videoData.statistics;
+  const likes = +likeCount;
+  const dislikes = +dislikeCount;
+
+  const likesToDislikesPercentage = (likes / (likes + dislikes)) * 100;
 
   // e.g. December 6th, 2019
   const formattedPublishDate = getFormattedDate(publishedAt, "PPP");
@@ -47,6 +52,8 @@ export const VideoStats: FC<IProps> = ({ videoData }) => {
           </div>
           <div className="c-video-stats__text">{addCommasToNumber(dislikeCount)}</div>
         </div>
+        
+        <ProgressBar percentage={likesToDislikesPercentage} />
       </div>
     </div>
   );

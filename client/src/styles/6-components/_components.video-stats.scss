@@ -1,7 +1,11 @@
 .c-video-stats__container {
+  background-color: #fafafa;
   border: 1px solid $color-grey-9;
-  border-radius: 1rem;
+  border-radius: 1.2rem;
   box-shadow: $box-shadow-light;
+  font-family: $font-primary;
+  font-weight: 500;
+  font-size: 0.9em;
   padding: $spacing-small;
   text-align: left;
   width: 90%;
@@ -9,18 +13,18 @@
 
 .c-video-stats {
   &__row {
-    color: $color-grey-5;
     display: flex;
       justify-content: flex-start;
 
     &:not(:last-child) {
-      margin-bottom: $spacing-small;
+      margin-bottom: $spacing-tiny;
     }
   }
 
   &__icon {
-    width: 2rem;
+    color: $color-grey-5;
     margin-right: $spacing-tiny;
+    width: 2rem;
   }
 
   &__text {
