@@ -1,10 +1,10 @@
 import React, { FC } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCalendarDay, faEye, faThumbsUp, faThumbsDown } from "@fortawesome/free-solid-svg-icons";
+import { faCalendarDay, faEye, faThumbsUp, faThumbsDown, faPercent } from "@fortawesome/free-solid-svg-icons";
 
 import { IVideo } from "shared/interfaces/youtube.interface";
-import { getFormattedDate, addCommasToNumber } from "shared/helpers";
+import { getFormattedDate, roundToTwoDecimals, addCommasToNumber } from "shared/helpers";
 import { ProgressBar } from "./progress-bar.component";
+import { VideoStatsRow } from "./video-stats-row.component";
 
 interface IProps {
   videoData: IVideo;
@@ -17,6 +17,7 @@ export const VideoStats: FC<IProps> = ({ videoData }) => {
   const dislikes = +dislikeCount;
 
   const likesToDislikesPercentage = (likes / (likes + dislikes)) * 100;
+  const roundedPercentage = roundToTwoDecimals(likesToDislikesPercentage);
 
   // e.g. December 6th, 2019
   const formattedPublishDate = getFormattedDate(publishedAt, "PPP");
@@ -25,34 +26,12 @@ export const VideoStats: FC<IProps> = ({ videoData }) => {
     <div className="c-video-stats__container">
       <div className="c-video-stats__content">
 
-        <div className="c-video-stats__row">
-          <div className="c-video-stats__icon">
-            <FontAwesomeIcon icon={faCalendarDay} /> 
-          </div>
-          <div className="c-video-stats__text">{formattedPublishDate}</div>
-        </div>
+        <VideoStatsRow icon={faCalendarDay} text={formattedPublishDate} />
+        <VideoStatsRow icon={faEye} text={addCommasToNumber(viewCount)} />
+        <VideoStatsRow icon={faThumbsUp} text={addCommasToNumber(likeCount)} />
+        <VideoStatsRow icon={faThumbsDown} text={addCommasToNumber(dislikeCount)} />
+        <VideoStatsRow icon={faPercent} text={roundedPercentage.toString()} />
 
-        <div className="c-video-stats__row">
-          <div className="c-video-stats__icon">
-            <FontAwesomeIcon className="c-video-stats__icon" icon={faEye} />
-          </div>
-          <div className="c-video-stats__text">{addCommasToNumber(viewCount)} views</div>
-        </div>
-
-        <div className="c-video-stats__row">
-          <div className="c-video-stats__icon">
-            <FontAwesomeIcon className="c-video-stats__icon" icon={faThumbsUp} /> 
-          </div>
-          <div className="c-video-stats__text">{addCommasToNumber(likeCount)}</div>
-        </div>
-
-        <div className="c-video-stats__row">
-          <div className="c-video-stats__icon">
-            <FontAwesomeIcon className="c-video-stats__icon" icon={faThumbsDown} /> 
-          </div>
-          <div className="c-video-stats__text">{addCommasToNumber(dislikeCount)}</div>
-        </div>
-        
         <ProgressBar percentage={likesToDislikesPercentage} />
       </div>
     </div>

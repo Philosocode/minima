@@ -58,3 +58,7 @@ export function parseHtmlEntities(str: string) {
       return String.fromCharCode(num);
   });
 }
+
+export function roundToTwoDecimals(num: number) {
+  return Math.round((num + Number.EPSILON) * 100) / 100;
+}

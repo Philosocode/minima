@@ -3,8 +3,8 @@
 }
 
 .c-progress-bar__container {
-  border: 1px solid royalblue;
-  border-radius: 1rem;
+  border: 1px solid $color-grey-C;
+  border-radius: 5px;
   height: 1.1rem;
   margin-top: 7px;
   overflow: hidden;
@@ -13,7 +13,7 @@
 
 .c-progress-bar {
   background-color: royalblue;
-  border-radius: 7px;
+  border-radius: 2px;
   width: var(--progress-bar-percentage);
   height: 100%;
   transition: width .5s ease;
