@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, useEffect } from "react";
 
 import { ICommentThread } from "shared/interfaces/youtube.interface";
 import { getCommentThreadsForVideo } from "apis/youtube.api";
@@ -16,6 +16,17 @@ export const ThreadList: FC<IProps> = ({ numComments, videoId }) => {
   const [nextPageToken, setNextPageToken] = useState<string>();
   const [hasMoreComments, setHasMoreComments] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+
+  // Make sure component re-renders when video changes
+  useEffect(() => {
+    clearState();
+  }, [videoId]);
+
+  function clearState() {
+    setThreads([]);
+    setHasMoreComments(true);
+    setNextPageToken("");
+  }
 
   async function loadCommentThreads() {
     try {
