@@ -1,16 +1,29 @@
+.c-header__container {
+  background-color: #fff;
+  border-bottom: 1px solid $color-grey-C;
+  position: fixed;
+    top: 0;
+  width: 100%;
+  z-index: 9999;
+}
+
 .c-header {
   &__nav {
     display: flex;
       flex-direction: row;
       align-items: center;
-    height: 7rem;
+      height: 7.5rem;
+    width: 100%;
   }
 
   &__logo {
     color: $color-black;
     font-size: 2rem;
     font-weight: bold;
+    // Header is using position: fixed and grid-column wasn't working
+    // Manually align the logo with the left sidebar grid line (where contnet begins)
     position: absolute;
+      left: $gridGutterWidth;
     text-decoration: none;
     transition: color 0.1s ease;
 
