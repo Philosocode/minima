@@ -42,7 +42,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ match, history }) =
     }
     fetchVideoAndChannelData();
   }, [history, videoId]);
-
+  
   if (!channelData || !videoData) {
     return <Loader position="centered" />;
   }
