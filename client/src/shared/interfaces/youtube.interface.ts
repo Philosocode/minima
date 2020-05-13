@@ -94,7 +94,7 @@ export interface IPlaylistsResponse {
 /* ======== */
 export interface IPlaylistItem {
   id: string;
-  snippet: IVideoSnippet;
+  snippet: IPlaylistItemSnippet;
 }
 
 export interface IPlaylistItemSnippet extends IVideoSnippet {

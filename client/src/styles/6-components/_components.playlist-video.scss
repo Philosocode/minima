@@ -1,0 +1,22 @@
+.c-playlist-video__list {
+  border: 1px solid $color-grey-3;
+  border-radius: 1rem;
+  padding-top: $spacing-medium;
+  height: 70rem;
+  overflow-y: scroll;
+}
+
+.c-playlist-video__container {
+  text-decoration: none;
+}
+
+.c-playlist-video {
+  &__title {
+    font-size: 1.6rem;
+    margin-bottom: 0;
+  }
+
+  &__uploader {
+    font-weight: normal;
+  }
+}

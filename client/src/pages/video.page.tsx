@@ -6,6 +6,7 @@ import { getChannelDetails, getVideoDetails, getVideosForPlaylist } from "apis/y
 
 import { Divider } from "components/divider.component";
 import { Loader } from "components/loader.component";
+import { PlaylistScrollList } from "components/playlist-scroll-list.component";
 import { ThreadList } from "components/thread-list.component";
 import { VideoStats } from "components/video-stats.component";
 import { VideoDescription } from "components/video-description";
@@ -32,9 +33,9 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
 
     if (typeof videoId === "string") {
       fetchVideoAndChannelData(videoId);
-    } 
+    }
     else {
-      history.push("/not-found");
+      alert("ERROR: Invalid video id.");
     }
     if (typeof playlistId === "string") fetchPlaylistVideos(playlistId);
 
@@ -49,7 +50,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
         document.title = videoRes.snippet.title;
       }
       catch (err) {
-        history.push("/not-found");
+        alert("ERROR: couldn't load video data.");
       }
     }
 
@@ -82,6 +83,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
       
       <div className="o-grid__item--left-sidebar">
         <VideoStats videoData={videoData} />
+        { playlistVideos.length > 0 && <PlaylistScrollList playlistId={playlistVideos[0].snippet.playlistId} videos={playlistVideos} /> }
       </div>
 
       <div className="o-grid__item--center-to-right">
@@ -89,10 +91,6 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
         <VideoDescription description={videoData.snippet.description} />
         <Divider />
         <ThreadList numComments={videoData.statistics.commentCount} videoId={videoData.id}  />
-      </div>
-
-      <div className="">
-        { playlistVideos.length > 0 && "FOUND VIDEOS" }
       </div>
     </>
   );
