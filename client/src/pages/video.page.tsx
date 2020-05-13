@@ -83,14 +83,17 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
       
       <div className="o-grid__item--left-sidebar">
         <VideoStats videoData={videoData} />
-        { playlistVideos.length > 0 && <PlaylistScrollList playlistId={playlistVideos[0].snippet.playlistId} videos={playlistVideos} /> }
       </div>
 
-      <div className="o-grid__item--center-to-right">
+      <div className="o-grid__item--center">
         <VideoUploader channelData={channelData} />
         <VideoDescription description={videoData.snippet.description} />
         <Divider />
         <ThreadList numComments={videoData.statistics.commentCount} videoId={videoData.id}  />
+      </div>
+
+      <div className="o-grid__item--right-sidebar">
+        { playlistVideos.length > 0 && <PlaylistScrollList playlistId={playlistVideos[0].snippet.playlistId} videos={playlistVideos} /> }
       </div>
     </>
   );

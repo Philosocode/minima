@@ -9,8 +9,6 @@ interface IProps {
 }
 
 export const PlaylistScrollList: FC<IProps> = ({ playlistId, videos }) => {
-  console.log(videos);
-  
   return (
     <div className="c-playlist-video__list">
       {
