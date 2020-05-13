@@ -1,0 +1,18 @@
+.c-playlist-scroll-list__container {
+  border: 1px solid black;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+  margin-left: $sidebar-gap;
+  width: 100%;
+}
+
+.c-playlist-scroll-list {
+  &__title {
+    font-size: 1.6rem;
+    margin-bottom: 5px;
+  }
+
+  &__sub-text {
+    font-weight: normal;
+  }
+}

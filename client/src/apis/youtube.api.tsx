@@ -7,7 +7,9 @@ import {
   IPlaylistItemsResponse,
   IVideo, 
   IVideosResponse,
-  IPlaylistItem, 
+  IPlaylistItem,
+  IPlaylist,
+  IPlaylistsResponse,
 } from "shared/interfaces/youtube.interface";
 
 export const BASE_URL = "https://www.googleapis.com/youtube/v3";
@@ -72,6 +74,25 @@ export function getCommentThreadsForVideo(videoId: string, nextPageToken?: strin
   return makeApiRequest<ICommentThreadsResponse>(url, params);
 }
 
+export function getPlaylistDetails(playlistId: string): Promise<IPlaylist> {
+  const url = BASE_URL + "/playlists";
+  const part = "id,snippet";
+  const MAX_NUM_PLAYLISTS = 50;
+
+  const params = {
+    key: API_KEY,
+    maxResults: MAX_NUM_PLAYLISTS,
+    id: playlistId,
+    part: part,
+  }
+
+  return makeApiRequest<IPlaylistsResponse>(url, params)
+    .then(playlistsRes => playlistsRes.items[0])
+    .catch(err => {
+      throw new Error(err);
+    });
+}
+
 interface IVideosForPlaylistParams {
   part: string;
   playlistId: string;
@@ -82,11 +103,11 @@ interface IVideosForPlaylistParams {
 export async function getVideosForPlaylist(playlistId: string): Promise<IPlaylistItem[]> {
   const url = BASE_URL + "/playlistItems";
   const part = "id,snippet";
-  const MAX_NUM_PLAYLISTS = 50;
+  const MAX_NUM_PLAYLIST_VIDEOS = 50;
 
   const params: IVideosForPlaylistParams = {
     key: API_KEY,
-    maxResults: MAX_NUM_PLAYLISTS,
+    maxResults: MAX_NUM_PLAYLIST_VIDEOS,
     playlistId: playlistId,
     part: part,
   }
@@ -144,10 +165,7 @@ export function getVideoDetails(videoId: string): Promise<IVideo> {
   };
 
   return makeApiRequest<IVideosResponse>(url, params)
-    .then(videosRes => {
-      console.log(videosRes);
-      return videosRes.items[0]
-    })
+    .then(videosRes => videosRes.items[0])
     .catch(err => {
       throw new Error(err);
     });

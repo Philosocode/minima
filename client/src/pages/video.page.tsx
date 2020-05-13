@@ -1,8 +1,8 @@
 import React, { FC, useState, useEffect } from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 
-import { IChannel, IPlaylistItem, IVideo } from "shared/interfaces/youtube.interface";
-import { getChannelDetails, getVideoDetails, getVideosForPlaylist } from "apis/youtube.api";
+import { IChannel, IVideo } from "shared/interfaces/youtube.interface";
+import { getChannelDetails, getVideoDetails } from "apis/youtube.api";
 
 import { Divider } from "components/divider.component";
 import { Loader } from "components/loader.component";
@@ -22,22 +22,21 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
   // State
   const [videoData, setVideoData] = useState<IVideo>();
   const [channelData, setChannelData] = useState<IChannel>();
-  const [playlistVideos, setPlaylistVideos] = useState<IPlaylistItem[]>([]);
+  const [playlistId, setPlaylistId] = useState("");
   
   // Functions
   useEffect(() => {
     const queryParams = getQueryParams(location.search);
+    const videoQueryParam = queryParams.query["v"];
+    const playlistQueryParam = queryParams.query["list"];
 
-    const videoId = queryParams.query["v"];
-    const playlistId = queryParams.query["list"];
+    typeof videoQueryParam === "string"
+      ?  fetchVideoAndChannelData(videoQueryParam)
+      : alert("ERROR: Invalid video id.");
 
-    if (typeof videoId === "string") {
-      fetchVideoAndChannelData(videoId);
+    if (typeof playlistQueryParam === "string") {
+      setPlaylistId(playlistQueryParam);
     }
-    else {
-      alert("ERROR: Invalid video id.");
-    }
-    if (typeof playlistId === "string") fetchPlaylistVideos(playlistId);
 
     async function fetchVideoAndChannelData(videoId: string) {
       try {
@@ -53,24 +52,12 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
         alert("ERROR: couldn't load video data.");
       }
     }
-
-    async function fetchPlaylistVideos(playlistId: string) {
-      if (typeof playlistId !== "string") return;
-
-      try {
-        const res = await getVideosForPlaylist(playlistId);
-        setPlaylistVideos(res);
-      }
-      catch (err) {
-        history.push("/not-found");
-      }
-    }
   }, [history, location.search]);
 
+  // Render
   if (!channelData || !videoData) {
     return <Loader position="centered" />;
   }
-  
   return (
     <>
       <div className="o-grid__item--full">
@@ -93,7 +80,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
       </div>
 
       <div className="o-grid__item--right-sidebar">
-        { playlistVideos.length > 0 && <PlaylistScrollList playlistId={playlistVideos[0].snippet.playlistId} videos={playlistVideos} /> }
+        { playlistId && <PlaylistScrollList playlistId={playlistId} watchingVideoId={videoData.id} /> }
       </div>
     </>
   );

@@ -1,14 +1,24 @@
 .c-playlist-video__list {
-  border: 1px solid $color-grey-3;
-  border-radius: 1rem;
-  padding-top: $spacing-medium;
+  border-top: 1px solid #000;
   height: 70rem;
-  margin-left: $sidebar-gap;
   overflow-y: scroll;
+  overflow-x: hidden;
+  width: 100%;
 }
 
 .c-playlist-video__container {
+  border-bottom: 1px solid $color-grey-3;
+  display: block;
+  padding-top: $spacing-medium;
   text-decoration: none;
+
+  &:hover { background-color: $color-grey-E; }
+  &:last-child { 
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+
+  &--current { background-color: $color-grey-E; }
 }
 
 .c-playlist-video {
