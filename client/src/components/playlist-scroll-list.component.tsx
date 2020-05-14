@@ -5,6 +5,7 @@ import { getPlaylistDetails, getVideosForPlaylist } from "apis/youtube.api";
 
 import { PlaylistScrollVideo } from "components/playlist-scroll-video.component";
 import { Loader } from "./loader.component";
+import { useToggle } from "hooks/use-toggle.hook";
 
 interface IProps {
   playlistId: string;
@@ -14,7 +15,8 @@ interface IProps {
 export const PlaylistScrollList: FC<IProps> = ({ playlistId, watchingVideoId }) => {
   const [playlistVideos, setPlaylistVideos] = useState<IPlaylistItem[]>([]);
   const [playlistDetails, setPlaylistDetails] = useState<IPlaylist>();
-  const [watchingVideoIdx, setWatchingVideoIdx] = useState(1);
+  const [watchingVideoIdx, setWatchingVideoIdx] = useState(0);
+  const [hidingPreviousVideos, toggleHidingPreviousVideos] = useToggle(true);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -46,17 +48,29 @@ export const PlaylistScrollList: FC<IProps> = ({ playlistId, watchingVideoId }) 
     }
   }
 
+  function getVideosToShow() {
+    if (hidingPreviousVideos) {
+      return playlistVideos.slice(watchingVideoIdx);
+    }
+
+    return playlistVideos;
+  }
+
   function renderLoadPlaylistsButton() {
     return (
       <div className="c-link-text c-link-text--centered" onClick={fetchPlaylistVideos}>LOAD PLAYLIST</div>
     )
   }
 
+  function getToggleLabel() {
+    if (hidingPreviousVideos) return "Show Previous Videos";
+
+    return "Hide Previous Videos";
+  }
+
   // Render
   if (isLoading) return <Loader position="centered" />
   if (playlistVideos.length <= 0 || !playlistDetails) return renderLoadPlaylistsButton();
-
-  console.log(playlistDetails);
   
   return (
     <div className="o-card c-playlist-scroll-list__container">
@@ -71,30 +85,37 @@ export const PlaylistScrollList: FC<IProps> = ({ playlistId, watchingVideoId }) 
         </div>
       </div>
 
+      {
+        watchingVideoIdx !== 1 && (
+          <div className="c-playlist-scroll-list__toggle-previous" onClick={toggleHidingPreviousVideos}>{getToggleLabel()}</div>
+        )
+      }
+
       <div className="c-playlist-scroll-list__videos">
-        <div className="c-playlist-scroll-list__toggle-previous">Show Previous Videos &darr;</div>
         {
-          playlistVideos.map((v, idx) => (
-            <PlaylistScrollVideo 
-              key={v.snippet.resourceId.videoId}
-              indexInPlaylist={idx+1}
-              playlistId={playlistId}
-              setWatchingVideoIdx={setWatchingVideoIdx}
-              title={v.snippet.title}
-              thumbnailUrl={v.snippet.thumbnails.medium.url} 
-              uploaderName={v.snippet.channelTitle}
-              videoId={v.snippet.resourceId.videoId}
-              watchingVideoId={watchingVideoId}
-            />
-          ))
+          getVideosToShow().map((v, idx) => { 
+            // If not hiding, start at 0
+            // If hiding, start at watchingVideoIdx
+            const currentVideoIdx = hidingPreviousVideos
+              ? watchingVideoIdx + idx
+              : idx;
+
+            return (
+              <PlaylistScrollVideo 
+                key={v.snippet.resourceId.videoId}
+                indexInPlaylist={currentVideoIdx}
+                playlistId={playlistId}
+                setWatchingVideoIdx={setWatchingVideoIdx}
+                title={v.snippet.title}
+                thumbnailUrl={v.snippet.thumbnails.medium.url} 
+                uploaderName={v.snippet.channelTitle}
+                videoId={v.snippet.resourceId.videoId}
+                watchingVideoId={watchingVideoId}
+              />
+            )
+          })
         }
       </div>
     </div>
   );
 }
-
-/* SHOW:
-- thumbnail
-- video length
-- 
-*/
