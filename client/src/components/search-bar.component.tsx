@@ -26,7 +26,10 @@ const _SearchBar: FC<RouteComponentProps> = ({ history }) => {
 
     const queryParams = getQueryParams(searchInputText);
     if (typeof queryParams.query.v == "string") {
-      return handleRedirect("video", queryParams.query.v);
+      // Found a video. Check if `list` query param is included
+      return typeof queryParams.query.list == "string"
+        ? handleVideoRedirect(queryParams.query.v, queryParams.query.list)
+        : handleVideoRedirect(queryParams.query.v);
     }
 
     const explicitSearchType = getExplicitSearchType();
@@ -84,6 +87,15 @@ const _SearchBar: FC<RouteComponentProps> = ({ history }) => {
     else if (searchType === "video") baseUrl = "watch";
 
     history.push(`/${baseUrl}/${term}`);
+  }
+
+  function handleVideoRedirect(videoId: string, playlistId?: string) {
+    let redirectUrl = `/watch?v=${videoId}`;
+    if (playlistId) {
+      redirectUrl += `&list=${playlistId}`;
+    }
+
+    history.push(redirectUrl);
   }
 
   function getSearchClearClasses() {
