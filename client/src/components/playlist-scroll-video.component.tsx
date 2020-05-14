@@ -32,7 +32,10 @@ export const PlaylistScrollVideo: FC<IProps> = ({ indexInPlaylist, playlistId, s
 
   return (
     <Link to={videoUrl} className={getContainerClasses()}>
-      <img className="c-playlist-scroll-video__image" src={thumbnailUrl} alt={title} />
+      <div className="c-playlist-scroll-video__image-container">
+        <img className="c-playlist-scroll-video__image" src={thumbnailUrl} alt={title} />
+        <div className="c-playlist-scroll-video__index">{indexInPlaylist}</div>
+      </div>
       <div className="c-playlist-scroll-video__text-container">
         <h3 className="c-playlist-scroll-video__title">{title}</h3>
         <h4 className="c-playlist-scroll-video__uploader">{uploaderName}</h4>

@@ -50,4 +50,21 @@
     font-weight: 500;
     margin-bottom: 0;
   }
+
+  &__image-container {
+    position: relative;
+  }
+
+  &__index {
+    background-color: $color-grey-3;
+    border-bottom-right-radius: 5px;
+    color: $color-off-white;
+    font-size: 1.3rem;
+    font-weight: bold;
+    display: block;
+    padding: 5px 0.8rem;
+    position: absolute;
+      top: 0px;
+      left: 1.2rem;
+  }
 }
