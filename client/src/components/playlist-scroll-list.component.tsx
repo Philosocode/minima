@@ -71,7 +71,8 @@ export const PlaylistScrollList: FC<IProps> = ({ playlistId, watchingVideoId }) 
         </div>
       </div>
 
-      <div className="c-playlist-scroll-video__list">
+      <div className="c-playlist-scroll-list__videos">
+        <div className="c-playlist-scroll-list__toggle-previous">Show Previous Videos &darr;</div>
         {
           playlistVideos.map((v, idx) => (
             <PlaylistScrollVideo 

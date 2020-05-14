@@ -1,6 +1,9 @@
 .c-playlist-scroll-list {
+  $spacing-bottom: 5px;
+  $playlist-border: 1px solid $color-grey-9;
+
   &__container {
-    border: 1px solid $color-grey-9;
+    border: $playlist-border;
     border-radius: 1rem;
     box-shadow: $box-shadow-default;
     margin-left: $sidebar-gap;
@@ -18,11 +21,11 @@
   }
 
   &__creator {
-    margin-bottom: 5px;
+    margin-bottom: $spacing-bottom;
   }
 
   &__header {
-    border-bottom: 1px solid $color-grey-9;
+    border-bottom: $playlist-border;
   }
 
   &__sub-text {
@@ -32,6 +35,26 @@
 
   &__title {
     font-size: 1.6rem;
-    margin-bottom: 5px;
+    margin-bottom: $spacing-bottom;
+  }
+
+  &__toggle-previous {
+    color: $color-grey-3;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1.4rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: $playlist-border;
+
+    &:hover {
+      background-color: #ececec;
+    }
+  }
+
+  &__videos {
+    height: 70rem;
+    overflow-y: scroll;
+    width: 100%;
   }
 }

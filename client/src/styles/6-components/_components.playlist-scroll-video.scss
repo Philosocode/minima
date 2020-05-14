@@ -1,11 +1,6 @@
 .c-playlist-scroll-video {
-  $hoverColor: #d7d7d7;
-  
-  &__list {
-    height: 70rem;
-    overflow-y: scroll;
-    width: 100%;
-  }
+  $hover-color: #ececec;
+  $selected-color: #d7d7d7;
 
   &__container {
     border-bottom: 1px solid $color-grey-A;
@@ -22,9 +17,16 @@
       border-bottom: none;
     }
 
-    &:hover { background-color: $hoverColor; }
+    &:hover { background-color: $hover-color; }
 
-    &--current { background-color: $hoverColor; }
+    // Don't use hover colour on currently selected video
+    &--current { 
+      background-color: $selected-color; 
+      
+      &:hover { 
+        background-color: $selected-color;
+      }
+    }
   }
 
   &__image {
