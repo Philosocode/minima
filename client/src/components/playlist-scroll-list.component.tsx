@@ -50,12 +50,13 @@ export const PlaylistScrollList: FC<IProps> = ({ playlistId, watchingVideoId }) 
   console.log(playlistDetails);
   
   return (
-    <div className="c-playlist-scroll-list__container">
+    <div className="o-card c-playlist-scroll-list__container">
+
       <div className="c-playlist-scroll-list__header">
         <h3 className="c-playlist-scroll-list__title">{playlistDetails.snippet.title}</h3>
         <div className="c-playlist-scroll-list__sub-text">
           <div className="c-playlist-scroll-list__creator">{playlistDetails.snippet.channelTitle}</div>
-          <div className="c-playlist-scroll-list__video-count">{watchingVideoIdx} / {playlistVideos.length} videos</div>
+          <div className="c-playlist-scroll-list__video-count">{watchingVideoIdx} / {playlistVideos.length}</div>
         </div>
       </div>
 
@@ -68,7 +69,7 @@ export const PlaylistScrollList: FC<IProps> = ({ playlistId, watchingVideoId }) 
               playlistId={playlistId}
               setWatchingVideoIdx={setWatchingVideoIdx}
               title={v.snippet.title}
-              thumbnailUrl={v.snippet.thumbnails.default.url} 
+              thumbnailUrl={v.snippet.thumbnails.medium.url} 
               uploaderName={v.snippet.channelTitle}
               videoId={v.snippet.resourceId.videoId}
               watchingVideoId={watchingVideoId}

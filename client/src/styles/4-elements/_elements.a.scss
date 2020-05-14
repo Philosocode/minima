@@ -1,8 +1,4 @@
 a {
-  color: #777;
+  color: $color-grey-7;
   transition: color 0.1s ease;
-
-  &:hover {
-    color: #AAA;
-  }
 }

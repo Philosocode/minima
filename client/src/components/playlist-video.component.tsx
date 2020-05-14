@@ -28,8 +28,10 @@ export const PlaylistVideo: FC<IProps> = ({ index, playlistId, setWatchingVideoI
   return (
     <Link to={videoUrl} className={getContainerClasses()}>
       <img className="c-playlist-video__image" src={thumbnailUrl} alt={title} />
-      <h3 className="c-playlist-video__title">{title}</h3>
-      <h4 className="c-playlist-video__uploader">{uploaderName}</h4>
+      <div className="c-playlist-video__text-container">
+        <h3 className="c-playlist-video__title">{title}</h3>
+        <h4 className="c-playlist-video__uploader">{uploaderName}</h4>
+      </div>
     </Link>
   );
 }

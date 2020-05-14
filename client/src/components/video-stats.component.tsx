@@ -23,7 +23,7 @@ export const VideoStats: FC<IProps> = ({ videoData }) => {
   const formattedPublishDate = getFormattedDate(publishedAt, "MMM io, yyyy");
   
   return (
-    <div className="c-video-stats__container">
+    <div className="o-card c-video-stats__container">
       <div className="c-video-stats__content">
 
         <VideoStatsRow icon={faCalendarDay} text={formattedPublishDate} />

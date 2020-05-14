@@ -1,33 +1,55 @@
 .c-playlist-video__list {
-  border-top: 1px solid #000;
   height: 70rem;
   overflow-y: scroll;
-  overflow-x: hidden;
   width: 100%;
 }
 
-.c-playlist-video__container {
-  border-bottom: 1px solid $color-grey-3;
-  display: block;
-  padding-top: $spacing-medium;
-  text-decoration: none;
+.c-playlist-video {
+  $hoverColor: #ececec;
 
-  &:hover { background-color: $color-grey-E; }
-  &:last-child { 
-    padding-bottom: 0;
-    border-bottom: none;
+  &__container {
+    border-bottom: 1px solid $color-grey-A;
+    color: $color-grey-3;
+    display: flex;
+      flex-direction: column;
+      align-items: center;
+    padding-top: $spacing-medium;
+    padding-bottom: $spacing-medium;
+    text-decoration: none;
+    z-index: 0;
+
+    &:first-of-type {
+      border-top: 1px solid $color-grey-9;
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:hover { background-color: $hoverColor; }
+
+    &--current { background-color: $hoverColor; }
   }
 
-  &--current { background-color: $color-grey-E; }
-}
+  &__image {
+    width: 90%;
+  }
 
-.c-playlist-video {
+  &__text-container {
+    margin-top: $spacing-small;
+    text-align: left;
+    width: 90%;
+  }
+  
   &__title {
-    font-size: 1.6rem;
-    margin-bottom: 0;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 5px;
   }
 
   &__uploader {
-    font-weight: normal;
+    font-size: 1.4rem;
+    font-weight: 500;
+    margin-bottom: 0;
   }
 }

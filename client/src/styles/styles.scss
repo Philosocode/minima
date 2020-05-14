@@ -1,5 +1,6 @@
 @import-normalize;
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
+
 
 // 1. Settings
 @import "1-settings/settings.colors";
@@ -22,6 +23,7 @@
 @import "4-elements/elements.html";
 
 // 5. Objects
+@import "5-objects/objects.card";
 @import "5-objects/objects.container";
 @import "5-objects/objects.grid";
 @import "5-objects/objects.list";
