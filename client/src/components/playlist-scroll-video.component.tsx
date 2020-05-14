@@ -12,13 +12,13 @@ interface IProps {
   watchingVideoId: string;
 }
 
-export const PlaylistVideo: FC<IProps> = ({ index, playlistId, setWatchingVideoIdx, thumbnailUrl, title, uploaderName, videoId, watchingVideoId }) => {
+export const PlaylistScrollVideo: FC<IProps> = ({ index, playlistId, setWatchingVideoIdx, thumbnailUrl, title, uploaderName, videoId, watchingVideoId }) => {
   const videoUrl = `/watch?v=${videoId}&list=${playlistId}&index=${index}`;
 
   function getContainerClasses() {
-    let classes = "c-playlist-video__container";
+    let classes = "c-playlist-scroll-video__container";
     if (videoId === watchingVideoId) {
-      classes += " c-playlist-video__container--current";
+      classes += " c-playlist-scroll-video__container--current";
       setWatchingVideoIdx(index);
     }
 
@@ -27,10 +27,10 @@ export const PlaylistVideo: FC<IProps> = ({ index, playlistId, setWatchingVideoI
 
   return (
     <Link to={videoUrl} className={getContainerClasses()}>
-      <img className="c-playlist-video__image" src={thumbnailUrl} alt={title} />
-      <div className="c-playlist-video__text-container">
-        <h3 className="c-playlist-video__title">{title}</h3>
-        <h4 className="c-playlist-video__uploader">{uploaderName}</h4>
+      <img className="c-playlist-scroll-video__image" src={thumbnailUrl} alt={title} />
+      <div className="c-playlist-scroll-video__text-container">
+        <h3 className="c-playlist-scroll-video__title">{title}</h3>
+        <h4 className="c-playlist-scroll-video__uploader">{uploaderName}</h4>
       </div>
     </Link>
   );

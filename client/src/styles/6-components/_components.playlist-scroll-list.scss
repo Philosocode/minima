@@ -1,7 +1,7 @@
 .c-playlist-scroll-list {
   &__container {
     border: 1px solid $color-grey-9;
-    border-radius: 1rem 1rem 0 1rem;
+    border-radius: 1rem;
     box-shadow: $box-shadow-default;
     margin-left: $sidebar-gap;
     overflow: hidden;
@@ -9,15 +9,21 @@
     z-index: 10;
   }
 
-  &__header {
-    display: flex;
-      flex-direction: column;
-      align-items: flex-start;
+  &__content {
+    text-align: left;
     padding-top: 1.6rem;
     padding-bottom: 1.6rem;
-    text-align: left;
-    margin: 0 auto;
     width: 90%;
+    margin: 0 auto;
+  }
+
+  &__header {
+    border-bottom: 1px solid $color-grey-9;
+  }
+
+  &__sub-text {
+    font-size: 1.4rem;
+    font-weight: 500;
   }
 
   &__title {
@@ -25,9 +31,4 @@
     margin-bottom: 5px;
   }
 
-  &__sub-text {
-    font-size: 1.4rem;
-    font-weight: 500;
-    color: $color-grey-3;
-  }
 }

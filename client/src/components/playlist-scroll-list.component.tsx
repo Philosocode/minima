@@ -3,7 +3,7 @@ import React, { FC, useState } from "react";
 import { IPlaylist, IPlaylistItem } from "shared/interfaces/youtube.interface";
 import { getPlaylistDetails, getVideosForPlaylist } from "apis/youtube.api";
 
-import { PlaylistVideo } from "components/playlist-video.component";
+import { PlaylistScrollVideo } from "components/playlist-scroll-video.component";
 import { Loader } from "./loader.component";
 
 interface IProps {
@@ -37,9 +37,7 @@ export const PlaylistScrollList: FC<IProps> = ({ playlistId, watchingVideoId }) 
 
   function renderLoadPlaylistsButton() {
     return (
-      <div className="c-playlist-video__load">
-        <button onClick={fetchPlaylistVideos}>Load Playlist</button>
-      </div>
+      <div className="c-link-text c-link-text--centered" onClick={fetchPlaylistVideos}>LOAD PLAYLIST</div>
     )
   }
 
@@ -53,17 +51,19 @@ export const PlaylistScrollList: FC<IProps> = ({ playlistId, watchingVideoId }) 
     <div className="o-card c-playlist-scroll-list__container">
 
       <div className="c-playlist-scroll-list__header">
-        <h3 className="c-playlist-scroll-list__title">{playlistDetails.snippet.title}</h3>
-        <div className="c-playlist-scroll-list__sub-text">
-          <div className="c-playlist-scroll-list__creator">{playlistDetails.snippet.channelTitle}</div>
-          <div className="c-playlist-scroll-list__video-count">{watchingVideoIdx} / {playlistVideos.length}</div>
+        <div className="c-playlist-scroll-list__content">
+          <h3 className="c-playlist-scroll-list__title">{playlistDetails.snippet.title}</h3>
+          <div className="c-playlist-scroll-list__sub-text">
+            <div className="c-playlist-scroll-list__creator">{playlistDetails.snippet.channelTitle}</div>
+            <div className="c-playlist-scroll-list__video-count">{watchingVideoIdx} / {playlistVideos.length}</div>
+          </div>
         </div>
       </div>
 
-      <div className="c-playlist-video__list">
+      <div className="c-playlist-scroll-video__list">
         {
           playlistVideos.map((v, idx) => (
-            <PlaylistVideo 
+            <PlaylistScrollVideo 
               key={v.snippet.resourceId.videoId}
               index={idx+1}
               playlistId={playlistId}

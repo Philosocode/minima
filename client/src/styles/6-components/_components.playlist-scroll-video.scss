@@ -1,11 +1,11 @@
-.c-playlist-video__list {
-  height: 70rem;
-  overflow-y: scroll;
-  width: 100%;
-}
-
-.c-playlist-video {
+.c-playlist-scroll-video {
   $hoverColor: #ececec;
+  
+  &__list {
+    height: 70rem;
+    overflow-y: scroll;
+    width: 100%;
+  }
 
   &__container {
     border-bottom: 1px solid $color-grey-A;
@@ -17,10 +17,6 @@
     padding-bottom: $spacing-medium;
     text-decoration: none;
     z-index: 0;
-
-    &:first-of-type {
-      border-top: 1px solid $color-grey-9;
-    }
 
     &:last-child {
       border-bottom: none;
