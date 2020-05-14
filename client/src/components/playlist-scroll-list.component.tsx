@@ -85,13 +85,12 @@ export const PlaylistScrollList: FC<IProps> = ({ playlistId, watchingVideoId }) 
         </div>
       </div>
 
-      {
-        watchingVideoIdx !== 1 && (
-          <div className="c-playlist-scroll-list__toggle-previous" onClick={toggleHidingPreviousVideos}>{getToggleLabel()}</div>
-        )
-      }
-
       <div className="c-playlist-scroll-list__videos">
+        {
+          watchingVideoIdx !== 1 && (
+            <div className="c-playlist-scroll-list__toggle-previous" onClick={toggleHidingPreviousVideos}>{getToggleLabel()}</div>
+          )
+        }
         {
           getVideosToShow().map((v, idx) => { 
             // If not hiding, start at 0
