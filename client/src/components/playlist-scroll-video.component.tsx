@@ -1,8 +1,8 @@
-import React, { FC, Dispatch, SetStateAction } from "react";
+import React, { FC, Dispatch, SetStateAction, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 interface IProps {
-  index: number;
+  indexInPlaylist: number;
   setWatchingVideoIdx: Dispatch<SetStateAction<number>>;
   thumbnailUrl: string;
   title: string;
@@ -12,14 +12,19 @@ interface IProps {
   watchingVideoId: string;
 }
 
-export const PlaylistScrollVideo: FC<IProps> = ({ index, playlistId, setWatchingVideoIdx, thumbnailUrl, title, uploaderName, videoId, watchingVideoId }) => {
-  const videoUrl = `/watch?v=${videoId}&list=${playlistId}&index=${index}`;
+export const PlaylistScrollVideo: FC<IProps> = ({ indexInPlaylist, playlistId, setWatchingVideoIdx, thumbnailUrl, title, uploaderName, videoId, watchingVideoId }) => {
+  const videoUrl = `/watch?v=${videoId}&list=${playlistId}&index=${indexInPlaylist}`;
+
+  useEffect(() => {
+    if (videoId === watchingVideoId) {
+      setWatchingVideoIdx(indexInPlaylist);
+    }
+  }, [indexInPlaylist, videoId, watchingVideoId, setWatchingVideoIdx])
 
   function getContainerClasses() {
     let classes = "c-playlist-scroll-video__container";
     if (videoId === watchingVideoId) {
       classes += " c-playlist-scroll-video__container--current";
-      setWatchingVideoIdx(index);
     }
 
     return classes;

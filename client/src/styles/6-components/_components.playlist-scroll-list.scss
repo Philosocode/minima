@@ -17,6 +17,10 @@
     margin: 0 auto;
   }
 
+  &__creator {
+    margin-bottom: 5px;
+  }
+
   &__header {
     border-bottom: 1px solid $color-grey-9;
   }
@@ -30,5 +34,4 @@
     font-size: 1.6rem;
     margin-bottom: 5px;
   }
-
 }

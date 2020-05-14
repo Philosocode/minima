@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, useEffect } from "react";
 
 import { IPlaylist, IPlaylistItem } from "shared/interfaces/youtube.interface";
 import { getPlaylistDetails, getVideosForPlaylist } from "apis/youtube.api";
@@ -16,6 +16,17 @@ export const PlaylistScrollList: FC<IProps> = ({ playlistId, watchingVideoId }) 
   const [playlistDetails, setPlaylistDetails] = useState<IPlaylist>();
   const [watchingVideoIdx, setWatchingVideoIdx] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    clearState();
+  }, [playlistId])
+
+  function clearState() {
+    setPlaylistVideos([]);
+    setPlaylistDetails(undefined);
+    setWatchingVideoIdx(1);
+    setIsLoading(false);
+  }
 
   async function fetchPlaylistVideos() {
     setIsLoading(true);
@@ -65,7 +76,7 @@ export const PlaylistScrollList: FC<IProps> = ({ playlistId, watchingVideoId }) 
           playlistVideos.map((v, idx) => (
             <PlaylistScrollVideo 
               key={v.snippet.resourceId.videoId}
-              index={idx+1}
+              indexInPlaylist={idx+1}
               playlistId={playlistId}
               setWatchingVideoIdx={setWatchingVideoIdx}
               title={v.snippet.title}
