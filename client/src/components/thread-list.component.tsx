@@ -59,9 +59,9 @@ export const ThreadList: FC<IProps> = ({ numComments, videoId }) => {
 
     const loadMoreText = threads.length <= 0
       ? `LOAD COMMENTS`
-      : `LOAD MORE COMMENTS`;
+      : `LOAD MORE`;
 
-    return <div className="c-link-text c-link-text--centered" onClick={loadCommentThreads}>{loadMoreText}</div>
+    return <button className="c-button c-button--centered c-thread__button" onClick={loadCommentThreads}>{loadMoreText}</button>
   }
 
   return (

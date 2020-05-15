@@ -1,5 +1,16 @@
 .c-thread__container {
-  &:not(:last-of-type) {
-    margin-bottom: 4rem;
+  
+}
+
+.c-thread {
+  &__container {
+    &:not(:last-of-type) {
+      margin-bottom: 4rem;
+    }
+  }
+
+  &__button {
+    margin-top: $spacing-small;
+    margin-bottom: 0;
   }
 }
