@@ -3,9 +3,9 @@ import React, { FC, useState, useEffect } from "react";
 import { IPlaylist, IPlaylistItem } from "shared/interfaces/youtube.interface";
 import { getPlaylistDetails, getVideosForPlaylist } from "apis/youtube.api";
 
-import { PlaylistScrollVideo } from "components/playlist-scroll-video.component";
-import { Loader } from "./loader.component";
 import { useToggle } from "hooks/use-toggle.hook";
+import { PlaylistScrollVideo } from "components/playlist-scroll-video.component";
+import { Loader } from "components/loader.component";
 
 interface IProps {
   playlistId: string;
@@ -58,7 +58,7 @@ export const PlaylistScrollList: FC<IProps> = ({ playlistId, watchingVideoId }) 
 
   function renderLoadPlaylistsButton() {
     return (
-      <div className="c-link-text c-link-text--centered" onClick={fetchPlaylistVideos}>LOAD PLAYLIST</div>
+      <button className="c-button" onClick={fetchPlaylistVideos}>LOAD PLAYLIST</button>
     )
   }
 
@@ -87,7 +87,7 @@ export const PlaylistScrollList: FC<IProps> = ({ playlistId, watchingVideoId }) 
 
       <div className="c-playlist-scroll-list__videos">
         {
-          watchingVideoIdx !== 1 && (
+          watchingVideoIdx !== 0 && (
             <div className="c-playlist-scroll-list__toggle-previous" onClick={toggleHidingPreviousVideos}>{getToggleLabel()}</div>
           )
         }
