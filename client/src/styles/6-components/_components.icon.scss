@@ -1,9 +1,12 @@
 .c-icon {
   &__icon {
-    color: $color-grey-7;
+    color: #888;
   }
 
   &__text {
     color: $color-grey-5;
+    font-size: 0.95em;
+    font-weight: 500;
+    margin-left: 2px;
   }
 }
