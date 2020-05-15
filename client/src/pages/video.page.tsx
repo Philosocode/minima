@@ -27,6 +27,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
   // Functions
   useEffect(() => {
     const queryParams = getQueryParams(location.search);
+    
     const videoQueryParam = queryParams.query["v"];
     const playlistQueryParam = queryParams.query["list"];
 
@@ -36,6 +37,8 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
 
     if (typeof playlistQueryParam === "string") {
       setPlaylistId(playlistQueryParam);
+    } else {
+      setPlaylistId("");
     }
 
     async function fetchVideoAndChannelData(videoId: string) {
