@@ -66,7 +66,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
     return <Loader position="center-page" />;
   }
   return (
-    <>
+    <div className="o-site__page o-grid__container">
       <div className="o-grid__item--full">
         <VideoPlayer isLoading={isLoading} videoId={videoData.id} />
       </div>
@@ -89,7 +89,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
       <div className="o-grid__item--right-sidebar">
         { playlistId && <PlaylistScrollList playlistId={playlistId} watchingVideoId={videoData.id} /> }
       </div>
-    </>
+    </div>
   );
 };
 

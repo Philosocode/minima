@@ -17,14 +17,14 @@ export function App() {
   return (
     <VideosProvider>
       <SearchProvider>
-        <div className="o-site-layout o-grid__container">
+        <div className="o-site__container">
           <Header />
-          <Switch>
-            <Route exact path="/" component={HomePage} />
-            <Route exact path="/search" component={SearchPage} />
-            <Route exact path="/watch" render={() => <VideoPage />} />
-            <Route component={NotFoundPage} />
-          </Switch>
+            <Switch>
+              <Route exact path="/" component={HomePage} />
+              <Route exact path="/search" component={SearchPage} />
+              <Route exact path="/watch" render={() => <VideoPage />} />
+              <Route component={NotFoundPage} />
+            </Switch>
           <Footer />
         </div>
       </SearchProvider>

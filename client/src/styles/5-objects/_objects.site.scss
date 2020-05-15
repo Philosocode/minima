@@ -1,0 +1,14 @@
+.o-site {
+  &__container {
+    margin: 0 auto;
+    padding-top: $header-height;
+    min-height: 99vh;
+    padding-bottom: 3rem;
+    position: relative;
+    text-align: center;
+  }
+
+  &__page {
+    margin-bottom: $spacing-medium;
+  }
+}
