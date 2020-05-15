@@ -23,6 +23,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
   const [videoData, setVideoData] = useState<IVideo>();
   const [channelData, setChannelData] = useState<IChannel>();
   const [playlistId, setPlaylistId] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   
   // Functions
   useEffect(() => {
@@ -32,16 +33,16 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
     const playlistQueryParam = queryParams.query["list"];
 
     typeof videoQueryParam === "string"
-      ?  fetchVideoAndChannelData(videoQueryParam)
+      ? fetchVideoAndChannelData(videoQueryParam)
       : alert("ERROR: Invalid video id.");
 
-    if (typeof playlistQueryParam === "string") {
-      setPlaylistId(playlistQueryParam);
-    } else {
-      setPlaylistId("");
-    }
+    typeof playlistQueryParam === "string"
+      ? setPlaylistId(playlistQueryParam)
+      : setPlaylistId("");
 
     async function fetchVideoAndChannelData(videoId: string) {
+      setIsLoading(true);
+
       try {
         const videoRes = await getVideoDetails(videoId);
         setVideoData(videoRes);
@@ -54,17 +55,20 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
       catch (err) {
         alert("ERROR: couldn't load video data.");
       }
+      finally {
+        setIsLoading(false);
+      }
     }
   }, [history, location.search]);
 
   // Render
   if (!channelData || !videoData) {
-    return <Loader position="centered" />;
+    return <Loader position="center-page" />;
   }
   return (
     <>
       <div className="o-grid__item--full">
-        <VideoPlayer videoId={videoData.id} />
+        <VideoPlayer isLoading={isLoading} videoId={videoData.id} />
       </div>
 
       <div className="o-grid__item--wide">

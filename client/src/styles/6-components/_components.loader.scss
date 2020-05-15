@@ -10,10 +10,17 @@
       align-items: center;
     position: relative;
  
-    &--centered { 
+    &--center-horizontal { 
         justify-content: center;
         grid-column: center-start / center-end;
-        margin: 0 auto; 
+        margin: 0 auto;
+    }
+
+    &--center-page {
+        position: absolute;
+            top: 40%;
+            left: 50%;
+        transform: translate(-50%, -50%)
     }
 
     &--left { left: 7.3rem; }

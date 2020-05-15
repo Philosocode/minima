@@ -53,7 +53,7 @@
   }
 
   &__videos {
-    height: 70rem;
+    max-height: 70rem;
     overflow-y: scroll;
     width: 100%;
   }

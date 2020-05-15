@@ -1,10 +1,13 @@
 import React, { FC } from "react";
+
 import { getQueryStringFromObject } from "shared/helpers";
+import { Loader } from "components/loader.component";
 
 interface IProps {
+  isLoading: boolean;
   videoId: string;
 }
-export const VideoPlayer: FC<IProps> = ({ videoId }) => { 
+export const VideoPlayer: FC<IProps> = ({ isLoading, videoId }) => { 
   const videoUrl = `https://www.youtube.com/embed/${videoId}`;
 
   function getIframeUrl() {
@@ -22,12 +25,16 @@ export const VideoPlayer: FC<IProps> = ({ videoId }) => {
 
   return (
     <div className="o-container c-video-player__container">
-      <iframe className="c-video-player__iframe"
-        src={getIframeUrl()}
-        frameBorder="0"
-        title={videoId}
-        allowFullScreen
-      />
+      {
+        isLoading
+          ? <Loader position="center-page" />
+          : <iframe className="c-video-player__iframe"
+            src={getIframeUrl()}
+            frameBorder="0"
+            title={videoId}
+            allowFullScreen
+          />
+      }
     </div>
   );
  }

@@ -54,7 +54,7 @@ export const ThreadList: FC<IProps> = ({ numComments, videoId }) => {
 
   function renderLoadCommentsButton() {
     if (isLoading) {
-      return <Loader position="centered" />;
+      return <Loader position="center-horizontal" />;
     }
 
     const loadMoreText = threads.length <= 0

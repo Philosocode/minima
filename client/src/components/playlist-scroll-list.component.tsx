@@ -26,7 +26,7 @@ export const PlaylistScrollList: FC<IProps> = ({ playlistId, watchingVideoId }) 
   function clearState() {
     setPlaylistVideos([]);
     setPlaylistDetails(undefined);
-    setWatchingVideoIdx(1);
+    setWatchingVideoIdx(0);
     setIsLoading(false);
   }
 
@@ -69,7 +69,7 @@ export const PlaylistScrollList: FC<IProps> = ({ playlistId, watchingVideoId }) 
   }
 
   // Render
-  if (isLoading) return <Loader position="centered" />
+  if (isLoading) return <Loader position="center-horizontal" />
   if (playlistVideos.length <= 0 || !playlistDetails) return renderLoadPlaylistsButton();
   
   return (
