@@ -30,8 +30,12 @@ export const PlaylistScrollVideo: FC<IProps> = ({ indexInPlaylist, playlistId, s
     return classes;
   }
 
+  function scrollToTop() {
+    window.scrollTo(0,0);
+  }
+
   return (
-    <Link to={videoUrl} className={getContainerClasses()}>
+    <Link to={videoUrl} className={getContainerClasses()} onClick={scrollToTop}>
       <div className="c-playlist-scroll-video__image-container">
         <img className="c-playlist-scroll-video__image" src={thumbnailUrl} alt={title} />
         <div className="c-playlist-scroll-video__index">{indexInPlaylist}</div>
