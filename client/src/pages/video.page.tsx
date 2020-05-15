@@ -9,7 +9,7 @@ import { Loader } from "components/loader.component";
 import { PlaylistScrollList } from "components/playlist-scroll-list.component";
 import { ThreadList } from "components/thread-list.component";
 import { VideoStats } from "components/video-stats.component";
-import { VideoDescription } from "components/video-description";
+import { VideoDescription } from "components/video-description.component";
 import { VideoPlayer } from "components/video-player.component";
 import { VideoUploader } from "components/video-uploader.component";
 import { getQueryParams } from "shared/helpers";
@@ -72,7 +72,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
       </div>
 
       <div className="o-grid__item--wide">
-        <h2 className="c-heading--title c-heading--left-align c-video__title">{videoData.snippet.title}</h2>
+        <h2 className="c-heading--large c-heading--left-align c-video__title">{videoData.snippet.title}</h2>
       </div>
       
       <div className="o-grid__item--left-sidebar">

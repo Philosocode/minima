@@ -77,7 +77,7 @@ export const PlaylistScrollList: FC<IProps> = ({ playlistId, watchingVideoId }) 
 
       <div className="c-playlist-scroll-list__header">
         <div className="c-playlist-scroll-list__content">
-          <h3 className="c-playlist-scroll-list__title">{playlistDetails.snippet.title}</h3>
+          <h3 className="c-heading c-heading--small c-playlist-scroll-list__title">{playlistDetails.snippet.title}</h3>
           <div className="c-playlist-scroll-list__sub-text">
             <div className="c-playlist-scroll-list__creator">{playlistDetails.snippet.channelTitle}</div>
             <div className="c-playlist-scroll-list__video-count">{watchingVideoIdx} / {playlistVideos.length}</div>

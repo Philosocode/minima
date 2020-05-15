@@ -17,17 +17,6 @@
     }
   }
 
-  &__name {
-    color: #333;
-    margin: 0;
-    font-weight: bold;
-    text-decoration: none;
-
-    &:hover { color: $color-grey-7; }
-
-    &--large { font-size: 2rem; }
-  }
-
   &__subscriber-count {
     color: $color-grey-7;
     font-size: 1.4rem;

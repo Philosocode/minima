@@ -10,6 +10,7 @@
       align-items: center;
     padding-top: $spacing-medium;
     padding-bottom: $spacing-medium;
+    transition: background-color 0.1s;
     text-decoration: none;
     z-index: 0;
 
@@ -44,8 +45,6 @@
   }
   
   &__title {
-    font-size: 1.4rem;
-    font-weight: 700;
     margin-bottom: 5px;
   }
 

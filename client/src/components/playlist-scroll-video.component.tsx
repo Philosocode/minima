@@ -41,7 +41,7 @@ export const PlaylistScrollVideo: FC<IProps> = ({ indexInPlaylist, playlistId, s
         <div className="c-playlist-scroll-video__index">{indexInPlaylist}</div>
       </div>
       <div className="c-playlist-scroll-video__text-container">
-        <h3 className="c-playlist-scroll-video__title">{title}</h3>
+        <h3 className="c-heading c-heading--tiny c-playlist-scroll-video__title">{title}</h3>
         <h4 className="c-playlist-scroll-video__uploader">{uploaderName}</h4>
       </div>
     </Link>

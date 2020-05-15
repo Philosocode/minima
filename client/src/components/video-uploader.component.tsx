@@ -20,7 +20,7 @@ export const VideoUploader: FC<IProps> = ({ channelData }) => {
         <img className="c-channel__image c-channel__image--small" src={imageUrl} alt={channelTitle} />
       </Link>
       <div className="o-media__body o-media__body--center-vertically">
-        <Link to={channelUrl} className="c-channel__name">{channelTitle}</Link>
+        <Link to={channelUrl} className="c-heading c-heading--small c-heading--link">{channelTitle}</Link>
         <h3 className="c-channel__subscriber-count">{getAbbreviatedNumber(subscriberCount)} subscribers</h3>
       </div>
     </div>
