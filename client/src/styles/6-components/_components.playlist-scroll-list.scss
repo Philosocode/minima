@@ -1,11 +1,9 @@
 .c-playlist-scroll-list {
   $spacing-bottom: 5px;
-  $playlist-border: 1px solid $color-grey-9;
+  $playlist-divider: 1px solid $color-grey-outline;
 
   &__container {
-    border: $playlist-border;
     border-radius: 1rem;
-    box-shadow: $box-shadow-default;
     margin-left: $sidebar-gap;
     overflow: hidden;
     width: 100%;
@@ -25,7 +23,7 @@
   }
 
   &__header {
-    border-bottom: $playlist-border;
+    border-bottom: $playlist-divider;
   }
 
   &__sub-text {
@@ -38,16 +36,16 @@
   }
 
   &__toggle-previous {
-    color: $color-grey-3;
+    color: $color-off-white;
     cursor: pointer;
     font-weight: 600;
     font-size: 1.4rem;
     padding-top: 1rem;
     padding-bottom: 1rem;
-    border-bottom: $playlist-border;
+    border-bottom: $playlist-divider;
 
     &:hover {
-      background-color: #ececec;
+      background-color: $color-grey-dark;
     }
   }
 

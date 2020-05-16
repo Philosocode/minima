@@ -1,5 +1,5 @@
 .c-link-text {
-  color: $color-grey-5;
+  color: $color-off-white;
   cursor: pointer;
   display: inline-block;
   font-family: $font-primary;
@@ -7,7 +7,7 @@
   font-weight: bold;
   transition: color 0.1s ease;
   
-  &:hover { color: $color-grey-7; }
+  &:hover { color: $color-green; }
 
   &--centered { margin: 0 auto; }
 }

@@ -3,8 +3,8 @@
 }
 
 .c-progress-bar__container {
-  background-color: $color-grey-E;
-  border: 1px solid $color-grey-C;
+  background-color: $color-grey;
+  border: 1px solid $color-grey-dark;
   border-radius: 5px;
   height: 1.1rem;
   margin-top: 7px;
@@ -13,7 +13,7 @@
 }
 
 .c-progress-bar {
-  background-color: royalblue;
+  background-color: $color-green-dark;
   border-radius: 2px;
   width: var(--progress-bar-percentage);
   height: 100%;

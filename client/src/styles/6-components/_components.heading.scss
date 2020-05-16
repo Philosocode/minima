@@ -1,5 +1,5 @@
 .c-heading {
-  color: $color-grey-3;
+  color: $color-off-white;
   display: inline-block;
   font-family: $font-primary;
   font-weight: bold;
@@ -18,7 +18,7 @@
     cursor: pointer;
 
     &:hover {
-      color: $color-grey-7;
+      color: $color-green;
     }
   }
 }

@@ -11,19 +11,18 @@
   &__row {
     display: flex;
       justify-content: flex-start;
-
     &:not(:last-child) {
       margin-bottom: $spacing-tiny;
     }
   }
 
   &__icon {
-    color: $color-grey-5;
+    color: $color-grey-light;
     margin-right: $spacing-tiny;
     width: 2rem;
   }
 
   &__text {
-    color: $color-grey-3;
+    color: $color-grey-lighter;
   }
 }

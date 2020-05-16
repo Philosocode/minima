@@ -1,10 +1,9 @@
 .c-playlist-scroll-video {
-  $hover-color: #ececec;
-  $selected-color: #d7d7d7;
+;
+  $selected-color: #666;
 
   &__container {
-    border-bottom: 1px solid $color-grey-A;
-    color: $color-grey-3;
+    border-bottom: 1px solid $color-grey-dark;
     display: flex;
       flex-direction: column;
       align-items: center;
@@ -18,7 +17,7 @@
       border-bottom: none;
     }
 
-    &:hover { background-color: $hover-color; }
+    &:hover { background-color: $color-grey-dark; }
 
     // Don't use hover colour on currently selected video
     &--current { 
@@ -29,7 +28,7 @@
       }
 
       & .c-playlist-scroll-video__index {
-        background-color: royalblue;
+        background-color: $color-green-darker;
       }
     }
   }
@@ -39,6 +38,7 @@
   }
 
   &__text-container {
+    color: $color-off-white;
     margin-top: $spacing-small;
     text-align: left;
     width: 90%;
@@ -59,7 +59,7 @@
   }
 
   &__index {
-    background-color: $color-grey-3;
+    background-color: $color-grey-darkest;
     border-bottom-right-radius: 5px;
     color: $color-off-white;
     font-size: 1.3rem;

@@ -1,9 +1,8 @@
 .c-button {
-  background-color: $color-off-white;
-  box-shadow: $box-shadow-light;
-  border: 1px solid $color-grey-A;
+  background-color: $color-grey-dark;
+  border: 1px solid $color-grey-outline;
   border-radius: 1rem;
-  color: $color-grey-3;
+  color: $color-off-white;
   cursor: pointer;
   display: inline-block;
   font-family: $font-primary;
@@ -15,13 +14,12 @@
   width: 16rem;
 
   &:hover {
-    box-shadow: $box-shadow-alt;
-    transform: translateY(-1px);
+    color: $color-green;
+    transform: translateY(-2px);
   }
 
   &:active,
   &:focus {
-    box-shadow: $box-shadow-pressed;
     outline: none;
     transform: translateY(-1px);
   }

@@ -1,8 +1,3 @@
-.c-comment__list {
-  margin-left: 9rem;
-  margin-top: $spacing-small;
-}
-
 .c-comment__container--reply {
   margin-top: $spacing-medium;
   margin-bottom: $spacing-medium;
@@ -21,20 +16,22 @@
 }
 
 .c-comment {
+  &__list {
+    margin-left: 9rem;
+    margin-top: $spacing-small;
+  }
+
   &__content {
+    color: $color-off-white;
     margin-top: $spacing-tiny;
     margin-bottom: $spacing-small;
   }
 
   &__date {
-    color: $color-grey-7;
+    color: $color-grey-light;
     font-size: 0.83em;
-    font-weight: bold;
+    font-weight: 600;
     margin-top: 3px;
-  }
-
-  &__likes {
-    color: $color-grey-5;
   }
 
   &__total {

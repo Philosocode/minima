@@ -33,10 +33,10 @@
     
     & div {
       animation: ball-fussion-ball1 1s 0s ease infinite;
-      border: 0 solid #333;
+      border: 0 solid $color-green-light;
       border-radius: 100%;
       display: inline-block;
-      background-color: #333;
+      background-color: $color-green-light;
       position: absolute;
       width: 1.2rem;
       height: 1.2rem;

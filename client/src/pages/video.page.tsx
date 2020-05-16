@@ -72,7 +72,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
       </div>
 
       <div className="o-grid__item--wide">
-        <h2 className="c-heading--large c-heading--left-align c-video__title">{videoData.snippet.title}</h2>
+        <h2 className="c-heading--huge c-heading--left-align c-video__title">{videoData.snippet.title}</h2>
       </div>
       
       <div className="o-grid__item--left-sidebar">

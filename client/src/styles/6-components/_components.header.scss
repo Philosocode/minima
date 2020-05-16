@@ -1,13 +1,13 @@
-.c-header__container {
-  background-color: $color-white;
-  border-bottom: 1px solid $color-grey-C;
-  position: fixed;
-    top: 0;
-  width: 100%;
-  z-index: 9999;
-}
-
 .c-header {
+  &__container {
+    background-color: $color-grey-darkest;
+    border-bottom: 1px solid $color-off-black;
+    position: fixed;
+      top: 0;
+    width: 100%;
+    z-index: 9999;
+  }
+
   &__nav {
     display: flex;
       flex-direction: row;
@@ -17,7 +17,7 @@
   }
 
   &__logo {
-    color: $color-black;
+    color: $color-off-white;
     font-size: 2rem;
     font-weight: bold;
     // Header is using position: fixed and grid-column wasn't working
@@ -27,6 +27,6 @@
     text-decoration: none;
     transition: color 0.1s ease;
 
-    &:hover { color: lighten($color-black, 30) }
+    &:hover { color: $color-green; }
   }
 }

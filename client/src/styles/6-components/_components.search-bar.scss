@@ -1,13 +1,15 @@
 .c-search-bar {
-  &__container {
+&__container {
     margin: 0 auto;
     position: relative;
     width: 40vw;
   }
 
   &__input {
-    border: 1px solid $color-grey-C;
+    background-color: $color-off-black;
+    border: 1px solid $color-grey-dark;
     border-radius: 2px;
+    color: $color-off-white;
     height: 2rem;
     font-family: $font-primary;
     font-weight: 400;
@@ -15,13 +17,13 @@
     padding: 1.8rem 3.6rem 1.8rem 1.8rem;
     width: 100%;
 
-    &:focus { outline: 1px solid $color-grey-C; }
+    &:focus { outline: 2px solid $color-green-dark; }
   }
 
   &__clear {
     $animation-settings: 0.1s linear;
 
-    color: $color-grey-7;
+    color: $color-grey-light;
     cursor: pointer;
     font-size: 2rem;
     opacity: 0;
