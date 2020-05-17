@@ -67,3 +67,7 @@ export function parseHtmlEntities(str: string) {
 export function roundToTwoDecimals(num: number) {
   return Math.round((num + Number.EPSILON) * 100) / 100;
 }
+
+export function scrollToTop() {
+  window.scrollTo(0,0);
+}

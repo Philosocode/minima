@@ -1,6 +1,8 @@
 import React, { FC, Dispatch, SetStateAction, useEffect } from "react";
 import { Link } from "react-router-dom";
 
+import { scrollToTop } from "shared/helpers";
+
 interface IProps {
   indexInPlaylist: number;
   setWatchingVideoIdx: Dispatch<SetStateAction<number>>;
@@ -28,10 +30,6 @@ export const PlaylistScrollVideo: FC<IProps> = ({ indexInPlaylist, playlistId, s
     }
 
     return classes;
-  }
-
-  function scrollToTop() {
-    window.scrollTo(0,0);
   }
 
   return (

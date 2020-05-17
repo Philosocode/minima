@@ -3,6 +3,7 @@ import { Switch, Route } from "react-router-dom";
 
 /* Pages */
 import { HomePage } from "pages/home.page";
+import { ChannelPage } from "pages/channel.page";
 import { SearchPage } from "pages/search.page";
 import { VideoPage } from "pages/video.page";
 import { NotFoundPage } from "pages/not-found.page";
@@ -22,6 +23,7 @@ export function App() {
             <Switch>
               <Route exact path="/" component={HomePage} />
               <Route exact path="/search" component={SearchPage} />
+              <Route exact path="/channel/:channelId" component={ChannelPage} />
               <Route exact path="/watch" render={() => <VideoPage />} />
               <Route component={NotFoundPage} />
             </Switch>

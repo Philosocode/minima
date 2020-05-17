@@ -2,6 +2,7 @@ import React, { FC, useState, useEffect } from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 
 import { IChannel, IVideo } from "shared/interfaces/youtube.interface";
+import { getQueryParams } from "shared/helpers";
 import { getChannelDetails, getVideoDetails } from "apis/youtube.api";
 
 import { Divider } from "components/divider.component";
@@ -12,7 +13,6 @@ import { VideoStats } from "components/video-stats.component";
 import { VideoDescription } from "components/video-description.component";
 import { VideoPlayer } from "components/video-player.component";
 import { VideoUploader } from "components/video-uploader.component";
-import { getQueryParams } from "shared/helpers";
 
 interface IRouteParams {
   videoId: string;
@@ -48,7 +48,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
         setVideoData(videoRes);
 
         const channelRes = await getChannelDetails(videoRes.snippet.channelId);
-        setChannelData(channelRes.items[0]);
+        setChannelData(channelRes);
 
         document.title = videoRes.snippet.title;
       }

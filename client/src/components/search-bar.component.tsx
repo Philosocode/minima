@@ -2,7 +2,7 @@ import React, { useState, FC, ChangeEvent, KeyboardEvent } from "react";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import { getQueryParams } from "shared/helpers";
+import { getQueryParams, scrollToTop } from "shared/helpers";
 
 type SearchType = "video" | "channel" | "playlist" | "general" | "unknown";
 
@@ -96,6 +96,7 @@ const _SearchBar: FC<RouteComponentProps> = ({ history }) => {
     }
 
     history.push(redirectUrl);
+    scrollToTop();
   }
 
   function getSearchClearClasses() {

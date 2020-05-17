@@ -1,7 +1,7 @@
 import React, { FC, useState } from "react";
 
 import { IComment } from "shared/interfaces/youtube.interface";
-import { getRepliesForCommentThread } from "apis/youtube.api";
+import { getCommentThreadReplies } from "apis/youtube.api";
 import { Comment } from "components/comment.component";
 import { useToggle } from "hooks/use-toggle.hook";
 import { Loader } from "./loader.component";
@@ -26,7 +26,7 @@ export const ReplyList: FC<IProps> = ({ topLevelCommentId, totalReplyCount }) =>
   async function loadReplies() {
     try {
       setIsLoading(true);
-      const res = await getRepliesForCommentThread(topLevelCommentId, nextPageToken);
+      const res = await getCommentThreadReplies(topLevelCommentId, nextPageToken);
       setIsLoading(false);
 
       // A nextPageToken means there are more replies to load

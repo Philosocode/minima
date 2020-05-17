@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from "react";
 
 import { ICommentThread } from "shared/interfaces/youtube.interface";
-import { getCommentThreadsForVideo } from "apis/youtube.api";
+import { getVideoCommentThreads } from "apis/youtube.api";
 import { Loader } from "components/loader.component";
 import { Thread } from "components/thread.component";
 import { addCommasToNumber } from "shared/helpers";
@@ -31,7 +31,7 @@ export const ThreadList: FC<IProps> = ({ numComments, videoId }) => {
   async function loadCommentThreads() {
     try {
       setIsLoading(true);
-      const res = await getCommentThreadsForVideo(videoId, nextPageToken);
+      const res = await getVideoCommentThreads(videoId, nextPageToken);
       setIsLoading(false);
   
       if (res.nextPageToken) {
