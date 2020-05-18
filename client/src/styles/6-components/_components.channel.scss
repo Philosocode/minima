@@ -1,19 +1,27 @@
 .c-channel {
+  &__box {
+    margin-bottom: $spacing-small;
+  }
+
+  &__description {
+    text-align: left;
+    white-space: pre-line;
+  }
+
   &__image {
-    border-radius: 1.2rem;
+    border-radius: 8px;
     margin-right: $spacing-small;
-    width: 8rem;
+    width: 6rem;
 
     &--small {
-      border-radius: 8px;
-      margin-right: $spacing-small;
-      width: 6rem;
-    }
-
-    &--tiny {
       border-radius: 7px;
       margin-right: $spacing-small;
       width: 4.5rem;
+    }
+
+    &--large {
+      width: 10rem;
+      border-radius: 1rem;
     }
   }
 
@@ -23,5 +31,9 @@
     font-weight: 500;
     margin-top: 5px;
     margin-bottom: 0;
+
+    &--large {
+      font-size: 1.6rem;
+    }
   }
 }

@@ -1,0 +1,32 @@
+.c-stats-card {
+  &__container {
+    border-radius: 1.2rem;
+    font-family: $font-primary;
+    font-weight: 500;
+    font-size: 0.9em;
+    padding: $spacing-small;
+    width: 80%;
+  
+    &--short {
+      width: max-content;
+    }
+  }
+  
+  &__row {
+    display: flex;
+      justify-content: flex-start;
+    &:not(:last-child) {
+      margin-bottom: $spacing-tiny;
+    }
+  }
+
+  &__icon {
+    color: $color-grey-light;
+    margin-right: 1.1rem;
+    width: 2rem;
+  }
+
+  &__text {
+    color: $color-grey-lighter;
+  }
+}

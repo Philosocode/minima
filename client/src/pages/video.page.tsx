@@ -2,17 +2,18 @@ import React, { FC, useState, useEffect } from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 
 import { IChannel, IVideo } from "shared/interfaces/youtube.interface";
-import { getQueryParams } from "shared/helpers";
+import { getQueryParams, roundToTwoDecimals, getFormattedDate, addCommasToNumber } from "shared/helpers";
 import { getChannelDetails, getVideoDetails } from "apis/youtube.api";
 
 import { Divider } from "components/divider.component";
 import { Loader } from "components/loader.component";
 import { PlaylistScrollList } from "components/playlist-scroll-list.component";
 import { ThreadList } from "components/thread-list.component";
-import { VideoStats } from "components/video-stats.component";
+import { StatsCard } from "components/stats-card.component";
 import { VideoDescription } from "components/video-description.component";
 import { VideoPlayer } from "components/video-player.component";
-import { VideoUploader } from "components/video-uploader.component";
+import { ChannelBox } from "components/channel-box.component";
+import { faCalendarDay, faEye, faThumbsUp, faThumbsDown, faPercent } from "@fortawesome/free-solid-svg-icons";
 
 interface IRouteParams {
   videoId: string;
@@ -61,12 +62,35 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
     }
   }, [history, location.search]);
 
+  function getStatsCardData() {
+    if (!videoData) return;
+    
+    const { publishedAt } = videoData.snippet; 
+    const { likeCount, dislikeCount, viewCount } = videoData.statistics;
+    const likes = +likeCount;
+    const dislikes = +dislikeCount;
+
+    const likesToDislikesPercentage = (likes / (likes + dislikes)) * 100;
+    const roundedPercentage = roundToTwoDecimals(likesToDislikesPercentage);
+
+    // e.g. December 6th, 2019
+    const formattedPublishDate = getFormattedDate(publishedAt, "MMM io, yyyy");
+
+    return [
+      { icon: faCalendarDay, text: formattedPublishDate },
+      { icon: faEye, text: addCommasToNumber(viewCount) },
+      { icon: faThumbsUp, text: addCommasToNumber(likeCount) },
+      { icon: faThumbsDown, text: addCommasToNumber(dislikeCount) },
+      { icon: faPercent, text: roundedPercentage.toString() }
+    ];
+  }
+
   // Render
   if (!channelData || !videoData) {
     return <Loader position="center-page" />;
   }
   return (
-    <div className="o-site__page o-grid__container">
+    <div className="o-page o-page--watch o-grid__container">
       <div className="o-grid__item--full">
         <VideoPlayer isLoading={isLoading} videoId={videoData.id} />
       </div>
@@ -76,11 +100,11 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
       </div>
       
       <div className="o-grid__item--left-sidebar">
-        <VideoStats videoData={videoData} />
+        <StatsCard statsCardData={getStatsCardData()} />
       </div>
 
       <div className="o-grid__item--center">
-        <VideoUploader channelData={channelData} />
+        <ChannelBox channelData={channelData} location="video-page" />
         <VideoDescription description={videoData.snippet.description} />
         <Divider />
         <ThreadList numComments={videoData.statistics.commentCount} videoId={videoData.id}  />
