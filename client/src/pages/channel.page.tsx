@@ -9,6 +9,7 @@ import { Loader } from "components/loader.component";
 import { ChannelBox } from "components/channel-box.component";
 import { linkify, addCommasToNumber, getFormattedDate } from "shared/helpers";
 import { StatsCard } from "components/stats-card.component";
+import { ChannelTabs } from "components/channel-tabs.component";
 
 interface IRouteParams {
   channelId: string;
@@ -54,7 +55,6 @@ const _ChannelPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
     ];
   }
 
-
   // Render
   if (!channelData) {
     return <Loader position="center-page" />;
@@ -63,6 +63,8 @@ const _ChannelPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
     <div className="o-page o-page--channel o-grid__container">
       <div className="o-grid__item--center">
         <ChannelBox channelData={channelData} location="channel-page" />
+
+        <ChannelTabs />
 
         <div className="o-text-container c-channel__description">
           <p dangerouslySetInnerHTML={{ __html: linkify(channelData.snippet.description) }}></p>
