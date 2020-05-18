@@ -24,6 +24,8 @@ export const ReplyList: FC<IProps> = ({ topLevelCommentId, totalReplyCount }) =>
   }
 
   async function loadReplies() {
+    if (!hasMoreReplies) return;
+    
     try {
       setIsLoading(true);
       const res = await getCommentThreadReplies(topLevelCommentId, nextPageToken);
