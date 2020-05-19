@@ -34,11 +34,17 @@ export const ChannelBox: FC<IProps> = ({ channelData, location }) => {
 
   return (
     <div className="o-media c-channel__box">
-      <Link to={channelUrl} className="o-media__image">
-        <img className={imageClasses} src={imageUrl} alt={channelTitle} />
-      </Link>
+      {
+        location === "video-page"
+          ? <Link to={channelUrl} className="o-media__image"><img className={imageClasses} src={imageUrl} alt={channelTitle} /></Link>
+          : <div className="o-media__image"><img className={imageClasses} src={imageUrl} alt={channelTitle} /></div>
+      }
       <div className="o-media__body o-media__body--center-vertically">
-        <Link to={channelUrl} className={headingClasses}>{channelTitle}</Link>
+        {
+          location === "video-page"
+            ? <Link to={channelUrl} className={headingClasses}>{channelTitle}</Link>
+            : <div className={headingClasses}>{channelTitle}</div>
+        }
         <h3 className={subscriberClasses}>{getAbbreviatedNumber(subscriberCount)} subscribers</h3>
       </div>
     </div>

@@ -15,9 +15,13 @@ interface IRouteParams {
   channelId: string;
 }
 
+export type ChannelTab = "Videos" | "Playlists" | "About";
+const channelTabs: ChannelTab[] = ["Videos", "Playlists", "About"];
+
 const _ChannelPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => { 
   const [channelData, setChannelData] = useState<IChannel>();
   const [isLoading, setIsLoading] = useState(false);
+  const [currentTab, setCurrentTab] = useState<ChannelTab>("Videos");
 
   const channelId = match.params.channelId;
 
@@ -55,6 +59,19 @@ const _ChannelPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
     ];
   }
 
+  function renderAbout() {
+    if (!channelData) return;
+    return (
+      <>
+        <div className="o-text-container c-channel__description">
+          <p dangerouslySetInnerHTML={{ __html: linkify(channelData.snippet.description) }}></p>
+        </div>
+
+        <StatsCard statsCardData={getStatsCardData()} isShort />
+      </>
+    )
+  }
+
   // Render
   if (!channelData) {
     return <Loader position="center-page" />;
@@ -64,13 +81,11 @@ const _ChannelPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
       <div className="o-grid__item--center">
         <ChannelBox channelData={channelData} location="channel-page" />
 
-        <ChannelTabs />
+        <ChannelTabs currentTab={currentTab} tabNames={channelTabs} setCurrentTab={setCurrentTab} />
 
-        <div className="o-text-container c-channel__description">
-          <p dangerouslySetInnerHTML={{ __html: linkify(channelData.snippet.description) }}></p>
-        </div>
-
-        <StatsCard statsCardData={getStatsCardData()} isShort />
+        {
+          currentTab === "About" && renderAbout()
+        }
       </div>
     </div>
   )

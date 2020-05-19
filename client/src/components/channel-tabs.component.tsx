@@ -1,11 +1,27 @@
-import React, { FC } from "react";
+import React, { FC, Dispatch, SetStateAction } from "react";
 
-export const ChannelTabs: FC = () => {
+import { ChannelTab } from "pages/channel.page";
+
+interface IProps {
+  currentTab: ChannelTab;
+  tabNames: ChannelTab[];
+  setCurrentTab: Dispatch<SetStateAction<ChannelTab>>;
+}
+
+export const ChannelTabs: FC<IProps> = ({ currentTab, tabNames, setCurrentTab }) => {
   return (
     <div className="c-channel-tab__container">
-      <h3 className="c-channel-tab__heading">Uploads</h3>
-      <h3 className="c-channel-tab__heading">Playlists</h3>
-      <h3 className="c-channel-tab__heading">Description</h3>
+      {
+        tabNames.map(tabName => (
+          <h3 
+            key={tabName}
+            className={`c-channel-tab__heading ${currentTab === tabName && "c-channel-tab__heading--selected"}`}
+            onClick={() => setCurrentTab(tabName)}
+          >
+            {tabName}
+          </h3>
+        ))
+      }
     </div>
   )
 }

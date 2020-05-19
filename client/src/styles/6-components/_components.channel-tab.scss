@@ -6,7 +6,7 @@
     margin-top: $spacing-medium;
     margin-bottom: $spacing-medium;
     text-transform: uppercase;
-    width: 45rem;
+    width: 35rem;
   }
 
   &__heading {
@@ -18,7 +18,8 @@
     margin-bottom: 0;
     transition: border 0.1s ease,  0.25s ease;
 
-    &:hover {
+    &:hover,
+    &--selected {
       border-bottom: 4px solid $color-green;
       color: $color-green;
     }
