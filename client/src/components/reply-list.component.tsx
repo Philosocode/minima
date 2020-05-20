@@ -58,7 +58,9 @@ export const ReplyList: FC<IProps> = ({ topLevelCommentId, totalReplyCount }) =>
     }
     else {
       functionToCall = handleShowReplies;
-      text = `↓ Show ${totalReplyCount} Replies`;
+      text = (totalReplyCount === 1)
+        ? `↓ Show Reply`
+        : `↓ Show ${totalReplyCount} Replies`;
     }
     
     return <div className="c-link-text" onClick={functionToCall}>{text}</div>;

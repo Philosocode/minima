@@ -55,7 +55,7 @@ export function getChannelDetails(channelId: string): Promise<IChannel> {
     });
 };
 
-export function getChannelPlaylists(channelId: string): Promise<IPlaylist[]> {
+export function getChannelPlaylists(channelId: string, nextPageToken?: string): Promise<IPlaylistsResponse> {
   const url = BASE_URL + "/playlists";
   const part = "id,snippet";
   const MAX_NUM_PLAYLISTS = 50;
@@ -65,13 +65,10 @@ export function getChannelPlaylists(channelId: string): Promise<IPlaylist[]> {
     maxResults: MAX_NUM_PLAYLISTS,
     channelId: channelId,
     part: part,
+    pageToken: nextPageToken
   }
-  
-  return makeApiRequest<IPlaylistsResponse>(url, params)
-    .then(playlistsRes => playlistsRes.items)
-    .catch(err => {
-      throw new Error(err);
-    });
+
+  return makeApiRequest<IPlaylistsResponse>(url, params);
 }
 
 export function getPlaylistDetails(playlistId: string): Promise<IPlaylist> {
@@ -141,7 +138,24 @@ interface IVideosForPlaylistParams {
   maxResults: number;
   pageToken?: string;
 }
-export async function getVideosForPlaylist(playlistId: string): Promise<IPlaylistItem[]> {
+
+export async function getVideosForPlaylist(playlistId: string, nextPageToken?: string): Promise<IPlaylistItemsResponse> {
+  const url = BASE_URL + "/playlistItems";
+  const part = "id,snippet";
+  const MAX_NUM_PLAYLIST_VIDEOS = 50;
+
+  const params: IVideosForPlaylistParams = {
+    key: API_KEY,
+    maxResults: MAX_NUM_PLAYLIST_VIDEOS,
+    playlistId: playlistId,
+    part: part,
+    pageToken: nextPageToken
+  }
+
+  return makeApiRequest<IPlaylistItemsResponse>(url, params);
+}
+
+export async function getAllVideosForPlaylist(playlistId: string): Promise<IPlaylistItem[]> {
   const url = BASE_URL + "/playlistItems";
   const part = "id,snippet";
   const MAX_NUM_PLAYLIST_VIDEOS = 50;

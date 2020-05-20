@@ -3,8 +3,17 @@
 /* ======== */
 export interface IChannel {
   id: string;
+  contentDetails: IChannelContentDetails;
   snippet: IChannelSnippet;
   statistics: IChannelStatistics;
+}
+
+interface IChannelContentDetails {
+  relatedPlaylists: {
+    favorites: string;
+    likes: string;
+    uploads: string;
+  }
 }
 
 export interface IChannelsResponse {
@@ -86,6 +95,7 @@ export interface IPlaylist {
 export interface IPlaylistsResponse {
   items: IPlaylist[];
   pageInfo: IPageInfo;
+  nextPageToken: string;
 }
 
 
