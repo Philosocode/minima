@@ -9,6 +9,14 @@
     width: 35rem;
   }
 
+  &__panel {
+    display: none;
+
+    &--visible {
+      display: block;
+    }
+  }
+
   &__heading {
     border-bottom: 4px solid transparent;
     color: $color-grey-light;

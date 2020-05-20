@@ -23,7 +23,9 @@ export const ChannelUploads: FC<IProps> = ({ isLoading, hasMoreUploads, loadUplo
 
   return (
     <ul>
-      { uploads.map(v => (<p key={v.id}>{v.snippet.title}</p> )) }
+      { 
+        uploads.map(v => (<p key={v.id}>{v.snippet.title}</p> ))
+      }
       {
         !isLoading && hasMoreUploads && <button onClick={loadUploads}>Load More</button>
       }

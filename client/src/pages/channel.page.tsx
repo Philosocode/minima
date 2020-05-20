@@ -12,6 +12,7 @@ import { StatsCard } from "components/stats-card.component";
 import { ChannelTabs } from "components/channel-tabs.component";
 import { ChannelUploads } from "components/channel-uploads.component";
 import { ChannelPlaylists } from "components/channel-playlists.component";
+import { ChannelTabPanel } from "components/channel-tab-panel.component";
 
 interface IRouteParams {
   channelId: string;
@@ -145,15 +146,19 @@ const _ChannelPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
       <div className="o-grid__item--center">
         <ChannelBox channelData={channelData} location="channel-page" />
         <ChannelTabs currentTab={currentTab} tabNames={channelTabs} setCurrentTab={setCurrentTab} />
-        {
-          currentTab === "Videos" && <ChannelUploads uploads={uploads} loadUploads={loadUploads} hasMoreUploads={hasMoreUploads} isLoading={isLoading} />
-        }
-        {
-          currentTab === "Playlists" && <ChannelPlaylists playlists={playlists} loadPlaylists={loadPlaylists} hasMorePlaylists={hasMorePlaylists} isLoading={isLoading} />
-        }
-        {
-          currentTab === "About" && renderAbout()
-        }
+
+        <ChannelTabPanel isActive={currentTab === "Videos"}>
+          <ChannelUploads uploads={uploads} loadUploads={loadUploads} hasMoreUploads={hasMoreUploads} isLoading={isLoading} />
+        </ChannelTabPanel>
+
+        <ChannelTabPanel isActive={currentTab === "Playlists"}>
+          <ChannelPlaylists playlists={playlists} loadPlaylists={loadPlaylists} hasMorePlaylists={hasMorePlaylists} isLoading={isLoading} />
+        </ChannelTabPanel>
+
+        <ChannelTabPanel isActive={currentTab === "About"}>
+          { renderAbout() }
+        </ChannelTabPanel>
+
       </div>
     </div>
   )
