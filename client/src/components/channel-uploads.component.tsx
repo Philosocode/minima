@@ -12,20 +12,36 @@ interface IProps {
 }
 
 export class ChannelUploads extends Component<IProps> {
+  state = {
+    doneInitialLoad: false
+  }
+
   async componentDidMount() {
     await this.props.loadUploads();
+    this.setState({ doneInitialLoad: true });
+  }
+
+  getLoadMoreButton = () => {
+    const { isLoading, hasMoreUploads, loadUploads } = this.props;
+
+    if (isLoading) return <Loader position="center-horizontal" />
+
+    if (!isLoading && hasMoreUploads) {
+      return <button className="c-button" onClick={loadUploads}>LOAD MORE</button> 
+    }
   }
 
   render() {
-    const { isLoading, hasMoreUploads, loadUploads, uploads } = this.props;
+    const { uploads } = this.props;
+    const { doneInitialLoad } = this.state;
 
-    if (isLoading) return <Loader position="center-horizontal" />;
+    if (!doneInitialLoad) return null;
     return (
       <>
         <div className="c-video__grid">
-          { uploads.map(v => (<ChannelVideo video={v} />)) }
+          { uploads.map(v => (<ChannelVideo key={v.id} video={v} />)) }
         </div>
-        { !isLoading && hasMoreUploads && <button className="c-button" onClick={loadUploads}>LOAD MORE</button> }
+        { this.getLoadMoreButton() }
       </>
     )
   }
