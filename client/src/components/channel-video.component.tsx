@@ -9,7 +9,7 @@ interface IProps {
 }
 
 export const ChannelVideo: FC<IProps> = ({ video }) => {
-  const watchLink = `/watch?v=${video.snippet.resourceId.videoId}&list=${video.snippet.playlistId}`;
+  const watchLink = `/watch?v=${video.snippet.resourceId.videoId}`;
 
   return (
     <div className="c-video-thumbnail__container">

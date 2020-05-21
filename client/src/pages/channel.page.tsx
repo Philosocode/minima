@@ -3,7 +3,7 @@ import { RouteComponentProps, withRouter } from "react-router-dom";
 import { faCalendarDay, faEye, faVideo } from "@fortawesome/free-solid-svg-icons";
 
 import { IChannel, IPlaylistItem, IPlaylist } from "shared/interfaces/youtube.interface";
-import { getChannelDetails, getVideosForPlaylist, getChannelPlaylists } from "apis/youtube.api";
+import { getChannelDetails, getPlaylistVideos, getChannelPlaylists } from "apis/youtube.api";
 
 import { Loader } from "components/loader.component";
 import { ChannelBox } from "components/channel-box.component";
@@ -76,7 +76,7 @@ const _ChannelPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
 
     setIsLoading(true);
     try {
-      const res = await getVideosForPlaylist(uploadsPlaylistId, uploadsPageToken);
+      const res = await getPlaylistVideos(uploadsPlaylistId, uploadsPageToken);
       
       if (res.nextPageToken) {
         setUploadsPageToken(res.nextPageToken);

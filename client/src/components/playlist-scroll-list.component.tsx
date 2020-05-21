@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from "react";
 
 import { IPlaylist, IPlaylistItem } from "shared/interfaces/youtube.interface";
-import { getPlaylistDetails, getAllVideosForPlaylist } from "apis/youtube.api";
+import { getPlaylistDetails, getAllPlaylistVideos } from "apis/youtube.api";
 
 import { useToggle } from "hooks/use-toggle.hook";
 import { PlaylistScrollVideo } from "components/playlist-scroll-video.component";
@@ -35,7 +35,7 @@ export const PlaylistScrollList: FC<IProps> = ({ playlistId, watchingVideoId }) 
     setIsLoading(true);
 
     try {
-      const videosRes = await getAllVideosForPlaylist(playlistId);
+      const videosRes = await getAllPlaylistVideos(playlistId);
       setPlaylistVideos(videosRes);
 
       const playlistRes = await getPlaylistDetails(playlistId);
