@@ -12,14 +12,14 @@ export const ChannelVideo: FC<IProps> = ({ video }) => {
   const watchLink = `/watch?v=${video.snippet.resourceId.videoId}`;
 
   return (
-    <div className="c-video-thumbnail__container">
-      <Link className="c-video-thumbnail__link" to={watchLink}>
-        <div className="c-video-thumbnail__image-container">
-          <img className="c-video-thumbnail__image" src={video.snippet.thumbnails.medium.url} alt={video.snippet.title} />
+    <div className="c-channel-item__container">
+      <Link className="c-channel-item__link" to={watchLink}>
+        <div className="c-channel-item__image-container">
+          <img className="c-channel-item__image" src={video.snippet.thumbnails.medium.url} alt={video.snippet.title} />
         </div>
-        <div className="c-video-thumbnail__text">
-          <h3 className="c-video-thumbnail__title">{video.snippet.title}</h3>
-          <div className="c-video-thumbnail__published">{ getFormattedDateFromToday(video.snippet.publishedAt)} ago</div>
+        <div className="c-channel-item__text">
+          <h3 className="c-channel-item__title">{video.snippet.title}</h3>
+          <div className="c-channel-item__published">{ getFormattedDateFromToday(video.snippet.publishedAt)} ago</div>
         </div>
       </Link>
     </div>

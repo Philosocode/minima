@@ -5,14 +5,14 @@ import { faCalendarDay, faEye, faVideo } from "@fortawesome/free-solid-svg-icons
 import { IChannel, IPlaylistItem, IPlaylist } from "shared/interfaces/youtube.interface";
 import { getChannelDetails, getPlaylistVideos, getChannelPlaylists } from "apis/youtube.api";
 
-import { Loader } from "components/loader.component";
-import { ChannelBox } from "components/channel-box.component";
 import { linkify, addCommasToNumber, getFormattedDate } from "shared/helpers";
-import { StatsCard } from "components/stats-card.component";
+import { ChannelBox } from "components/channel-box.component";
 import { ChannelTabs } from "components/channel-tabs.component";
-import { ChannelUploads } from "components/channel-uploads.component";
 import { ChannelPlaylists } from "components/channel-playlists.component";
 import { ChannelTabPanel } from "components/channel-tab-panel.component";
+import { ChannelVideos } from "components/channel-videos.component";
+import { Loader } from "components/loader.component";
+import { StatsCard } from "components/stats-card.component";
 
 interface IRouteParams {
   channelId: string;
@@ -25,7 +25,7 @@ const _ChannelPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
   // State
   const [channelData, setChannelData] = useState<IChannel>();
   const [isLoading, setIsLoading] = useState(false);
-  const [currentTab, setCurrentTab] = useState<ChannelTab>("Videos");
+  const [currentTab, setCurrentTab] = useState<ChannelTab>("Playlists");
 
   const [uploads, setUploads] = useState<IPlaylistItem[]>([]);
   const [uploadsPageToken, setUploadsPageToken] = useState<string>();
@@ -150,7 +150,7 @@ const _ChannelPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
 
       <div className="o-grid__item--wide">
         <ChannelTabPanel isActive={currentTab === "Videos"}>
-          <ChannelUploads uploads={uploads} loadUploads={loadUploads} hasMoreUploads={hasMoreUploads} isLoading={isLoading} />
+          <ChannelVideos uploads={uploads} loadUploads={loadUploads} hasMoreUploads={hasMoreUploads} isLoading={isLoading} />
         </ChannelTabPanel>
 
         <ChannelTabPanel isActive={currentTab === "Playlists"}>

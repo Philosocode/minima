@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 
 import { IPlaylistItem } from "shared/interfaces/youtube.interface";
-import { Loader } from "./loader.component";
-import { ChannelVideo } from "./channel-video.component";
+import { ChannelVideo } from "components/channel-video.component";
+import { Loader } from "components/loader.component";
 
 interface IProps {
   isLoading: boolean;
@@ -11,7 +11,7 @@ interface IProps {
   uploads: IPlaylistItem[];
 }
 
-export class ChannelUploads extends Component<IProps> {
+export class ChannelVideos extends Component<IProps> {
   state = {
     doneInitialLoad: false
   }
@@ -38,7 +38,7 @@ export class ChannelUploads extends Component<IProps> {
     if (!doneInitialLoad) return null;
     return (
       <>
-        <div className="c-video__grid">
+        <div className="c-channel__grid">
           { uploads.map(v => (<ChannelVideo key={v.id} video={v} />)) }
         </div>
         { this.getLoadMoreButton() }

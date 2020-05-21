@@ -1,7 +1,8 @@
-import React, { FC, useEffect } from "react";
+import React, { Component } from "react";
 
 import { IPlaylist } from "shared/interfaces/youtube.interface";
-import { Loader } from "./loader.component";
+import { ChannelPlaylist } from "components/channel-playlist.component";
+import { Loader } from "components/loader.component";
 
 interface IProps {
   isLoading: boolean;
@@ -10,23 +11,39 @@ interface IProps {
   playlists: IPlaylist[];
 }
 
-export const ChannelPlaylists: FC<IProps> = ({ isLoading, hasMorePlaylists, loadPlaylists, playlists }) => {
-  useEffect(() => {
-    async function initialLoadPlaylists() {
-      await loadPlaylists();
+export class ChannelPlaylists extends Component<IProps> {
+  state = {
+    doneInitialLoad: false
+  }
+
+  async componentDidMount() {
+    await this.props.loadPlaylists();
+    this.setState({ doneInitialLoad: true });
+  }
+
+  getLoadMoreButton = () => {
+    const { isLoading, hasMorePlaylists, loadPlaylists } = this.props;
+
+    if (isLoading) return <Loader position="center-horizontal" />
+
+    if (!isLoading && hasMorePlaylists) {
+      return <button className="c-button" onClick={loadPlaylists}>LOAD MORE</button> 
     }
+  }
 
-    initialLoadPlaylists();
-  }, [loadPlaylists]);
+  render() {
+    const { doneInitialLoad } = this.state;
+    const { playlists } = this.props;
 
-  if (isLoading) return <Loader position="center-horizontal" />;
+    if (!doneInitialLoad) return null;
 
-  return (
-    <ul>
-      { playlists.map(p => (<p key={p.id}>{p.id}</p> )) }
-      {
-        !isLoading && hasMorePlaylists && <button onClick={loadPlaylists}>Load More</button>
-      }
-    </ul>
-  )
+    return (
+      <>
+        <div className="c-channel__grid">
+          { playlists.map(p => <ChannelPlaylist key={p.id} playlist={p} />) }
+        </div>
+        { this.getLoadMoreButton() }
+      </>
+    )
+  }
 }

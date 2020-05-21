@@ -1,4 +1,4 @@
-.c-video-thumbnail {
+.c-channel-item {
   &__container {
     display: inline-block;
     width: 30rem;
@@ -16,11 +16,11 @@
     text-decoration: none;
 
     &:hover {
-      .c-video-thumbnail__text {
+      .c-channel-item__text {
         color: $color-green;
       }
 
-      .c-video-thumbnail__image {
+      .c-channel-item__image {
         border: 1px solid $color-green;
       }
     }
