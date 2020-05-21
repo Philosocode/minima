@@ -89,7 +89,12 @@ export interface IPageInfo {
 /* ======== */
 export interface IPlaylist {
   id: string;
+  contentDetails: IPlaylistContentDetails;
   snippet: IVideoSnippet;
+}
+
+interface IPlaylistContentDetails {
+  itemCount: number;
 }
 
 export interface IPlaylistsResponse {

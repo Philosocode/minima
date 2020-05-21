@@ -57,7 +57,7 @@ export function getChannelDetails(channelId: string): Promise<IChannel> {
 
 export function getChannelPlaylists(channelId: string, nextPageToken?: string): Promise<IPlaylistsResponse> {
   const url = BASE_URL + "/playlists";
-  const part = "id,snippet";
+  const part = "id,contentDetails,snippet";
   const MAX_NUM_PLAYLISTS = 50;
 
   const params = {
