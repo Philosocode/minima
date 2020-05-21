@@ -107,7 +107,11 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
         <ChannelBox channelData={channelData} location="video-page" />
         <VideoDescription description={videoData.snippet.description} />
         <Divider />
-        <ThreadList numComments={videoData.statistics.commentCount} videoId={videoData.id}  />
+        {
+          +videoData.statistics.commentCount > 0
+            ? <ThreadList numComments={videoData.statistics.commentCount} videoId={videoData.id}  />
+            : <h3 className="c-heading c-heading--medium">No Comments</h3>
+        }
       </div>
 
       <div className="o-grid__item--right-sidebar">
