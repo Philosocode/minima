@@ -1,5 +1,39 @@
 .c-video-thumbnail {
+  &__container {
+    display: inline-block;
+    width: 30rem;
+  }
+
+  &__image {
+    border: 1px solid transparent;
+    border-radius: 8px;
+    margin-bottom: $spacing-small;
+    width: 100%;
+    transition: border 0.1s ease;
+  }
+
+  &__link {
+    text-decoration: none;
+
+    &:hover {
+      .c-video-thumbnail__text {
+        color: $color-green;
+      }
+
+      .c-video-thumbnail__image {
+        border: 1px solid $color-green;
+      }
+    }
+  }
+
+  &__text {
+    color: $color-off-white;
+    text-align: left;
+    transition: color 0.1s ease;
+  }
+
   &__title {
-    font-size: 1.4rem;
+    font-size: 1.6rem;
+    margin-bottom: 5px;
   }
 }

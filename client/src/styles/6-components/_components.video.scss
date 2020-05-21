@@ -1,7 +1,11 @@
 .c-video {
   &__grid {
     display: grid;
-      grid-template-columns: [side-start] 25% [side-end main-start] 1fr [main-end];
+      grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
+      justify-items: center;
+      column-gap: $spacing-medium;
+      row-gap: $spacing-large;
+    margin-bottom: $spacing-large;
   }
 
   &__title {

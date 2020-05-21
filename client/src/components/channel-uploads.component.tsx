@@ -1,7 +1,8 @@
-import React, { FC, useEffect } from "react";
+import React, { Component } from "react";
 
 import { IPlaylistItem } from "shared/interfaces/youtube.interface";
 import { Loader } from "./loader.component";
+import { ChannelVideo } from "./channel-video.component";
 
 interface IProps {
   isLoading: boolean;
@@ -10,25 +11,22 @@ interface IProps {
   uploads: IPlaylistItem[];
 }
 
-export const ChannelUploads: FC<IProps> = ({ isLoading, hasMoreUploads, loadUploads, uploads }) => {
-  useEffect(() => {
-    async function initialLoadUploads() {
-      await loadUploads();
-    }
+export class ChannelUploads extends Component<IProps> {
+  async componentDidMount() {
+    await this.props.loadUploads();
+  }
 
-    initialLoadUploads();
-  }, [loadUploads]);
+  render() {
+    const { isLoading, hasMoreUploads, loadUploads, uploads } = this.props;
 
-  if (isLoading) return <Loader position="center-horizontal" />;
-
-  return (
-    <ul>
-      { 
-        uploads.map(v => (<p key={v.id}>{v.snippet.title}</p> ))
-      }
-      {
-        !isLoading && hasMoreUploads && <button onClick={loadUploads}>Load More</button>
-      }
-    </ul>
-  )
+    if (isLoading) return <Loader position="center-horizontal" />;
+    return (
+      <>
+        <div className="c-video__grid">
+          { uploads.map(v => (<ChannelVideo video={v} />)) }
+        </div>
+        { !isLoading && hasMoreUploads && <button className="c-button" onClick={loadUploads}>LOAD MORE</button> }
+      </>
+    )
+  }
 }

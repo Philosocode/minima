@@ -25,7 +25,7 @@ const _ChannelPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
   // State
   const [channelData, setChannelData] = useState<IChannel>();
   const [isLoading, setIsLoading] = useState(false);
-  const [currentTab, setCurrentTab] = useState<ChannelTab>("About");
+  const [currentTab, setCurrentTab] = useState<ChannelTab>("Videos");
 
   const [uploads, setUploads] = useState<IPlaylistItem[]>([]);
   const [uploadsPageToken, setUploadsPageToken] = useState<string>();
@@ -103,9 +103,6 @@ const _ChannelPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
     try {
       const res = await getChannelPlaylists(channelId, playlistsPageToken);
 
-      console.log("PLAYLIST RES");
-      console.log(res);
-      
       if (res.nextPageToken) {
         setPlaylistsPageToken(res.nextPageToken);
       }
@@ -146,7 +143,12 @@ const _ChannelPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
       <div className="o-grid__item--center">
         <ChannelBox channelData={channelData} location="channel-page" />
         <ChannelTabs currentTab={currentTab} tabNames={channelTabs} setCurrentTab={setCurrentTab} />
+        <ChannelTabPanel isActive={currentTab === "About"}>
+          { renderAbout() }
+        </ChannelTabPanel>
+      </div>
 
+      <div className="o-grid__item--wide">
         <ChannelTabPanel isActive={currentTab === "Videos"}>
           <ChannelUploads uploads={uploads} loadUploads={loadUploads} hasMoreUploads={hasMoreUploads} isLoading={isLoading} />
         </ChannelTabPanel>
@@ -154,11 +156,6 @@ const _ChannelPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
         <ChannelTabPanel isActive={currentTab === "Playlists"}>
           <ChannelPlaylists playlists={playlists} loadPlaylists={loadPlaylists} hasMorePlaylists={hasMorePlaylists} isLoading={isLoading} />
         </ChannelTabPanel>
-
-        <ChannelTabPanel isActive={currentTab === "About"}>
-          { renderAbout() }
-        </ChannelTabPanel>
-
       </div>
     </div>
   )
