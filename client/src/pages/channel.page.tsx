@@ -25,7 +25,7 @@ const _ChannelPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
   // State
   const [channelData, setChannelData] = useState<IChannel>();
   const [isLoading, setIsLoading] = useState(false);
-  const [currentTab, setCurrentTab] = useState<ChannelTab>("Playlists");
+  const [currentTab, setCurrentTab] = useState<ChannelTab>("Videos");
 
   const [uploads, setUploads] = useState<IPlaylistItem[]>([]);
   const [uploadsPageToken, setUploadsPageToken] = useState<string>();
