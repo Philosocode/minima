@@ -38,6 +38,21 @@
     position: relative;
   }
 
+  &__index {
+    background-color: $color-grey-darkest;
+    border-bottom-right-radius: 5px;
+    border-top-left-radius: 5px;
+    color: $color-off-white;
+    font-size: 1.3rem;
+    font-weight: bold;
+    display: block;
+    transition: background-color 0.1s ease;
+    padding: 5px 0.8rem;
+    position: absolute;
+      top: 0px;
+      left: 0rem;
+  }
+
   &__link {
     text-decoration: none;
 
@@ -48,6 +63,10 @@
 
       .c-video-thumbnail__image {
         border: 1px solid $color-green;
+      }
+
+      .c-video-thumbnail__index {
+        background-color: $color-green-darker;
       }
     }
   }

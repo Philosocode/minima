@@ -1,6 +1,6 @@
 .c-heading {
   color: $color-off-white;
-  display: block;
+  display: inline-block;
   font-family: $font-primary;
   font-weight: bold;
   margin-bottom: 0;
@@ -12,6 +12,7 @@
   &--small { font-size: 1.6rem; }
   &--tiny { font-size: 1.4rem; }
 
+  &--block { display: block; }
   &--left-align { text-align: left; }
   &--center { text-align: center; }
   &--link {
