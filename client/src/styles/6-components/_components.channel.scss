@@ -3,15 +3,6 @@
     margin-bottom: $spacing-small;
   }
 
-  &__grid {
-    display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
-      justify-items: center;
-      column-gap: $spacing-medium;
-      row-gap: $spacing-large;
-    margin-bottom: $spacing-medium;
-  }
-
 
   &__description {
     text-align: left;

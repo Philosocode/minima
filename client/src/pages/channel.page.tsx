@@ -8,9 +8,9 @@ import { getChannelDetails, getPlaylistVideos, getChannelPlaylists } from "apis/
 import { linkify, addCommasToNumber, getFormattedDate } from "shared/helpers";
 import { ChannelBox } from "components/channel-box.component";
 import { ChannelTabs } from "components/channel-tabs.component";
-import { ChannelPlaylists } from "components/channel-playlists.component";
+import { PlaylistGrid } from "components/playlist-grid.component";
 import { ChannelTabPanel } from "components/channel-tab-panel.component";
-import { ChannelVideos } from "components/channel-videos.component";
+import { VideoGrid } from "components/video-grid.component";
 import { Loader } from "components/loader.component";
 import { StatsCard } from "components/stats-card.component";
 
@@ -150,11 +150,11 @@ const _ChannelPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
 
       <div className="o-grid__item--wide">
         <ChannelTabPanel isActive={currentTab === "Videos"}>
-          <ChannelVideos uploads={uploads} loadUploads={loadUploads} hasMoreUploads={hasMoreUploads} isLoading={isLoading} />
+          <VideoGrid videos={uploads} loadVideos={loadUploads} hasMoreVideos={hasMoreUploads} isLoading={isLoading} />
         </ChannelTabPanel>
 
         <ChannelTabPanel isActive={currentTab === "Playlists"}>
-          <ChannelPlaylists playlists={playlists} loadPlaylists={loadPlaylists} hasMorePlaylists={hasMorePlaylists} isLoading={isLoading} />
+          <PlaylistGrid playlists={playlists} loadPlaylists={loadPlaylists} hasMorePlaylists={hasMorePlaylists} isLoading={isLoading} />
         </ChannelTabPanel>
       </div>
     </div>

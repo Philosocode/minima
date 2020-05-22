@@ -73,7 +73,7 @@ export function getChannelPlaylists(channelId: string, nextPageToken?: string): 
 
 export function getPlaylistDetails(playlistId: string): Promise<IPlaylist> {
   const url = BASE_URL + "/playlists";
-  const part = "id,snippet";
+  const part = "id,contentDetails,snippet";
   const MAX_NUM_PLAYLISTS = 50;
 
   const params = {

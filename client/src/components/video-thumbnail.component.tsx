@@ -1,34 +1,29 @@
 import React, { FC } from "react";
 import { Link } from "react-router-dom";
 
-import { IVideo } from "shared/interfaces/youtube.interface";
+import { getFormattedDateFromToday } from "shared/helpers";
 
 interface IProps {
-  video: IVideo
+  count?: number;
+  resourceUrl: string;
+  date: string;
+  thumbnailUrl: string;
+  title: string;
 }
 
-export const VideoThumbnail: FC<IProps> = ({ video }) => {
-  const videoUrl = `/watch?v=${video.id}`;
-  // const channelUrl = `/channel/${video.snippet.channelId}`;
-
+export const VideoThumbnail: FC<IProps> = ({ count, date, resourceUrl, thumbnailUrl, title }) => {
   return (
-    <>
-      <div className="c-channel-item__container">
-        <div className="c-channel-item__image-container">
-          <Link to={videoUrl}>
-            <img 
-              className="c-channel-item__image"
-              src={video.snippet.thumbnails.medium.url} 
-              alt={video.snippet.title} 
-            />
-          </Link>
+    <div className="c-video-thumbnail__container">
+      <Link className="c-video-thumbnail__link" to={resourceUrl}>
+        <div className="c-video-thumbnail__image-container">
+          <img className="c-video-thumbnail__image" src={thumbnailUrl} alt={title} />
+          { count && <div className="c-video-thumbnail__count">{count} Videos</div>}
         </div>
-        <h3 className="c-channel-item__title">
-          <Link to={videoUrl}>{video.snippet.title}</Link>
-        </h3>
-        <p className="c-channel-item__published">Published: {video.snippet.publishedAt}</p>
-        <p className="c-channel-item__views">{}</p>
-      </div>
-    </>
+        <div className="c-video-thumbnail__text">
+          <h3 className="c-video-thumbnail__title">{title}</h3>
+          <div className="c-video-thumbnail__published">{ getFormattedDateFromToday(date)} ago</div>
+        </div>
+      </Link>
+    </div>
   );
 }

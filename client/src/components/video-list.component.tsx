@@ -9,7 +9,7 @@ interface IProps {
 export const VideoList: FC<IProps> = ({ videos }) => {
   return (
     <div className="c-video-list__container">
-      { videos.map(video => <VideoThumbnail video={video} key={video.id} />) }
+      {/* { videos.map(video => <VideoThumbnail video={video} key={video.id} />) } */}
     </div>
   );
 }
