@@ -8,19 +8,16 @@
   }
 
   &__image {
-    border-radius: 8px;
     margin-right: $spacing-small;
     width: 6rem;
 
     &--small {
-      border-radius: 7px;
       margin-right: $spacing-small;
       width: 4.5rem;
     }
 
     &--large {
       width: 10rem;
-      border-radius: 1rem;
     }
   }
 

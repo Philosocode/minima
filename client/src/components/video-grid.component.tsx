@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { IPlaylistItem } from "shared/interfaces/youtube.interface";
 import { Loader } from "components/loader.component";
 import { VideoThumbnail } from "components/video-thumbnail.component";
+import { NotFoundHeading } from "./not-found-heading.component";
 
 interface IProps {
   isLoading: boolean;
@@ -38,6 +39,7 @@ export class VideoGrid extends Component<IProps> {
     const { doneInitialLoad } = this.state;
 
     if (!doneInitialLoad) return null;
+    if (doneInitialLoad && videos.length <= 0) return <NotFoundHeading>No Uploads</NotFoundHeading>
 
     return (
       <>

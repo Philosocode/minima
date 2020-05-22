@@ -18,7 +18,7 @@ export const ChannelBox: FC<IProps> = ({ channelData, location }) => {
 
   // Set classes dynamically
   let imageUrl = channelData.snippet.thumbnails.default.url;
-  let imageClasses = "c-channel__image";
+  let imageClasses = "o-thumbnail c-channel__image";
   let headingClasses = "c-heading";
   let subscriberClasses = "c-channel__subscriber-count";
 

@@ -14,6 +14,7 @@ import { VideoDescription } from "components/video-description.component";
 import { VideoPlayer } from "components/video-player.component";
 import { ChannelBox } from "components/channel-box.component";
 import { faCalendarDay, faEye, faThumbsUp, faThumbsDown, faPercent } from "@fortawesome/free-solid-svg-icons";
+import { NotFoundHeading } from "components/not-found-heading.component";
 
 interface IRouteParams {
   videoId: string;
@@ -110,7 +111,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
         {
           +videoData.statistics.commentCount > 0
             ? <ThreadList numComments={videoData.statistics.commentCount} videoId={videoData.id}  />
-            : <h3 className="c-heading c-heading--medium">No Comments</h3>
+            : <NotFoundHeading>No Comments</NotFoundHeading>
         }
       </div>
 

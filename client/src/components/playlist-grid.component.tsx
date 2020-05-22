@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { IPlaylist } from "shared/interfaces/youtube.interface";
 import { Loader } from "components/loader.component";
 import { VideoThumbnail } from "./video-thumbnail.component";
+import { NotFoundHeading } from "./not-found-heading.component";
 
 interface IProps {
   isLoading: boolean;
@@ -36,6 +37,7 @@ export class PlaylistGrid extends Component<IProps> {
     const { playlists } = this.props;
 
     if (!doneInitialLoad) return null;
+    if (doneInitialLoad && playlists.length <= 0) return <NotFoundHeading>No Playlists</NotFoundHeading>
 
     return (
       <>
@@ -43,7 +45,7 @@ export class PlaylistGrid extends Component<IProps> {
           { playlists.map(p =>  
             <VideoThumbnail 
               key={p.id} 
-              count={p.contentDetails.itemCount}
+              count={p.contentDetails.itemCount.toString()}
               date={p.snippet.publishedAt}
               resourceUrl={`/playlist/${p.id}`}
               thumbnailUrl={p.snippet.thumbnails.medium.url}

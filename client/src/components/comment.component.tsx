@@ -32,7 +32,7 @@ export const Comment: FC<IProps> = ({ comment, type }) => {
   }
 
   function getChannelImageClasses(): string {
-    let classes = "c-channel__image";
+    let classes = "o-thumbnail c-channel__image";
     if (type === "reply") classes += " c-channel__image--small";
 
     return classes;

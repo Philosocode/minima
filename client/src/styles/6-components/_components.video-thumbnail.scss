@@ -1,9 +1,9 @@
 .c-video-thumbnail {
   &__grid {
     display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
-      justify-items: center;
-      column-gap: $spacing-medium;
+      grid-template-columns: repeat(auto-fit, 30rem);
+      justify-content: center;
+      column-gap: $spacing-large;
       row-gap: $spacing-large;
     margin-bottom: $spacing-medium;
   }
@@ -29,6 +29,7 @@
   &__image {
     border: 1px solid transparent;
     border-radius: 8px;
+    height: 17rem;
     width: 100%;
     transition: border 0.1s ease;
   }
