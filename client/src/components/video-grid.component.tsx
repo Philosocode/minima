@@ -4,6 +4,7 @@ import { IPlaylistItem } from "shared/interfaces/youtube.interface";
 import { Loader } from "components/loader.component";
 import { VideoThumbnail } from "components/video-thumbnail.component";
 import { NotFoundHeading } from "./not-found-heading.component";
+import { MISSING_THUMBNAIL_URL } from "apis/youtube.api";
 
 interface IProps {
   isLoading: boolean;
@@ -39,7 +40,7 @@ export class VideoGrid extends Component<IProps> {
     const { doneInitialLoad } = this.state;
 
     if (!doneInitialLoad) return null;
-    if (doneInitialLoad && videos.length <= 0) return <NotFoundHeading>No Uploads</NotFoundHeading>
+    if (doneInitialLoad && videos.length <= 0) return <NotFoundHeading>No Videos</NotFoundHeading>
 
     return (
       <>
@@ -48,12 +49,14 @@ export class VideoGrid extends Component<IProps> {
             let url = `/watch?v=${v.snippet.resourceId.videoId}`;
             if (playlistId) url += `&list=${playlistId}`;
 
+            const thumbnailUrl = v.snippet.thumbnails.medium?.url ?? MISSING_THUMBNAIL_URL;
+            
             return (
               <VideoThumbnail 
                 key={v.id}
                 date={v.snippet.publishedAt}
                 resourceUrl={url}
-                thumbnailUrl={v.snippet.thumbnails.medium.url}
+                thumbnailUrl={thumbnailUrl}
                 title={v.snippet.title}
                 index={showVideoIndices ? idx.toString() : undefined}
               />

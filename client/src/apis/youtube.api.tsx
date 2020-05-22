@@ -15,6 +15,7 @@ import {
 
 export const BASE_URL = "https://www.googleapis.com/youtube/v3";
 export const API_KEY = process.env.REACT_APP_YOUTUBE_API_KEY as string;
+export const MISSING_THUMBNAIL_URL = "http://s.ytimg.com/yts/img/no_thumbnail-vfl4t3-4R.jpg";
 
 interface ICommentsParams {
   part: string;
