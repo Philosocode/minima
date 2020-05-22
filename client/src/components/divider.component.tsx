@@ -1,5 +1,9 @@
 import React, { FC } from "react";
 
-export const Divider: FC = () => (
-  <div className="c-divider"></div>
+interface IProps {
+  customClass?: string;
+}
+
+export const Divider: FC<IProps> = ({ customClass }) => (
+  <div className={`c-divider ${customClass ?? ""}`}></div>
 );

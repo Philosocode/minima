@@ -1,0 +1,34 @@
+.c-playlist-details {
+  $dot-spacing: 5px;
+
+  &__container {
+    margin-bottom: $spacing-small;
+    text-align: left;
+  }
+
+  &__channel {
+    margin-bottom: $spacing-tiny;
+  }
+
+  &__count {
+    margin-right: $dot-spacing;
+  }
+
+  &__date {
+    margin-left: $dot-spacing;
+  }
+
+  &__description {
+    margin-top: $spacing-small;
+  }
+
+  &__divider {
+    margin-top: $spacing-small;
+    margin-bottom: $spacing-medium;
+  }
+
+  &__sub-text {
+    font-weight: 500;
+    font-size: 1.4rem;
+  }
+}

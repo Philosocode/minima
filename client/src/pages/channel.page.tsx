@@ -125,7 +125,7 @@ const _ChannelPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
     if (!channelData) return;
     return (
       <>
-        <div className="o-text-container c-channel__description">
+        <div className="o-text-container o-text-container--html c-channel__description">
           <p dangerouslySetInnerHTML={{ __html: linkify(channelData.snippet.description) }}></p>
         </div>
 

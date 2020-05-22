@@ -1,4 +1,8 @@
 .o-text-container {
   font-family: $font-secondary;
   font-size: 1.67rem;
+
+  &--html {
+    white-space: pre-line;
+  }
 }

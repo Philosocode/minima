@@ -1,11 +1,12 @@
 import React, { FC, useState, useEffect } from "react";
-import { RouteComponentProps, withRouter, Link } from "react-router-dom";
+import { RouteComponentProps, withRouter } from "react-router-dom";
 
 import { IPlaylist, IPlaylistItem } from "shared/interfaces/youtube.interface";
-import { getFormattedDate } from "shared/helpers";
 import { getPlaylistDetails, getPlaylistVideos } from "apis/youtube.api";
 import { Loader } from "components/loader.component";
 import { VideoGrid } from "components/video-grid.component";
+import { PlaylistDetails } from "components/playlist-details.component";
+import { Divider } from "components/divider.component";
 
 interface IRouteParams {
   playlistId: string;
@@ -73,22 +74,11 @@ const _PlaylistPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
     return <Loader position="center-page" />;
   }
 
-  const { channelId, channelTitle, description, publishedAt, title } = playlistDetails.snippet;
-  const numVideos = playlistDetails.contentDetails.itemCount;
-  const thumbnailUrl = playlistDetails.snippet.thumbnails.medium.url;
-  const channelUrl = `/channel/${channelId}`;
-
   return (
     <div className="o-page o-page--playlist o-grid__container">
       <div className="o-grid__item--center">
-        <div className="c-playlist">
-          <img src={thumbnailUrl} alt={title} />
-          <h2 className="c-heading c-heading--block c-heading--large">{title}</h2>
-          <Link to={channelUrl}>{channelTitle}</Link>
-          <div>Published: {getFormattedDate(publishedAt, "MMM io, yyyy")}</div>
-          <div className="">{numVideos} videos</div>
-          <div className="o-text-container">{description}</div>
-        </div>
+        <PlaylistDetails playlist={playlistDetails} />
+        <Divider customClass="c-playlist-details__divider" />
       </div>
 
       <div className="o-grid__item--wide">

@@ -39,6 +39,7 @@
   }
 
   &__index {
+    border: 1px solid transparent;
     background-color: $color-grey-darkest;
     border-bottom-right-radius: 5px;
     border-top-left-radius: 5px;
@@ -46,7 +47,7 @@
     font-size: 1.3rem;
     font-weight: bold;
     display: block;
-    transition: background-color 0.1s ease;
+    transition: background-color 0.1s ease, border 0.1s ease;
     padding: 5px 0.8rem;
     position: absolute;
       top: 0px;
@@ -67,6 +68,7 @@
 
       .c-video-thumbnail__index {
         background-color: $color-green-darker;
+        border: 1px solid $color-green;
       }
     }
   }
