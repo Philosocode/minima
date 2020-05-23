@@ -150,6 +150,13 @@ export interface IVideo {
   id: string;
   snippet: IVideoSnippet;
   statistics: IVideoStatistics;
+  player: IVideoPlayer;
+}
+
+export interface IVideoPlayer {
+  embedHtml: string;
+  embedHeight: number;
+  embedWidth: number;
 }
 
 export interface IVideosResponse {

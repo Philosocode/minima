@@ -1,26 +1,19 @@
 import React, { FC } from "react";
 
-import { getQueryStringFromObject } from "shared/helpers";
 import { Loader } from "components/loader.component";
+import { YouTubePlayer } from "components/youtube-player.component";
 
 interface IProps {
   isLoading: boolean;
   videoId: string;
 }
 export const VideoPlayer: FC<IProps> = ({ isLoading, videoId }) => { 
-  const videoUrl = `https://www.youtube.com/embed/${videoId}`;
+  function renderVideoPlayer() {
+    return <YouTubePlayer videoId={videoId} onPlayerReady={onPlayerReady} />
+  }
 
-  function getIframeUrl() {
-    const params = {
-      rel: "0",
-      modestbranding: "1"
-    }
-  
-    // e.g. rel=0&modestbranding=1
-    const queryString = getQueryStringFromObject(params);
-  
-    // e.g. youtube.com/embed/<videoId>?rel=0&modestbranding=1
-    return videoUrl + queryString;
+  function onPlayerReady(e: any) {
+    e.target.setPlaybackRate(2);
   }
 
   return (
@@ -28,12 +21,7 @@ export const VideoPlayer: FC<IProps> = ({ isLoading, videoId }) => {
       {
         isLoading
           ? <Loader position="center-page" />
-          : <iframe className="c-video-player__iframe"
-            src={getIframeUrl()}
-            frameBorder="0"
-            title={videoId}
-            allowFullScreen
-          />
+          : renderVideoPlayer()
       }
     </div>
   );

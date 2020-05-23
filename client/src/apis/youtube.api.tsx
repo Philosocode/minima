@@ -180,7 +180,7 @@ export function getVideoCommentThreads(videoId: string, nextPageToken?: string):
 
 export function getVideoDetails(videoId: string): Promise<IVideo> {
   const url = BASE_URL + "/videos";
-  const part = "snippet,statistics";
+  const part = "snippet,statistics,player";
   const params = {
     id: videoId,
     key: API_KEY,
