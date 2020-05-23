@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from "react";
 
 import { IPlaylist, IPlaylistItem } from "shared/interfaces/youtube.interface";
-import { getPlaylistDetails, getAllPlaylistVideos } from "apis/youtube.api";
+import { getPlaylistDetails, getPlaylistVideos, MISSING_THUMBNAIL_URL, getPlaylistVideosUntilCurrentVideo } from "apis/youtube.api";
 
 import { useToggle } from "hooks/use-toggle.hook";
 import { PlaylistScrollVideo } from "components/playlist-scroll-video.component";
@@ -14,38 +14,96 @@ interface IProps {
 }
 
 export const PlaylistScrollList: FC<IProps> = ({ playlistId, watchingVideoId }) => {
-  const [playlistVideos, setPlaylistVideos] = useState<IPlaylistItem[]>([]);
-  const [playlistDetails, setPlaylistDetails] = useState<IPlaylist>();
-  const [watchingVideoIdx, setWatchingVideoIdx] = useState(0);
   const [hidingPreviousVideos, toggleHidingPreviousVideos] = useToggle(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [nextPageToken, setNextPageToken] = useState("");
+  const [playlistDetails, setPlaylistDetails] = useState<IPlaylist>();
+  const [playlistVideos, setPlaylistVideos] = useState<IPlaylistItem[]>([]);
+  const [watchingVideoIdx, setWatchingVideoIdx] = useState(0);
 
   useEffect(() => {
     clearState();
   }, [playlistId])
 
   function clearState() {
-    setPlaylistVideos([]);
-    setPlaylistDetails(undefined);
-    setWatchingVideoIdx(0);
     setIsLoading(false);
+    setNextPageToken("");
+    setPlaylistDetails(undefined);
+    setPlaylistVideos([]);
+    setWatchingVideoIdx(0);
+  }
+
+  async function handleLoadPlaylistVideos() {
+    setIsLoading(true);
+
+    await fetchPlaylistDetails();
+    await initialFetchPlaylistVideos();
+
+    setIsLoading(false);
+  }
+
+  async function fetchPlaylistDetails() {
+    try {
+      const playlistRes = await getPlaylistDetails(playlistId);
+
+      setPlaylistDetails(playlistRes);
+    } 
+    catch(err) {
+      alert(err);
+    }
   }
 
   async function fetchPlaylistVideos() {
     setIsLoading(true);
 
     try {
-      const videosRes = await getAllPlaylistVideos(playlistId);
-      setPlaylistVideos(videosRes);
+      const videosRes = await getPlaylistVideos(playlistId, nextPageToken);
+      const videosFetched = videosRes.items;
+      const updatedVideos = playlistVideos.concat(videosFetched);
 
-      const playlistRes = await getPlaylistDetails(playlistId);
-      setPlaylistDetails(playlistRes);
+      setPlaylistVideos(updatedVideos);
+  
+      // Update nextPageToken
+      if (videosRes.nextPageToken) {
+        setNextPageToken(videosRes.nextPageToken)
+      }
+      else {
+        setNextPageToken("");
+      }
+      
+      return videosFetched;
     }
     catch(err) {
       alert(err);
     }
     finally {
       setIsLoading(false);
+    }
+  }
+
+  function hasMoreVideos() {
+    if (!playlistDetails) return true;
+    return playlistVideos.length < playlistDetails.contentDetails.itemCount;
+  }
+
+  async function initialFetchPlaylistVideos() {
+    try {
+      const [fetchedVideos, pageToken] = await getPlaylistVideosUntilCurrentVideo(
+        watchingVideoId,
+        playlistId
+      );
+
+      setPlaylistVideos(fetchedVideos);
+
+      if (pageToken) {
+        setNextPageToken(pageToken);
+      } 
+      else {
+        setNextPageToken("");
+      }
+    }
+    catch(err) {
+      alert(err);
     }
   }
 
@@ -59,7 +117,7 @@ export const PlaylistScrollList: FC<IProps> = ({ playlistId, watchingVideoId }) 
 
   function renderLoadPlaylistsButton() {
     return (
-      <button className="c-button" onClick={fetchPlaylistVideos}>LOAD PLAYLIST</button>
+      <button className="c-button" onClick={handleLoadPlaylistVideos}>LOAD PLAYLIST</button>
     )
   }
 
@@ -75,6 +133,15 @@ export const PlaylistScrollList: FC<IProps> = ({ playlistId, watchingVideoId }) 
     )
   }
 
+  function renderLoadMoreVideosButton() {
+    if (!hasMoreVideos()) return;
+    if (isLoading) return <Loader position="center-horizontal" />
+
+    return (
+      <div className="c-playlist-scroll-list__toggle-previous" onClick={async () => await fetchPlaylistVideos()}>LOAD MORE</div>
+    )
+  }
+
   function renderPlaylistVideos() {
     return getVideosToShow().map((v, idx) => { 
       // If not hiding, start at 0
@@ -82,6 +149,8 @@ export const PlaylistScrollList: FC<IProps> = ({ playlistId, watchingVideoId }) 
       const currentVideoIdx = hidingPreviousVideos
         ? watchingVideoIdx + idx
         : idx;
+      
+      const thumbnailUrl = v.snippet.thumbnails.medium?.url ?? MISSING_THUMBNAIL_URL;
 
       return (
         <PlaylistScrollVideo 
@@ -90,7 +159,7 @@ export const PlaylistScrollList: FC<IProps> = ({ playlistId, watchingVideoId }) 
           playlistId={playlistId}
           setWatchingVideoIdx={setWatchingVideoIdx}
           title={v.snippet.title}
-          thumbnailUrl={v.snippet.thumbnails.medium.url} 
+          thumbnailUrl={thumbnailUrl}
           uploaderName={v.snippet.channelTitle}
           videoId={v.snippet.resourceId.videoId}
           watchingVideoId={watchingVideoId}
@@ -100,21 +169,22 @@ export const PlaylistScrollList: FC<IProps> = ({ playlistId, watchingVideoId }) 
   }
 
   // Render
-  if (isLoading) return <Loader position="center-horizontal" />
-  if (playlistVideos.length <= 0 || !playlistDetails) return renderLoadPlaylistsButton();
+  if (isLoading && playlistVideos.length <= 0) return <Loader position="center-horizontal" />
+  if (!playlistDetails || playlistVideos.length <= 0) return renderLoadPlaylistsButton();
   
   return (
     <div className="o-card c-playlist-scroll-list__container">
       <PlaylistScrollHeader 
         channelTitle={playlistDetails.snippet.channelTitle} 
         currentVideoIdx={watchingVideoIdx}
-        totalVideos={playlistVideos.length - 1}
+        totalVideos={playlistDetails.contentDetails.itemCount}
         videoTitle={playlistDetails.snippet.title}
       />
 
       <div className="c-playlist-scroll-list__videos">
         { renderShowPreviousVideosToggle() }
         { renderPlaylistVideos() }
+        { renderLoadMoreVideosButton() }
       </div>
     </div>
   );

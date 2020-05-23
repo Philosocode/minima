@@ -92,6 +92,11 @@ export function getPlaylistDetails(playlistId: string): Promise<IPlaylist> {
 }
 
 export async function getPlaylistVideos(playlistId: string, nextPageToken?: string): Promise<IPlaylistItemsResponse> {
+  /**
+   * Fetch up to `MAX_NUM_PLAYLIST_VIDEOS` videos from a playlist. Use `nextPageToken` if provided
+   * 
+   * @returns Videos from the playlist
+   */
   const url = BASE_URL + "/playlistItems";
   const part = "id,snippet";
   const MAX_NUM_PLAYLIST_VIDEOS = 50;
@@ -107,36 +112,45 @@ export async function getPlaylistVideos(playlistId: string, nextPageToken?: stri
   return makeApiRequest<IPlaylistItemsResponse>(url, params);
 }
 
-export async function getAllPlaylistVideos(playlistId: string): Promise<IPlaylistItem[]> {
-  const url = BASE_URL + "/playlistItems";
-  const part = "id,snippet";
-  const MAX_NUM_PLAYLIST_VIDEOS = 50;
+export async function getPlaylistVideosUntilCurrentVideo(
+  currentVideoId: string,
+  playlistId: string,
+): Promise<[IPlaylistItem[], string]> {
+  /**
+   * Fetch videos from the beginning of a playlist in batches of MAX_NUM_PLAYLIST_VIDEOS
+   * Stop once a set of videos contains the current video
+   * 
+   * @returns Videos, including the current video, in increments of MAX_NUM_PLAYLIST_VIDEOS (e.g. 50 videos, 100 videos, etc)
+   */
+  const videos: IPlaylistItem[] = [];
+  let nextPageToken = "";
 
-  const params: IPlaylistVideosParams = {
-    key: API_KEY,
-    maxResults: MAX_NUM_PLAYLIST_VIDEOS,
-    playlistId: playlistId,
-    part: part,
-  }
+  while (true) {
+    console.log("LOOP");
+    
+    const videosRes = await getPlaylistVideos(playlistId, nextPageToken);    
+    const videosFetched = videosRes.items;
 
-  const videosForPlaylist: IPlaylistItem[] = [];
+    videos.push(...videosFetched);
 
-  let hasNextPageToken = true;
-
-  while (hasNextPageToken) {
-    const res = await makeApiRequest<IPlaylistItemsResponse>(url, params);
-
-    videosForPlaylist.push(...res.items);
-
-    if (res.nextPageToken) {
-      params["pageToken"] = res.nextPageToken;
+    // If `nextPageToken` is in the res, that means more videos can be loaded
+    // If not, that means all videos have been loaded, so break out of the loop
+    if (videosRes.nextPageToken) {
+      nextPageToken = videosRes.nextPageToken
     }
     else {
-      hasNextPageToken = false;
+      nextPageToken = "";
+      break;
     }
+
+    // If current video is among the fetched batch, stop fetching more videos
+    const resContainsCurrentVideo = videosFetched.some(
+      v => v.snippet.resourceId.videoId === currentVideoId
+    );
+    if (resContainsCurrentVideo) break;
   }
 
-  return videosForPlaylist;
+  return [videos, nextPageToken];
 }
 
 interface ICommentThreadsParams {
