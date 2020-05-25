@@ -110,7 +110,11 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
         <Divider />
         {
           +videoData.statistics.commentCount > 0
-            ? <ThreadList numComments={videoData.statistics.commentCount} videoId={videoData.id}  />
+            ? <ThreadList
+                numComments={videoData.statistics.commentCount} 
+                uploaderId={videoData.snippet.channelId}
+                videoId={videoData.id}  
+              />
             : <NotFoundHeading>No Comments</NotFoundHeading>
         }
       </div>

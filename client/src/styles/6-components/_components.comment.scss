@@ -34,6 +34,13 @@
     margin-top: 3px;
   }
 
+  &__uploader {
+    background-color: $color-green-darker;
+    border-radius: 2rem;
+    color: $color-grey-light;
+    padding: 3px 1rem;
+  }
+
   &__total {
     margin-top: $spacing-small;
     margin-bottom: $spacing-small;

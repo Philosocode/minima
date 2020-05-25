@@ -11,9 +11,10 @@ type CommentType = "comment" | "reply";
 interface IProps {
   comment: IComment;
   type: CommentType;
+  isUploader?: boolean;
 }
 
-export const Comment: FC<IProps> = ({ comment, type }) => {
+export const Comment: FC<IProps> = ({ comment, type, isUploader }) => {
   const {
     authorChannelId,
     authorDisplayName,
@@ -38,6 +39,18 @@ export const Comment: FC<IProps> = ({ comment, type }) => {
     return classes;
   }
 
+  function getChannelNameClasses(): string {
+    let classes = "c-heading c-heading--small";
+    if (isUploader) {
+      classes += " c-comment__uploader";
+    }
+    else {
+      classes += " c-heading--link";
+    }
+
+    return classes;
+  }
+
   function getContainerClasses(): string {
     let classes = "o-media c-comment__container";
     if (type === "reply") classes += " c-comment__container--reply"
@@ -53,7 +66,7 @@ export const Comment: FC<IProps> = ({ comment, type }) => {
       </Link>
       
       <div className="o-media__body">
-        <Link className="c-heading c-heading--small c-heading--link" to={channelUrl}>{authorDisplayName}</Link>
+        <Link className={getChannelNameClasses()} to={channelUrl}>{authorDisplayName}</Link>
         <div className="c-comment__date">{formattedDate} ago { commentWasUpdated() && "(edited)"}</div>
         <p dangerouslySetInnerHTML={{__html: textDisplay}} className="o-text-container o-text-container--html c-comment__content"></p>
         <div><FontAwesomeIcon className="c-icon__icon" icon={faThumbsUp} /> <span className="c-icon__text">{likeCount.toLocaleString()}</span></div>
