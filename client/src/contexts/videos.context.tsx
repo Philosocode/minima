@@ -5,13 +5,14 @@ import { parseHtmlEntities } from "shared/helpers";
 
 /* Referenced: https://github.com/piotrwitek/react-redux-typescript-guide#themecontext */
 // Create Context
-interface IVideosContext {
+type VideosContextProps = {
   videos: IVideo[];
   currentVideo?: IVideo;
   clearVideos?: () => void;
   setVideos?: (videos: IVideo[]) => void;
+  setCurrentVideo?: (video: IVideo) => void;
 }
-export const VideosContext = createContext<IVideosContext>({ videos: [] });
+export const VideosContext = createContext<VideosContextProps>({ videos: [] });
 
 // Create Provider
 interface IState {
@@ -42,10 +43,10 @@ export class VideosProvider extends Component<{}, IState> {
 
   render() {
     const { videos } = this.state;
-    const { clearVideos, setVideos } = this;
+    const { clearVideos, setVideos, setCurrentVideo } = this;
 
     return (
-      <VideosContext.Provider value={{ videos, clearVideos, setVideos }}>
+      <VideosContext.Provider value={{ videos, clearVideos, setVideos, setCurrentVideo }}>
         {this.props.children}
       </VideosContext.Provider>
     )

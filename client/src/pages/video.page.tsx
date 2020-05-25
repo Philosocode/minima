@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from "react";
+import React, { FC, useState, useEffect, useContext } from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 
 import { IChannel, IVideo } from "shared/interfaces/youtube.interface";
@@ -15,6 +15,7 @@ import { VideoPlayer } from "components/video-player.component";
 import { ChannelBox } from "components/channel-box.component";
 import { faCalendarDay, faEye, faThumbsUp, faThumbsDown, faPercent } from "@fortawesome/free-solid-svg-icons";
 import { NotFoundHeading } from "components/not-found-heading.component";
+import { VideosContext } from "contexts/videos.context";
 
 interface IRouteParams {
   videoId: string;
@@ -26,6 +27,8 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
   const [channelData, setChannelData] = useState<IChannel>();
   const [playlistId, setPlaylistId] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const { currentVideo, setCurrentVideo } = useContext(VideosContext);
   
   // Functions
   useEffect(() => {
