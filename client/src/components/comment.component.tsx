@@ -1,20 +1,22 @@
 import React, { FC } from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 
-import { IComment } from "shared/interfaces/youtube.interface";
+import { IComment, IVideo } from "shared/interfaces/youtube.interface";
 import { getFormattedDateFromToday } from "shared/helpers";
+import { AppState } from "redux/root-reducer";
 
 type CommentType = "comment" | "reply";
 
 interface IProps {
   comment: IComment;
+  currentVideo?: IVideo;
   type: CommentType;
-  isUploader?: boolean;
 }
 
-export const Comment: FC<IProps> = ({ comment, type, isUploader }) => {
+const _Comment: FC<IProps> = ({ comment, type, currentVideo }) => {
   const {
     authorChannelId,
     authorDisplayName,
@@ -41,7 +43,11 @@ export const Comment: FC<IProps> = ({ comment, type, isUploader }) => {
 
   function getChannelNameClasses(): string {
     let classes = "c-heading c-heading--small";
-    if (isUploader) {
+
+    const commentAuthorId = comment.snippet.authorChannelId.value;
+    const uploaderId = currentVideo?.snippet.channelId;
+
+    if (commentAuthorId === uploaderId) {
       classes += " c-comment__uploader";
     }
     else {
@@ -75,3 +81,9 @@ export const Comment: FC<IProps> = ({ comment, type, isUploader }) => {
     </div>
   );
 };
+
+const mapStateToProps = (state: AppState) => ({
+  currentVideo: state.videos.currentVideo
+})
+
+export const Comment = connect(mapStateToProps)(_Comment);

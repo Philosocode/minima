@@ -1,5 +1,8 @@
-import React, { FC, useState, useEffect, useContext } from "react";
+import React, { FC, useState, useEffect } from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+
+import { setCurrentVideo } from "redux/video";
 
 import { IChannel, IVideo } from "shared/interfaces/youtube.interface";
 import { getQueryParams, roundToTwoDecimals, getFormattedDate, addCommasToNumber } from "shared/helpers";
@@ -15,21 +18,23 @@ import { VideoPlayer } from "components/video-player.component";
 import { ChannelBox } from "components/channel-box.component";
 import { faCalendarDay, faEye, faThumbsUp, faThumbsDown, faPercent } from "@fortawesome/free-solid-svg-icons";
 import { NotFoundHeading } from "components/not-found-heading.component";
-import { VideosContext } from "contexts/videos.context";
 
 interface IRouteParams {
   videoId: string;
 }
 
-const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }) => { 
+interface IProps {
+  currentVideo?: IVideo;
+  setCurrentVideo: typeof setCurrentVideo;
+}
+
+const _VideoPage: FC<RouteComponentProps<IRouteParams> & IProps> = ({ setCurrentVideo, location, history }) => { 
   // State
   const [videoData, setVideoData] = useState<IVideo>();
   const [channelData, setChannelData] = useState<IChannel>();
   const [playlistId, setPlaylistId] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const { currentVideo, setCurrentVideo } = useContext(VideosContext);
-  
   // Functions
   useEffect(() => {
     const queryParams = getQueryParams(location.search);
@@ -51,6 +56,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
       try {
         const videoRes = await getVideoDetails(videoId);
         setVideoData(videoRes);
+        setCurrentVideo(videoRes);
 
         const channelRes = await getChannelDetails(videoRes.snippet.channelId);
         setChannelData(channelRes);
@@ -64,7 +70,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
         setIsLoading(false);
       }
     }
-  }, [history, location.search]);
+  }, [history, location.search, setCurrentVideo]);
 
   function getStatsCardData() {
     if (!videoData) return;
@@ -115,7 +121,6 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
           +videoData.statistics.commentCount > 0
             ? <ThreadList
                 numComments={videoData.statistics.commentCount} 
-                uploaderId={videoData.snippet.channelId}
                 videoId={videoData.id}  
               />
             : <NotFoundHeading>No Comments</NotFoundHeading>
@@ -129,4 +134,6 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
   );
 };
 
-export const VideoPage = withRouter(_VideoPage);
+const mapDispatchToProps = { setCurrentVideo };
+
+export const VideoPage = withRouter(connect(null, mapDispatchToProps)(_VideoPage));

@@ -8,11 +8,10 @@ import { addCommasToNumber } from "shared/helpers";
 
 interface IProps {
   numComments: string;
-  uploaderId: string;
   videoId: string;
 }
 
-export const ThreadList: FC<IProps> = ({ numComments, uploaderId, videoId }) => {
+export const ThreadList: FC<IProps> = ({ numComments, videoId }) => {
   const [threads, setThreads] = useState<ICommentThread[]>([]);
   const [nextPageToken, setNextPageToken] = useState<string>();
   const [hasMoreComments, setHasMoreComments] = useState(true);
@@ -50,7 +49,7 @@ export const ThreadList: FC<IProps> = ({ numComments, uploaderId, videoId }) => 
   }
 
   function renderThreads() {
-    return threads.map(t => <Thread key={t.id} thread={t} uploaderId={uploaderId} />);
+    return threads.map(t => <Thread key={t.id} thread={t} />);
   }
 
   function renderLoadCommentsButton() {

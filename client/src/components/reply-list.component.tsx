@@ -9,10 +9,9 @@ import { Loader } from "./loader.component";
 interface IProps {
   topLevelCommentId: string;
   totalReplyCount: number;
-  uploaderId: string;
 }
 
-export const ReplyList: FC<IProps> = ({ topLevelCommentId, totalReplyCount, uploaderId }) => { 
+export const ReplyList: FC<IProps> = ({ topLevelCommentId, totalReplyCount }) => { 
   const [replies, setReplies] = useState<IComment[]>([]);
   const [nextPageToken, setNextPageToken] = useState<string>();
   const [showingReplies, toggleShowingReplies] = useToggle(false);
@@ -50,7 +49,7 @@ export const ReplyList: FC<IProps> = ({ topLevelCommentId, totalReplyCount, uplo
   }
 
   function renderReplies() {
-    return replies.map(c => <Comment key={c.id} comment={c} type="reply" isUploader={c.snippet.authorChannelId.value === uploaderId} />);
+    return replies.map(c => <Comment key={c.id} comment={c} type="reply" />);
   }
 
   function renderReplyToggle() {
