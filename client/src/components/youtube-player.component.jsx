@@ -20,15 +20,22 @@ export class YouTubePlayer extends Component {
       });
     }
 
+    const options = {
+      modestBranding: 1,
+      rel: 0,
+      ...this.props.playlistId && { 
+        listType: "playlist",
+        list: this.props.playlistId
+      }
+    };
+    console.log("OPTIONS:", options);
+
     loadYT.then((YT) => {
       this.player = new YT.Player(this.youtubePlayerAnchor, {
         height: this.props.height || 390,
         width: this.props.width || 640,
         videoId: this.props.videoId,
-        playerVars: {
-          modestBranding: 1,
-          rel: 0
-        },
+        playerVars: options,
         events: {
           onReady: this.onPlayerReady,
           onStateChange: this.onPlayerStateChange,
@@ -65,6 +72,7 @@ export class YouTubePlayer extends Component {
 
 YouTubePlayer.propTypes = {
   videoId: PropTypes.string.isRequired,
+  playlistId: PropTypes.string,
   onStateChange: PropTypes.func,
   onPlayerReady: PropTypes.func,
   playbackRate: PropTypes.number,

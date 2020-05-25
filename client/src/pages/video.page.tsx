@@ -93,7 +93,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
   return (
     <div className="o-page o-page--watch o-grid__container">
       <div className="o-grid__item--full">
-        <VideoPlayer isLoading={isLoading} videoId={videoData.id} />
+        <VideoPlayer isLoading={isLoading} videoId={videoData.id} playlistId={playlistId} />
       </div>
 
       <div className="o-grid__item--wide">
