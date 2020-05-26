@@ -1,10 +1,10 @@
 import React, { FC } from "react";
 import { Link } from "react-router-dom";
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 
-import { IComment, IVideo } from "shared/interfaces/youtube.interface";
+import { IComment } from "shared/interfaces/youtube.interface";
 import { getFormattedDateFromToday } from "shared/helpers";
 import { AppState } from "redux/root-reducer";
 
@@ -12,11 +12,10 @@ type CommentType = "comment" | "reply";
 
 interface IProps {
   comment: IComment;
-  currentVideo?: IVideo;
   type: CommentType;
 }
 
-const _Comment: FC<IProps> = ({ comment, type, currentVideo }) => {
+export const Comment: FC<IProps> = ({ comment, type }) => {
   const {
     authorChannelId,
     authorDisplayName,
@@ -26,7 +25,7 @@ const _Comment: FC<IProps> = ({ comment, type, currentVideo }) => {
     textDisplay,
     updatedAt,
   } = comment.snippet;
-
+  const currentVideo = useSelector((state: AppState) => state.videos.currentVideo);
   const channelUrl = `channel/${authorChannelId.value}`;
   const formattedDate = getFormattedDateFromToday(publishedAt);
 
@@ -81,9 +80,3 @@ const _Comment: FC<IProps> = ({ comment, type, currentVideo }) => {
     </div>
   );
 };
-
-const mapStateToProps = (state: AppState) => ({
-  currentVideo: state.videos.currentVideo
-})
-
-export const Comment = connect(mapStateToProps)(_Comment);

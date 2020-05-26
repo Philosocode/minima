@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect } from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import { connect } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import { setCurrentVideo } from "redux/video";
 
@@ -23,17 +23,14 @@ interface IRouteParams {
   videoId: string;
 }
 
-interface IProps {
-  currentVideo?: IVideo;
-  setCurrentVideo: typeof setCurrentVideo;
-}
-
-const _VideoPage: FC<RouteComponentProps<IRouteParams> & IProps> = ({ setCurrentVideo, location, history }) => { 
+const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }) => { 
   // State
   const [videoData, setVideoData] = useState<IVideo>();
   const [channelData, setChannelData] = useState<IChannel>();
   const [playlistId, setPlaylistId] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const dispatch = useDispatch();
 
   // Functions
   useEffect(() => {
@@ -56,7 +53,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams> & IProps> = ({ setCurrent
       try {
         const videoRes = await getVideoDetails(videoId);
         setVideoData(videoRes);
-        setCurrentVideo(videoRes);
+        dispatch(setCurrentVideo);
 
         const channelRes = await getChannelDetails(videoRes.snippet.channelId);
         setChannelData(channelRes);
@@ -70,7 +67,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams> & IProps> = ({ setCurrent
         setIsLoading(false);
       }
     }
-  }, [history, location.search, setCurrentVideo]);
+  }, [history, location.search, dispatch]);
 
   function getStatsCardData() {
     if (!videoData) return;
@@ -134,6 +131,4 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams> & IProps> = ({ setCurrent
   );
 };
 
-const mapDispatchToProps = { setCurrentVideo };
-
-export const VideoPage = withRouter(connect(null, mapDispatchToProps)(_VideoPage));
+export const VideoPage = withRouter(_VideoPage);
