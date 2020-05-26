@@ -28,7 +28,6 @@ export class YouTubePlayer extends Component {
         list: this.props.playlistId
       }
     };
-    console.log("OPTIONS:", options);
 
     loadYT.then((YT) => {
       this.player = new YT.Player(this.youtubePlayerAnchor, {
@@ -39,22 +38,29 @@ export class YouTubePlayer extends Component {
         events: {
           onReady: this.onPlayerReady,
           onStateChange: this.onPlayerStateChange,
+          onPlaybackRateChange: this.onPlaybackRateChange,
         },
       });
     });
   }
 
   onPlayerReady = (e) => {
-    if (typeof this.props.onPlayerReady === "function") {
-      this.props.onPlayerReady(e);
+    if (typeof this.props.handlePlayerReady === "function") {
+      this.props.handlePlayerReady(e);
     }
   }
 
   onPlayerStateChange = (e) => {
-    if (typeof this.props.onStateChange === "function") {
-      this.props.onStateChange(e);
+    if (typeof this.props.handleStateChange === "function") {
+      this.props.handleStateChange(e);
     }
   };
+
+  onPlaybackRateChange = (e) => {
+    if (typeof this.props.handlePlaybackRateChange === "function") {
+      this.props.handlePlaybackRateChange(e);
+    }
+  }
 
   render() {
     return (
@@ -73,8 +79,9 @@ export class YouTubePlayer extends Component {
 YouTubePlayer.propTypes = {
   videoId: PropTypes.string.isRequired,
   playlistId: PropTypes.string,
-  onStateChange: PropTypes.func,
-  onPlayerReady: PropTypes.func,
+  handleStateChange: PropTypes.func,
+  handlePlayerReady: PropTypes.func,
+  handlePlaybackRateChange: PropTypes.func,
   playbackRate: PropTypes.number,
   height: PropTypes.number,
   width: PropTypes.number,
