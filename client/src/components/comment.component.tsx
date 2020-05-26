@@ -6,7 +6,7 @@ import { faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 
 import { IComment } from "shared/interfaces/youtube.interface";
 import { getFormattedDateFromToday } from "shared/helpers";
-import { AppState } from "redux/root-reducer";
+import { selectCurrentVideo } from "redux/video";
 
 type CommentType = "comment" | "reply";
 
@@ -25,7 +25,7 @@ export const Comment: FC<IProps> = ({ comment, type }) => {
     textDisplay,
     updatedAt,
   } = comment.snippet;
-  const currentVideo = useSelector((state: AppState) => state.videos.currentVideo);
+  const currentVideo = useSelector(selectCurrentVideo);
   const channelUrl = `channel/${authorChannelId.value}`;
   const formattedDate = getFormattedDateFromToday(publishedAt);
 
