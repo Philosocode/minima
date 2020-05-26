@@ -1,11 +1,11 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 
 import { IComment } from "shared/interfaces/youtube.interface";
-import { getFormattedDateFromToday } from "shared/helpers";
+import { getFormattedDateFromToday, timeify } from "shared/helpers";
 import { selectCurrentVideo } from "redux/video";
 
 type CommentType = "comment" | "reply";
@@ -25,9 +25,14 @@ export const Comment: FC<IProps> = ({ comment, type }) => {
     textDisplay,
     updatedAt,
   } = comment.snippet;
+
   const currentVideo = useSelector(selectCurrentVideo);
   const channelUrl = `channel/${authorChannelId.value}`;
   const formattedDate = getFormattedDateFromToday(publishedAt);
+
+  useEffect(() => {
+    timeify(textDisplay)
+  }, []);
 
   function commentWasUpdated(): boolean {
     return updatedAt !== publishedAt;    

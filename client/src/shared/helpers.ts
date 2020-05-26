@@ -46,7 +46,7 @@ export function linkify(text: string): string {
   const exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/ig;
   const maxNumChars = 70;
   
-  return text.replace(exp, (match, p1) => {
+  return text.replace(exp, (_, p1) => {
     const includeDots = p1.length > maxNumChars;
     let anchorTag = `<a href="${p1}" target="_blank" rel="noopener">${p1.substring(0, maxNumChars)}`;
     if (includeDots) anchorTag += "...";
@@ -70,4 +70,23 @@ export function roundToTwoDecimals(num: number) {
 
 export function scrollToTop() {
   window.scrollTo(0,0);
+}
+
+export function timeify(text: string) {
+  /**
+   * Convert text time links to YouTube video start times
+   * e.g. 1:11 -> change video to 1:11
+   * 
+   * @param text - the text to parse
+   * @returns Text with time links changed
+   */
+  // FROM: https://stackoverflow.com/a/7536768
+  const exp = /t=([0-1]?[0-9]|2[0-3]):[0-5][0-9]/g;
+  let matches = text.matchAll(exp);
+
+  for (const match of matches) {
+    console.log(match);
+  }
+  
+  return text;
 }
