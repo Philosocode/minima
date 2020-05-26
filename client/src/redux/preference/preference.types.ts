@@ -1,5 +1,5 @@
 export enum PreferenceConstants {
-  SET_SESSION_PLAYBACK_SPEED = "SET_SESSION_LAYBACK_SPEED"
+  SET_SESSION_PLAYBACK_SPEED = "SET_SESSION_PLAYBACK_SPEED"
 };
 
 // TODO: https://stackoverflow.com/questions/47181789/limit-object-properties-to-keyof-interface

@@ -53,7 +53,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
       try {
         const videoRes = await getVideoDetails(videoId);
         setVideoData(videoRes);
-        dispatch(setCurrentVideo);
+        dispatch(setCurrentVideo(videoRes));
 
         const channelRes = await getChannelDetails(videoRes.snippet.channelId);
         setChannelData(channelRes);
