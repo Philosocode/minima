@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 
 import { IComment } from "shared/interfaces/youtube.interface";
-import { getFormattedDateFromToday, timeify } from "shared/helpers";
+import { getFormattedDateFromToday } from "shared/helpers";
 import { selectCurrentVideo } from "redux/video";
 
 type CommentType = "comment" | "reply";
@@ -31,7 +31,6 @@ export const Comment: FC<IProps> = ({ comment, type }) => {
   const formattedDate = getFormattedDateFromToday(publishedAt);
 
   useEffect(() => {
-    timeify(textDisplay)
   }, []);
 
   function commentWasUpdated(): boolean {

@@ -6,6 +6,20 @@ export function addCommasToNumber(num: number | string) {
   return Number(num).toLocaleString();
 }
 
+export function convertTimeToSeconds(minutes: string, seconds: string, hours?: string) {
+  let totalSeconds = 0;
+
+  totalSeconds += (+seconds);
+  
+  totalSeconds += (+minutes * 60);
+  if (hours) {
+    const hoursWithoutColon = hours.substring(0, hours.length - 1);
+    totalSeconds += (+hoursWithoutColon * 60 * 60);
+  }
+
+  return totalSeconds;
+}
+
 export function getAbbreviatedNumber(num: number | string): string {
   const fullValue = Number(num);
 
@@ -70,23 +84,4 @@ export function roundToTwoDecimals(num: number) {
 
 export function scrollToTop() {
   window.scrollTo(0,0);
-}
-
-export function timeify(text: string) {
-  /**
-   * Convert text time links to YouTube video start times
-   * e.g. 1:11 -> change video to 1:11
-   * 
-   * @param text - the text to parse
-   * @returns Text with time links changed
-   */
-  // FROM: https://stackoverflow.com/a/7536768
-  const exp = /t=([0-1]?[0-9]|2[0-3]):[0-5][0-9]/g;
-  let matches = text.matchAll(exp);
-
-  for (const match of matches) {
-    console.log(match);
-  }
-  
-  return text;
 }
