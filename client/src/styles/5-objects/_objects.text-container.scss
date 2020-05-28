@@ -1,7 +1,7 @@
 .o-text-container {
   font-family: $font-secondary;
   font-size: 1.67rem;
-  margin-top: 2px;
+  margin-top: $spacing-tiny;
   margin-bottom: $spacing-small;
 
   &--html {
