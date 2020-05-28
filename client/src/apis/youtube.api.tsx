@@ -23,6 +23,7 @@ interface ICommentsParams {
   key: string;
   maxResults: number;
   pageToken: string | undefined;
+  textFormat: "html" | "plainText";
 }
 export function getCommentThreadReplies(threadId: string, nextPageToken?: string): Promise<ICommentsResponse> {
   const url = BASE_URL + "/comments";
@@ -34,7 +35,8 @@ export function getCommentThreadReplies(threadId: string, nextPageToken?: string
     maxResults: MAX_NUM_COMMENTS,
     pageToken: nextPageToken,
     part: part,
-    parentId: threadId
+    parentId: threadId,
+    textFormat: "plainText"
   };
 
   return makeApiRequest<ICommentsResponse>(url, params);
@@ -160,6 +162,7 @@ interface ICommentThreadsParams {
   maxResults: number;
   order: string;
   pageToken: string | undefined;
+  textFormat: "html" | "plainText";
 }
 export function getVideoCommentThreads(videoId: string, nextPageToken?: string): Promise<ICommentThreadsResponse> {
   const url = BASE_URL + "/commentThreads";
@@ -172,7 +175,8 @@ export function getVideoCommentThreads(videoId: string, nextPageToken?: string):
     pageToken: nextPageToken,
     part: part,
     videoId: videoId,
-    order: "relevance"
+    order: "relevance",
+    textFormat: "plainText"
   };
 
   return makeApiRequest<ICommentThreadsResponse>(url, params);

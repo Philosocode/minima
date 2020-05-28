@@ -6,7 +6,7 @@ const timeExp = /(\d?\d?:?[0-5]?[0-9]:[0-5][0-9])/g;
 // FROM: https://stackoverflow.com/a/17773849
 const urlExp = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/ig;
 
-export function linkifyDescriptionText(text: string) {
+export function linkifyText(text: string) {
   /**
    * Convert text time links in video descriptions to YouTube video start times
    * e.g. 1:11:11 -> set video time to 1:11:11
@@ -20,18 +20,17 @@ export function linkifyDescriptionText(text: string) {
 
   return (
     <>{
-      parts.map(
-        part => {
-          // It's a time. Convert to Link element
-          if (part.match(timeExp)) {
-            return convertTimeStringToLinkElement(part);
-          }
-          // It's a URL. Convert to anchor element
-          else if (part.match(urlExp)) {
-            return convertUrlToAnchorElement(part);
-          }
+      parts.map((part) => {
+        // It's a time. Convert to Link element
+        if (part.match(timeExp)) {
+          return convertTimeStringToLinkElement(part);
+        }
+        // It's a URL. Convert to anchor element
+        else if (part.match(urlExp)) {
+          return convertUrlToAnchorElement(part);
+        }
 
-          return part;
+        return part;
       })
     }</>
   );

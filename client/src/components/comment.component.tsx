@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from "react";
+import React, { FC } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -7,6 +7,8 @@ import { faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import { IComment } from "shared/interfaces/youtube.interface";
 import { getFormattedDateFromToday } from "shared/helpers";
 import { selectCurrentVideo } from "redux/video";
+import { HTMLTextContainer } from "./html-text-container.component";
+import { linkifyText } from "shared/jsx-helpers";
 
 type CommentType = "comment" | "reply";
 
@@ -29,9 +31,6 @@ export const Comment: FC<IProps> = ({ comment, type }) => {
   const currentVideo = useSelector(selectCurrentVideo);
   const channelUrl = `channel/${authorChannelId.value}`;
   const formattedDate = getFormattedDateFromToday(publishedAt);
-
-  useEffect(() => {
-  }, []);
 
   function commentWasUpdated(): boolean {
     return updatedAt !== publishedAt;    
@@ -77,7 +76,7 @@ export const Comment: FC<IProps> = ({ comment, type }) => {
       <div className="o-media__body">
         <Link className={getChannelNameClasses()} to={channelUrl}>{authorDisplayName}</Link>
         <div className="c-comment__date">{formattedDate} ago { commentWasUpdated() && "(edited)"}</div>
-        <p dangerouslySetInnerHTML={{__html: textDisplay}} className="o-text-container o-text-container--html c-comment__content"></p>
+        <HTMLTextContainer textElement={linkifyText(textDisplay)} />
         <div><FontAwesomeIcon className="c-icon__icon" icon={faThumbsUp} /> <span className="c-icon__text">{likeCount.toLocaleString()}</span></div>
       </div>
 
