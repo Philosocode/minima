@@ -62,7 +62,7 @@ export function linkify(text: string): string {
   
   return text.replace(exp, (_, p1) => {
     const includeDots = p1.length > maxNumChars;
-    let anchorTag = `<a href="${p1}" target="_blank" rel="noopener">${p1.substring(0, maxNumChars)}`;
+    let anchorTag = `<a href="${p1}" target="_blank" rel="noopener noreferrer">${p1.substring(0, maxNumChars)}`;
     if (includeDots) anchorTag += "...";
     anchorTag += "</a>";
     

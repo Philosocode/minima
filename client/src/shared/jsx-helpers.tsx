@@ -1,7 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { convertTimeToSeconds } from "./helpers";
 
-export function addLinksToTimes(text: string) {
+const timeExp = /(\d?\d?:?[0-5]?[0-9]:[0-5][0-9])/g;
+// FROM: https://stackoverflow.com/a/17773849
+const urlExp = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/ig;
+
+export function linkifyDescriptionText(text: string) {
   /**
    * Convert text time links in video descriptions to YouTube video start times
    * e.g. 1:11:11 -> set video time to 1:11:11
@@ -11,26 +16,75 @@ export function addLinksToTimes(text: string) {
    */
   // FROM: https://stackoverflow.com/a/14892796
   // FROM: https://github.com/facebook/react/issues/3386#issuecomment-78605760
-  // const exp = /([0-9]?[0-9][:])?([0-5]?[0-9]):([0-5][0-9])/g;
-  const exp = /(\d?\d?:?[0-5]?[0-9]:[0-5][0-9])/g;
-  
-  const parts = text.split(exp);
+  const parts = text.split(timeExp);
 
-  return <>{
-    parts.map(part => (part.match(exp) ? <Link to={part}>{part}</Link> : part))
-  }</>;
+  return (
+    <>{
+      parts.map(
+        part => {
+          // It's a time. Convert to Link element
+          if (part.match(timeExp)) {
+            return convertTimeStringToLinkElement(part);
+          }
+          // It's a URL. Convert to anchor element
+          else if (part.match(urlExp)) {
+            return convertUrlToAnchorElement(part);
+          }
+
+          return part;
+      })
+    }</>
+  );
 }
 
-export function addLinksToTimes2(text: string, formattingFunction?: (value: number | string) => React.ReactNode, ...values: Array<number | string> ) {
-  const templateSplit = new RegExp(/{(\d)}/g);
-  const isNumber = new RegExp(/^\d+$/);
+function convertTimeStringToLinkElement(time: string) {
+  // Time will either be ##:##:## or ##:## format
+  const timeParts = time.split(":");
+  let startSeconds = 0;
 
-  const splitText = text.split(templateSplit);
-  return splitText.map(sentence => {
-    if (isNumber.test(sentence)) {
-      const value = values[Number(sentence)];
-      return formattingFunction ? formattingFunction(value) : value;
-    }
-    return sentence;
-  });
+  // ##:##
+  if (timeParts.length === 2) {
+    const [minutes, seconds] = timeParts;
+    startSeconds = convertTimeToSeconds(minutes, seconds);
+  }
+
+  // ##:##:##
+  else if (timeParts.length === 3) {
+    const [hours, minutes, seconds] = timeParts;
+
+    startSeconds = convertTimeToSeconds(minutes, seconds, hours);
+  }
+
+  else {
+    throw new Error("ERROR: Invalid time passed");
+  }
+
+  return (
+    <Link to={`/watch?v=lhu8HWc9TlA&start=${startSeconds}`}>{time}</Link>
+  );
+}
+
+function convertUrlToAnchorElement(url: string) {
+  const maxNumChars = 70;
+  const parts = url.split(urlExp);
+
+  return (
+    <>{
+      parts.map(
+        part => {
+          // It's a URL. Convert to anchor element
+          if (part.match(urlExp)) {
+            const includeDots = part.length > maxNumChars;
+            let urlText = `${part.substring(0, maxNumChars)}`;
+            if (includeDots) urlText += "...";
+
+            return (
+              <a href={part} target="_blank" rel="noopener noreferrer">{urlText}</a>
+            )
+          }
+          // Regular text
+          return part;
+      })
+    }</>
+  );
 }
