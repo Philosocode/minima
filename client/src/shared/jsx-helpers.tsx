@@ -5,6 +5,7 @@ import { convertTimeToSeconds } from "./helpers";
 const timeExp = /(\d?\d?:?[0-5]?[0-9]:[0-5][0-9])/g;
 // FROM: https://stackoverflow.com/a/17773849
 const urlExp = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/ig;
+const youtubeUrlExp = /https?:\/\/www\.youtube\.com/ig;
 
 export function linkifyText(text: string) {
   /**
@@ -64,21 +65,28 @@ function convertTimeStringToLinkElement(time: string) {
 }
 
 function convertUrlToAnchorElement(url: string) {
-  const maxNumChars = 70;
   const parts = url.split(urlExp);
 
   return (
     <>{
       parts.map(
         part => {
-          // It's a URL. Convert to anchor element
-          if (part.match(urlExp)) {
-            const includeDots = part.length > maxNumChars;
-            let urlText = `${part.substring(0, maxNumChars)}`;
-            if (includeDots) urlText += "...";
+          // It's a YouTube URL. Convert to Link element
+          if (part.match(youtubeUrlExp)) {
+            const relativeUrl = part.replace(youtubeUrlExp, "");
+            const shortenedUrl = getShortenedUrl(part);
 
             return (
-              <a href={part} target="_blank" rel="noopener noreferrer">{urlText}</a>
+              <Link to={relativeUrl}>{shortenedUrl}</Link>
+            )
+          }
+
+          // It's a URL. Convert to anchor element
+          else if (part.match(urlExp)) {
+            const shortenedUrl = getShortenedUrl(part);
+
+            return (
+              <a href={part} target="_blank" rel="noopener noreferrer">{shortenedUrl}</a>
             )
           }
           // Regular text
@@ -86,4 +94,14 @@ function convertUrlToAnchorElement(url: string) {
       })
     }</>
   );
+}
+
+function getShortenedUrl(url: string) {
+  const maxNumChars = 70;
+  const includeDots = url.length > maxNumChars;
+
+  let shortenedUrl = `${url.substring(0, maxNumChars)}`;
+  if (includeDots) shortenedUrl += "...";
+
+  return shortenedUrl;
 }
