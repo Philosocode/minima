@@ -1,18 +1,57 @@
-import React, { FC } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { withRouter, RouteComponentProps } from "react-router-dom";
 
 import { selectSessionPlaybackSpeed, setSessionPlaybackSpeed } from "redux/preference";
 import { Loader } from "components/loader.component";
 import { YouTubePlayer } from "components/youtube-player.component";
+import { getQueryParams } from "shared/helpers";
 
 interface IProps {
   isLoading: boolean;
   videoId: string;
   playlistId?: string;
 }
-export const VideoPlayer: FC<IProps> = ({ isLoading, playlistId, videoId }) => { 
-  const dispatch = useDispatch();
+
+enum PlayerState {
+  UNSTARTED = -1,
+  ENDED = 0,
+  PLAYING,
+  PAUSED,
+  BUFFERING,
+  VIDEO_CUED = 5
+}
+
+const _VideoPlayer: FC<RouteComponentProps & IProps> = ({ location, isLoading, playlistId, videoId }) => { 
+  const [startSeconds, setStartSeconds] = useState<number>();
+  const [endSeconds, setEndSeconds] = useState<number>();
   const playbackSpeed = useSelector(selectSessionPlaybackSpeed);
+  const dispatch = useDispatch();
+
+  const options = {
+    modestBranding: 1,
+    rel: 0,
+    ...playlistId && { 
+      listType: "playlist",
+      list: playlistId
+    },
+    ...startSeconds && { start: startSeconds },
+    ...endSeconds && { end: endSeconds }
+  };
+
+  useEffect(() => {
+    const queryParams = getQueryParams(location.search);
+    const startSecondsQueryParam = queryParams.query["start"];
+    const endSecondsQueryParam = queryParams.query["end"];
+
+    typeof startSecondsQueryParam === "string"
+    ? setStartSeconds(+startSecondsQueryParam)
+    : setStartSeconds(undefined);
+
+  typeof endSecondsQueryParam === "string"
+    ? setEndSeconds(+endSecondsQueryParam)
+    : setEndSeconds(undefined);
+  }, [setStartSeconds, location.search])
 
   function renderVideoPlayer() {
     return (
@@ -20,7 +59,8 @@ export const VideoPlayer: FC<IProps> = ({ isLoading, playlistId, videoId }) => {
         videoId={videoId} 
         handlePlayerReady={handlePlayerReady} 
         handlePlaybackRateChange={handlePlaybackRateChange}
-        playlistId={playlistId} 
+        handleStateChange={handleStateChange}
+        options={options}
       />
     );
   }
@@ -35,6 +75,11 @@ export const VideoPlayer: FC<IProps> = ({ isLoading, playlistId, videoId }) => {
     dispatch(setSessionPlaybackSpeed(e.data));
   }
 
+  function handleStateChange(e: any) {
+    // FROM: https://stackoverflow.com/a/49264465
+    if (e.data === PlayerState.ENDED) e.target.seekTo(startSeconds);
+  }
+
   return (
     <div className="o-container c-video-player__container">
       {
@@ -45,3 +90,5 @@ export const VideoPlayer: FC<IProps> = ({ isLoading, playlistId, videoId }) => {
     </div>
   );
  }
+
+ export const VideoPlayer = withRouter(_VideoPlayer);
