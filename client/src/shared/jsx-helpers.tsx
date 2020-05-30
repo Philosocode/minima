@@ -1,13 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { parse, stringify, ParsedQuery } from "query-string";
+import { parse, ParsedQuery } from "query-string";
 
-import { convertTimeToSeconds, scrollToTop } from "./helpers";
+import { convertTimeToSeconds, scrollToTop, getVideoQueryString } from "./helpers";
 
 const timeExp = /(\d?\d?:?[0-5]?[0-9]:[0-5][0-9])/g;
 // FROM: https://stackoverflow.com/a/17773849
 const urlExp = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/ig;
 const youtubeUrlExp = /https?:\/\/www\.youtube\.com/ig;
+const youtubeShortUrlExp = /https?:\/\/youtu\.be\//ig;
 
 export function linkifyText(text: string) {
   /**
@@ -64,10 +65,10 @@ function convertTimeStringToLinkElement(time: string, queryParams: ParsedQuery<s
 
   queryParams["start"] = startSeconds.toString();
 
-  const stringified = stringify(queryParams)
+  const stringified = getVideoQueryString(queryParams);
 
   return (
-    <Link to={`/watch?${stringified}`} onClick={scrollToTop}>{time}</Link>
+    <Link to={`/watch${stringified}`} onClick={scrollToTop}>{time}</Link>
   );
 }
 
@@ -84,8 +85,17 @@ function convertUrlToAnchorElement(url: string) {
             const shortenedUrl = getShortenedUrl(part);
 
             return (
-              <Link to={relativeUrl}>{shortenedUrl}</Link>
-            )
+              <Link to={relativeUrl} onClick={scrollToTop}>{shortenedUrl}</Link>
+            );
+          }
+
+          else if (part.match(youtubeShortUrlExp)) {
+            const videoId = part.replace(youtubeShortUrlExp, "");
+            const url = `/watch?v=${videoId}`;
+
+            return (
+              <Link to={url} onClick={scrollToTop}>{part}</Link>
+            );
           }
 
           // It's a URL. Convert to anchor element
