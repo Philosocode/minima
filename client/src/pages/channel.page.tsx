@@ -5,7 +5,8 @@ import { faCalendarDay, faEye, faVideo } from "@fortawesome/free-solid-svg-icons
 import { IChannel, IPlaylistItem, IPlaylist } from "shared/interfaces/youtube.interface";
 import { getChannelDetails, getPlaylistVideos, getChannelPlaylists } from "apis/youtube.api";
 
-import { linkify, addCommasToNumber, getFormattedDate } from "shared/helpers";
+import { addCommasToNumber, getFormattedDate } from "shared/helpers";
+import { linkifyText } from "shared/jsx-helpers";
 import { ChannelBox } from "components/channel-box.component";
 import { ChannelTabs } from "components/channel-tabs.component";
 import { PlaylistGrid } from "components/playlist-grid.component";
@@ -13,6 +14,7 @@ import { ChannelTabPanel } from "components/channel-tab-panel.component";
 import { VideoGrid } from "components/video-grid.component";
 import { Loader } from "components/loader.component";
 import { StatsCard } from "components/stats-card.component";
+import { HTMLTextContainer } from "components/html-text-container.component";
 
 interface IRouteParams {
   channelId: string;
@@ -125,10 +127,7 @@ const _ChannelPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
     if (!channelData) return;
     return (
       <>
-        <div className="o-text-container o-text-container--html c-channel__description">
-          <p dangerouslySetInnerHTML={{ __html: linkify(channelData.snippet.description) }}></p>
-        </div>
-
+        <HTMLTextContainer textElement={linkifyText(channelData.snippet.description)} />
         <StatsCard statsCardData={getStatsCardData()} isShort />
       </>
     )
