@@ -7,12 +7,13 @@ import { Loader } from "components/loader.component";
 import { VideoGrid } from "components/video-grid.component";
 import { PlaylistDetails } from "components/playlist-details.component";
 import { Divider } from "components/divider.component";
+import { getQueryParams } from "shared/helpers";
 
 interface IRouteParams {
   playlistId: string;
 }
 
-const _PlaylistPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
+const _PlaylistPage: FC<RouteComponentProps<IRouteParams>> = ({ location }) => {
   // State
   const [playlistDetails, setPlaylistDetails] = useState<IPlaylist>();
   const [videos, setVideos] = useState<IPlaylistItem[]>([]);
@@ -20,11 +21,17 @@ const _PlaylistPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
   const [hasMoreVideos, setHasMoreVideos] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
-  const playlistId = match.params.playlistId;
   
   // Functions
   useEffect(() => {
-    async function fetchChannelData() {
+    const queryParams = getQueryParams(location.search);
+    const playlistQueryParam = queryParams.query["list"];
+
+    if (typeof playlistQueryParam === "string") {
+      fetchPlaylistData(playlistQueryParam);
+    }
+
+    async function fetchPlaylistData(playlistId: string) {
       setIsLoading(true);
 
       try {
@@ -40,16 +47,14 @@ const _PlaylistPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
         setIsLoading(false);
       }
     }
-    
-    fetchChannelData();
-  }, [playlistId]);
+  }, [location.search]);
 
   async function loadVideos() {
     if (!playlistDetails || !hasMoreVideos) return;
 
     setIsLoading(true);
     try {
-      const res = await getPlaylistVideos(playlistId, videosPageToken);
+      const res = await getPlaylistVideos(playlistDetails.id, videosPageToken);
       
       if (res.nextPageToken) {
         setVideosPageToken(res.nextPageToken);
@@ -88,7 +93,7 @@ const _PlaylistPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
           hasMoreVideos={hasMoreVideos}
           isLoading={isLoading}
           showVideoIndices
-          playlistId={playlistId} 
+          playlistId={playlistDetails.id} 
         />
       </div>
     </div>

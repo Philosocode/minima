@@ -27,7 +27,7 @@ export function App() {
               <Route exact path="/" component={HomePage} />
               <Route exact path="/search" component={SearchPage} />
               <Route exact path="/channel/:channelId" component={ChannelPage} />
-              <Route exact path="/playlist/:playlistId" component={PlaylistPage} />
+              <Route exact path="/playlist" component={PlaylistPage} />
               <Route exact path="/watch" render={() => <VideoPage />} />
               <Route component={NotFoundPage} />
             </Switch>

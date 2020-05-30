@@ -47,7 +47,7 @@ export class PlaylistGrid extends Component<IProps> {
               key={p.id} 
               count={p.contentDetails.itemCount.toString()}
               date={p.snippet.publishedAt}
-              resourceUrl={`/playlist/${p.id}`}
+              resourceUrl={`/playlist?list=${p.id}`}
               thumbnailUrl={p.snippet.thumbnails.medium.url}
               title={p.snippet.title}
             />
