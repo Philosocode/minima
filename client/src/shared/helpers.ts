@@ -1,5 +1,5 @@
 import { format, formatDistanceToNow, parseISO } from "date-fns";
-import { parseUrl } from "query-string";
+import { parseUrl, ParsedQuery } from "query-string";
 
 // FROM: https://stackoverflow.com/a/17663871
 export function addCommasToNumber(num: number | string) {
@@ -46,8 +46,22 @@ export function getFormattedDate(dateToFormat: string, dateFormat: DateFormat) {
   return format(parseISO(dateToFormat), dateFormat);
 }
 
-export function getQueryParams(url: string){
+export function getQueryParams(url: string) {
   return parseUrl(url);
+}
+
+export function getVideoQueryString(queryParams: ParsedQuery<string>) {
+  // Params: v, list, index, start, end
+  let queryString = "";
+
+  if (typeof queryParams["v"] === "string") queryString += `?v=${queryParams["v"]}`;
+
+  const otherParams = ["list", "index", "start", "end"];
+  otherParams.forEach(param => {
+    if (typeof queryParams[param] === "string") queryString += `&${param}=${queryParams[param]}`;
+  });
+
+  return queryString;
 }
 
 // FROM: https://howchoo.com/g/nwywodhkndm/how-to-turn-an-object-into-query-string-parameters-in-javascript#using-map-and-join

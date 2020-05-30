@@ -2,7 +2,7 @@ import React, { useState, FC, ChangeEvent, KeyboardEvent } from "react";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import { getQueryParams, scrollToTop } from "shared/helpers";
+import { getQueryParams, scrollToTop, getVideoQueryString } from "shared/helpers";
 
 type SearchType = "video" | "channel" | "playlist" | "general" | "unknown";
 
@@ -11,13 +11,12 @@ const _SearchBar: FC<RouteComponentProps> = ({ history }) => {
   const [ searchInputText, setSearchInputText ] = useState("");
 
   // RegExps
-  const videoIdExp = /^[0-9A-Za-z_-]{10}[048AEIMQUYcgkosw]$/;
-  const channelIdExp = /(UC[0-9A-Za-z_-]{21}[AQgw])/;
-  const playlistIdExp = /\/playlist\?list=(.*)/;
+  const channelPageExp = /\/channel\/(UC[0-9A-Za-z_-]{21}[AQgw])$/;
+  const playlistPageExp = /\/playlist\?list=(.*)/;
 
   // Functions
   function handleChange(ev: ChangeEvent<HTMLInputElement>) {    
-    setSearchInputText(ev.target.value);
+    setSearchInputText(ev.target.value.trim());
   }
 
   function handleSearchClear() {
@@ -29,86 +28,52 @@ const _SearchBar: FC<RouteComponentProps> = ({ history }) => {
     if (ev.key !== "Enter") return;
     if (!searchInputText) return;
 
-    const queryParams = getQueryParams(searchInputText);
-    if (typeof queryParams.query.v == "string") {
-      // Found a video. Check if `list` query param is included
-      return typeof queryParams.query.list == "string"
-        ? handleVideoRedirect(queryParams.query.v, queryParams.query.list)
-        : handleVideoRedirect(queryParams.query.v);
-    }
+    scrollToTop();
 
-    const explicitSearchType = getExplicitSearchType();
-    if (explicitSearchType !== "unknown") {
-      return handleRedirect(explicitSearchType);
-    }
-
+    // Infer if it's a video, channel, or playlist page
+    // If not, assume general search
     const inferredSearchType = getInferredSearchType();
-    if (inferredSearchType !== "unknown") {
-      return handleRedirect(inferredSearchType);
-    }
+    if (inferredSearchType === "video")     return handleVideoRedirect();
+    if (inferredSearchType === "channel")   return handleChannelRedirect();
+    if (inferredSearchType === "playlist")  return handlePlaylistRedirect();
 
-    handleRedirect("general");
-  }
-
-  function getExplicitSearchType(): SearchType {
-    // Expected Format: v[ideo]=__, p[laylist]=__, c[hannel]=__
-    const splitSearch = searchInputText.split("=");
-    const searchBy = splitSearch[0].toLowerCase();
-
-    // e.g. `video=` with no id passed
-    if (splitSearch.length <= 1) return "unknown";
-
-    if (searchBy === "v" || searchBy === "video") return "video";
-    if (searchBy === "p" || searchBy === "playlist") return "playlist";
-    if (searchBy === "c" || searchBy === "channel") return "channel";
-    if (searchBy === "g" || searchBy === "general") return "general";
-
-    return "unknown";
+    return handleSearchRedirect();
   }
 
   function getInferredSearchType(): SearchType {
     // Referenced: https://webapps.stackexchange.com/a/101153
-    if (searchInputText.match(videoIdExp)) {
-      return "video";
-    }
-    else if (searchInputText.match(channelIdExp)) {
-      return "channel";
-    }
-    else if (searchInputText.match(playlistIdExp)) {
-      return "playlist";
-    }
-    else {
-      return "unknown";
-    }
+    const queryParams = getQueryParams(searchInputText);
+    
+    if (queryParams.query["v"])                 return "video";
+    if (searchInputText.match(channelPageExp))  return "channel";
+    if (searchInputText.match(playlistPageExp)) return "playlist";
+    
+    return "unknown";
   }
 
-  function handleRedirect(searchType: SearchType, term = searchInputText) {
-    let baseUrl: string = searchType;
-    if (searchType === "general") baseUrl = "search";
-    else if (searchType === "video") baseUrl = "watch";
+  function handleVideoRedirect() {
+    const queryParams = getQueryParams(searchInputText);
+    const queryString = getVideoQueryString(queryParams.query);
 
-    let resourceUrl = term;
-    // Extract the channel ID
-    if (searchType === "channel") {
-      const matches = term.match(channelIdExp);
-      if (matches) resourceUrl = matches[0];
-    }
-    if (searchType === "playlist") {
-      const matches = term.match(playlistIdExp);
-      if (matches) resourceUrl = matches[1];
-    }
+    const url = `/watch${queryString}`
 
-    history.push(`/${baseUrl}/${resourceUrl}`);
+    history.push(url);
   }
 
-  function handleVideoRedirect(videoId: string, playlistId?: string) {
-    let redirectUrl = `/watch?v=${videoId}`;
-    if (playlistId) {
-      redirectUrl += `&list=${playlistId}`;
-    }
+  function handleChannelRedirect() {
+    const match = searchInputText.match(channelPageExp);
+    if (match) history.push(`/channel/${match[1]}`);
+  }
 
-    history.push(redirectUrl);
-    scrollToTop();
+  function handlePlaylistRedirect() {
+    const queryParams = getQueryParams(searchInputText).query;
+
+    if (typeof queryParams["list"] === "string") {
+      history.push(`/playlist?list=${queryParams["list"]}`);
+    }
+  }
+  function handleSearchRedirect() {
+    history.push(`/results?search_query=${searchInputText}`)
   }
 
   function getSearchClearClasses() {
