@@ -10,6 +10,11 @@ const _SearchBar: FC<RouteComponentProps> = ({ history }) => {
   // State
   const [ searchInputText, setSearchInputText ] = useState("");
 
+  // RegExps
+  const videoIdExp = /^[0-9A-Za-z_-]{10}[048AEIMQUYcgkosw]$/;
+  const channelIdExp = /(UC[0-9A-Za-z_-]{21}[AQgw])/;
+  const playlistIdExp = /\/playlist\?list=(.*)/;
+
   // Functions
   function handleChange(ev: ChangeEvent<HTMLInputElement>) {    
     setSearchInputText(ev.target.value);
@@ -63,16 +68,13 @@ const _SearchBar: FC<RouteComponentProps> = ({ history }) => {
 
   function getInferredSearchType(): SearchType {
     // Referenced: https://webapps.stackexchange.com/a/101153
-    if (searchInputText.match(/^[0-9A-Za-z_-]{10}[048AEIMQUYcgkosw]$/)) {
+    if (searchInputText.match(videoIdExp)) {
       return "video";
     }
-    else if (searchInputText.match(/^UC[0-9A-Za-z_-]{21}[AQgw]$/)) {
+    else if (searchInputText.match(channelIdExp)) {
       return "channel";
     }
-    else if (searchInputText.match(/^UU[0-9A-Za-z_-]{21}[AQgw]$/)) {
-      return "playlist";
-    }
-    else if (searchInputText.match(/^PL[0-9A-Za-z_-]{14}$/) || searchInputText.match(/^PL[0-9A-Za-z_-]{32}$/)) {
+    else if (searchInputText.match(playlistIdExp)) {
       return "playlist";
     }
     else {
@@ -82,11 +84,21 @@ const _SearchBar: FC<RouteComponentProps> = ({ history }) => {
 
   function handleRedirect(searchType: SearchType, term = searchInputText) {
     let baseUrl: string = searchType;
-
     if (searchType === "general") baseUrl = "search";
     else if (searchType === "video") baseUrl = "watch";
 
-    history.push(`/${baseUrl}/${term}`);
+    let resourceUrl = term;
+    // Extract the channel ID
+    if (searchType === "channel") {
+      const matches = term.match(channelIdExp);
+      if (matches) resourceUrl = matches[0];
+    }
+    if (searchType === "playlist") {
+      const matches = term.match(playlistIdExp);
+      if (matches) resourceUrl = matches[1];
+    }
+
+    history.push(`/${baseUrl}/${resourceUrl}`);
   }
 
   function handleVideoRedirect(videoId: string, playlistId?: string) {
