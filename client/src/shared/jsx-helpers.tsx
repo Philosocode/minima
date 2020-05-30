@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { convertTimeToSeconds } from "./helpers";
+import { parse, stringify, ParsedQuery } from "query-string";
+
+import { convertTimeToSeconds, scrollToTop } from "./helpers";
 
 const timeExp = /(\d?\d?:?[0-5]?[0-9]:[0-5][0-9])/g;
 // FROM: https://stackoverflow.com/a/17773849
@@ -18,13 +20,14 @@ export function linkifyText(text: string) {
   // FROM: https://stackoverflow.com/a/14892796
   // FROM: https://github.com/facebook/react/issues/3386#issuecomment-78605760
   const parts = text.split(timeExp);
-
+  const queryParams = parse(window.location.search);
+  
   return (
     <>{
       parts.map((part) => {
         // It's a time. Convert to Link element
         if (part.match(timeExp)) {
-          return convertTimeStringToLinkElement(part);
+          return convertTimeStringToLinkElement(part, queryParams);
         }
         // It's a URL. Convert to anchor element
         else if (part.match(urlExp)) {
@@ -37,7 +40,7 @@ export function linkifyText(text: string) {
   );
 }
 
-function convertTimeStringToLinkElement(time: string) {
+function convertTimeStringToLinkElement(time: string, queryParams: ParsedQuery<string>) {
   // Time will either be ##:##:## or ##:## format
   const timeParts = time.split(":");
   let startSeconds = 0;
@@ -59,8 +62,12 @@ function convertTimeStringToLinkElement(time: string) {
     throw new Error("ERROR: Invalid time passed");
   }
 
+  queryParams["start"] = startSeconds.toString();
+
+  const stringified = stringify(queryParams)
+
   return (
-    <Link to={`/watch?v=lhu8HWc9TlA&start=${startSeconds}`}>{time}</Link>
+    <Link to={`/watch?${stringified}`} onClick={scrollToTop}>{time}</Link>
   );
 }
 
