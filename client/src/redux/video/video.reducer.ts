@@ -6,7 +6,7 @@ import {
 
 const initialState: IVideoState = {
   currentVideo: undefined,
-  isLooping: false,
+  shouldLoop: false,
 }
 
 export const videoReducer = (state = initialState, action: VideoAction) => {
@@ -19,7 +19,7 @@ export const videoReducer = (state = initialState, action: VideoAction) => {
     case VideoConstants.SET_IS_LOOPING:
       return {
         ...state,
-        isLooping: action.payload
+        shouldLoop: action.payload
       };
     case VideoConstants.SET_START_SECONDS:
       return {

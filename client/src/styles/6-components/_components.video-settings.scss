@@ -1,0 +1,31 @@
+.c-video-settings {
+  &__container {
+    height: 5rem;
+    margin-top: $spacing-tiny;
+    width: 80%;
+  }
+
+  &__icon-container {
+    border-left: 1px solid $color-grey;
+    border-right: 1px solid $color-grey;
+    cursor: pointer;
+    display: flex;
+      align-items: center;
+      justify-content: center;
+    height: 100%;
+    margin: 0 auto;
+    transition: background-color 0.1s ease;
+    width: 33%;
+    
+    &:hover,
+    &.is-active {
+      background-color: $color-green-dark;
+      border-left: 1px solid $color-green;
+      border-right: 1px solid $color-green;
+    }
+  }
+
+  &__icon {
+    font-size: 2.5rem;
+  }
+}

@@ -6,6 +6,7 @@ import { selectSessionPlaybackSpeed, setSessionPlaybackSpeed } from "redux/prefe
 import { Loader } from "components/loader.component";
 import { YouTubePlayer } from "components/youtube-player.component";
 import { getQueryParams } from "shared/helpers";
+import { selectShouldLoop } from "redux/video";
 
 interface IProps {
   isLoading: boolean;
@@ -26,6 +27,7 @@ const _VideoPlayer: FC<RouteComponentProps & IProps> = ({ location, isLoading, p
   const [startSeconds, setStartSeconds] = useState<number>();
   const [endSeconds, setEndSeconds] = useState<number>();
   const playbackSpeed = useSelector(selectSessionPlaybackSpeed);
+  const shouldLoop = useSelector(selectShouldLoop);
   const dispatch = useDispatch();
 
   const options = {
@@ -53,18 +55,6 @@ const _VideoPlayer: FC<RouteComponentProps & IProps> = ({ location, isLoading, p
     : setEndSeconds(undefined);
   }, [setStartSeconds, location.search])
 
-  function renderVideoPlayer() {
-    return (
-      <YouTubePlayer 
-        videoId={videoId} 
-        handlePlayerReady={handlePlayerReady} 
-        handlePlaybackRateChange={handlePlaybackRateChange}
-        handleStateChange={handleStateChange}
-        options={options}
-      />
-    );
-  }
-
   function handlePlayerReady(e: any) {
     const player = e.target;
     
@@ -77,7 +67,19 @@ const _VideoPlayer: FC<RouteComponentProps & IProps> = ({ location, isLoading, p
 
   function handleStateChange(e: any) {
     // FROM: https://stackoverflow.com/a/49264465
-    if (e.data === PlayerState.ENDED) e.target.seekTo(startSeconds);
+    if (e.data === PlayerState.ENDED && shouldLoop) e.target.seekTo(startSeconds);
+  }
+
+  function renderVideoPlayer() {
+    return (
+      <YouTubePlayer 
+        videoId={videoId} 
+        handlePlayerReady={handlePlayerReady} 
+        handlePlaybackRateChange={handlePlaybackRateChange}
+        handleStateChange={handleStateChange}
+        options={options}
+      />
+    );
   }
 
   return (

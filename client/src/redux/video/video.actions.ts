@@ -1,7 +1,7 @@
 import {
   VideoConstants,
   ISetCurrentVideoAction,
-  ISetIsLoopingAction,
+  ISetShouldLoopAction,
   ISetStartSecondsAction
 } from "./video.types";
 
@@ -12,9 +12,9 @@ export const setCurrentVideo = (video: IVideo): ISetCurrentVideoAction => ({
   payload: video
 });
 
-export const setIsLooping = (isLooping: boolean): ISetIsLoopingAction => ({
+export const setShouldLoop = (shouldLoop: boolean): ISetShouldLoopAction => ({
   type: VideoConstants.SET_IS_LOOPING,
-  payload: isLooping
+  payload: shouldLoop
 });
 
 export const setStartSeconds = (startSeconds: number): ISetStartSecondsAction => ({

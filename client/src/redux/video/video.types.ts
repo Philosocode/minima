@@ -9,7 +9,7 @@ export enum VideoConstants {
 
 export interface IVideoState {
   currentVideo?: IVideo;
-  isLooping: boolean;
+  shouldLoop: boolean;
   startSeconds?: number;
   endSeconds?: number;
 }
@@ -20,7 +20,7 @@ export interface ISetCurrentVideoAction {
   payload: IVideo;
 }
 
-export interface ISetIsLoopingAction {
+export interface ISetShouldLoopAction {
   type: VideoConstants.SET_IS_LOOPING;
   payload: boolean;
 }
@@ -32,5 +32,5 @@ export interface ISetStartSecondsAction {
 
 export type VideoAction =
   | ISetCurrentVideoAction
-  | ISetIsLoopingAction
+  | ISetShouldLoopAction
   | ISetStartSecondsAction;

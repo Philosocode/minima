@@ -1,6 +1,7 @@
 import React, { FC, useState, useEffect } from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { faCalendarDay, faEye, faThumbsUp, faThumbsDown, faPercent } from "@fortawesome/free-solid-svg-icons";
 
 import { setCurrentVideo } from "redux/video";
 
@@ -16,8 +17,8 @@ import { StatsCard } from "components/stats-card.component";
 import { VideoDescription } from "components/video-description.component";
 import { VideoPlayer } from "components/video-player.component";
 import { ChannelBox } from "components/channel-box.component";
-import { faCalendarDay, faEye, faThumbsUp, faThumbsDown, faPercent } from "@fortawesome/free-solid-svg-icons";
 import { NotFoundHeading } from "components/not-found-heading.component";
+import { VideoSettingsCard } from "components/video-settings-card.component";
 
 interface IRouteParams {
   videoId: string;
@@ -112,6 +113,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
       
       <div className="o-grid__item--left-sidebar">
         <StatsCard statsCardData={getStatsCardData()} />
+        <VideoSettingsCard />
       </div>
 
       <div className="o-grid__item--center">
