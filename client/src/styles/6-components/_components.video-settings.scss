@@ -14,10 +14,13 @@
       justify-content: center;
     height: 100%;
     margin: 0 auto;
-    transition: background-color 0.1s ease;
+    transition: background-color 0.1s ease, color 0.2s ease;
     width: 33%;
+
+    &:hover {
+      color:$color-green-light;
+    }
     
-    &:hover,
     &.is-active {
       background-color: $color-green-dark;
       border-left: 1px solid $color-green;
