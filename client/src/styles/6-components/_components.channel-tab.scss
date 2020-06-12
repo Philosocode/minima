@@ -24,7 +24,7 @@
     display: inline-block;
     font-size: 1.6rem;
     margin-bottom: 0;
-    transition: border 0.1s ease,  0.25s ease;
+    transition: border 0.1s ease, color 0.25s ease;
 
     &:hover,
     &--selected {
