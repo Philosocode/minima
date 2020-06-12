@@ -26,7 +26,8 @@ export function App() {
             <Switch>
               <Route exact path="/" component={HomePage} />
               <Route exact path="/search" component={SearchPage} />
-              <Route exact path="/channel/:channelId" component={ChannelPage} />
+              <Route exact path="/channel/:channelId" component={(props: any) => <ChannelPage key={window.location.pathname} {...props} />} />
+              <Route exact path="/user/:userName" component={(props: any) => <ChannelPage key={window.location.pathname} {...props} />} />
               <Route exact path="/playlist" component={PlaylistPage} />
               <Route exact path="/watch" render={() => <VideoPage />} />
               <Route component={NotFoundPage} />

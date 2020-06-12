@@ -48,6 +48,7 @@ export function getChannelDetails(channelId?: string, username?: string): Promis
   const params = {
     key: API_KEY,
     id: channelId,
+    forUsername: username,
     part: part
   };
 

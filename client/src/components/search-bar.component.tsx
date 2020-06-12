@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { getQueryParams, scrollToTop, getVideoQueryString } from "shared/helpers";
 
-type SearchType = "video" | "channel" | "playlist" | "general" | "unknown";
+type SearchType = "video" | "channel" | "user" | "playlist" | "general" | "unknown";
 
 const _SearchBar: FC<RouteComponentProps> = ({ history }) => {
   // State
@@ -12,6 +12,7 @@ const _SearchBar: FC<RouteComponentProps> = ({ history }) => {
 
   // RegExps
   const channelPageExp = /\/channel\/(UC[0-9A-Za-z_-]{21}[AQgw])$/;
+  const userPageExp = /\/user\/(.*)/;
   const playlistPageExp = /\/playlist\?list=(.*)/;
 
   // Functions
@@ -35,6 +36,7 @@ const _SearchBar: FC<RouteComponentProps> = ({ history }) => {
     const inferredSearchType = getInferredSearchType();
     if (inferredSearchType === "video")     return handleVideoRedirect();
     if (inferredSearchType === "channel")   return handleChannelRedirect();
+    if (inferredSearchType === "user")      return handleUserRedirect();
     if (inferredSearchType === "playlist")  return handlePlaylistRedirect();
 
     return handleSearchRedirect();
@@ -46,6 +48,7 @@ const _SearchBar: FC<RouteComponentProps> = ({ history }) => {
     
     if (queryParams.query["v"])                 return "video";
     if (searchInputText.match(channelPageExp))  return "channel";
+    if (searchInputText.match(userPageExp))     return "user";
     if (searchInputText.match(playlistPageExp)) return "playlist";
     
     return "unknown";
@@ -63,6 +66,11 @@ const _SearchBar: FC<RouteComponentProps> = ({ history }) => {
   function handleChannelRedirect() {
     const match = searchInputText.match(channelPageExp);
     if (match) history.push(`/channel/${match[1]}`);
+  }
+
+  function handleUserRedirect() {
+    const match = searchInputText.match(userPageExp);
+    if (match) history.push(`/user/${match[1]}`);
   }
 
   function handlePlaylistRedirect() {

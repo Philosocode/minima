@@ -18,6 +18,7 @@ import { HTMLTextContainer } from "components/html-text-container.component";
 
 interface IRouteParams {
   channelId: string;
+  userName: string;
 }
 
 export type ChannelTab = "Videos" | "Playlists" | "About";
@@ -38,6 +39,7 @@ const _ChannelPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
   const [hasMorePlaylists, setHasMorePlaylists] = useState(true);
 
   const channelId = match.params.channelId;
+  const userName = match.params.userName;
   
   // Functions
   useEffect(() => {
@@ -45,9 +47,10 @@ const _ChannelPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
       setIsLoading(true);
 
       try {
-        const channelRes = await getChannelDetails(channelId);
-        setChannelData(channelRes);
+        const channelRes = await getChannelDetails(channelId, userName);
 
+        setChannelData(channelRes);
+        
         document.title = channelRes.snippet.title;
       }
       catch (err) {
@@ -59,7 +62,7 @@ const _ChannelPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
     }
     
     fetchChannelData();
-  }, [channelId]);
+  }, [channelId, userName]);
 
   function getStatsCardData() {
     if (!channelData) return;
@@ -103,7 +106,7 @@ const _ChannelPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
 
     setIsLoading(true);
     try {
-      const res = await getChannelPlaylists(channelId, playlistsPageToken);
+      const res = await getChannelPlaylists(channelData.id, playlistsPageToken);
 
       if (res.nextPageToken) {
         setPlaylistsPageToken(res.nextPageToken);
