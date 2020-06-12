@@ -6,7 +6,7 @@ import {
 
 const initialState: IVideoState = {
   currentVideo: undefined,
-  shouldLoop: false,
+  shouldLoop: true,
 }
 
 export const videoReducer = (state = initialState, action: VideoAction) => {

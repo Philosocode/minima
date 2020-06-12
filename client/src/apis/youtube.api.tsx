@@ -42,7 +42,7 @@ export function getCommentThreadReplies(threadId: string, nextPageToken?: string
   return makeApiRequest<ICommentsResponse>(url, params);
 }
 
-export function getChannelDetails(channelId: string): Promise<IChannel> {
+export function getChannelDetails(channelId?: string, username?: string): Promise<IChannel> {
   const url = BASE_URL + "/channels";
   const part = "id,contentDetails,snippet,statistics";
   const params = {
