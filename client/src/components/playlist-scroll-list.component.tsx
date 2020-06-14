@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from "react";
+import React, { FC, useState } from "react";
 
 import { IPlaylist, IPlaylistItem } from "shared/interfaces/youtube.interface";
 import { getPlaylistDetails, getPlaylistVideos, MISSING_THUMBNAIL_URL, getPlaylistVideosUntilCurrentVideo } from "apis/youtube.api";
@@ -20,18 +20,6 @@ export const PlaylistScrollList: FC<IProps> = ({ playlistId, watchingVideoId }) 
   const [playlistDetails, setPlaylistDetails] = useState<IPlaylist>();
   const [playlistVideos, setPlaylistVideos] = useState<IPlaylistItem[]>([]);
   const [watchingVideoIdx, setWatchingVideoIdx] = useState(0);
-
-  useEffect(() => {
-    clearState();
-  }, [playlistId])
-
-  function clearState() {
-    setIsLoading(false);
-    setNextPageToken("");
-    setPlaylistDetails(undefined);
-    setPlaylistVideos([]);
-    setWatchingVideoIdx(0);
-  }
 
   async function handleLoadPlaylistVideos() {
     setIsLoading(true);

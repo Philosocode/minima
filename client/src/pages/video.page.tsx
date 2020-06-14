@@ -131,7 +131,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
       </div>
 
       <div className="o-grid__item--right-sidebar">
-        { playlistId && <PlaylistScrollList playlistId={playlistId} watchingVideoId={videoData.id} /> }
+        { playlistId && <PlaylistScrollList key={playlistId} playlistId={playlistId} watchingVideoId={videoData.id} /> }
       </div>
     </div>
   );
