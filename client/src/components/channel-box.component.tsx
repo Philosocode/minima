@@ -12,9 +12,7 @@ interface IProps {
 }
 
 export const ChannelBox: FC<IProps> = ({ channelData, location }) => {
-  let channelUrl = channelData.snippet.customUrl 
-    ? `/user/${channelData.snippet.customUrl}`
-    : `/channel/${channelData.id}`;
+  const channelUrl = `/channel/${channelData.id}`;
 
   const subscriberCount = channelData.statistics.subscriberCount;
   const channelTitle = channelData.snippet.title;
