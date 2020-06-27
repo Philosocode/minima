@@ -1,6 +1,6 @@
 import React, { FC, useState } from "react";
 
-import { IComment } from "shared/interfaces/youtube.interface";
+import { IComment } from "shared/interfaces/youtube.interfaces";
 import { getCommentThreadReplies } from "apis/youtube.api";
 import { Comment } from "components/comment.component";
 import { useToggle } from "hooks/use-toggle.hook";

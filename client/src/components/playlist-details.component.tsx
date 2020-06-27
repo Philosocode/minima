@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { Link } from "react-router-dom";
 
-import { IPlaylist } from "shared/interfaces/youtube.interface";
+import { IPlaylist } from "shared/interfaces/youtube.interfaces";
 import { getFormattedDate } from "shared/helpers";
 
 interface IProps {

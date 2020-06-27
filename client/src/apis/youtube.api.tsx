@@ -11,7 +11,7 @@ import {
   IPlaylist,
   IPlaylistsResponse,
   IChannel,
-} from "shared/interfaces/youtube.interface";
+} from "shared/interfaces/youtube.interfaces";
 
 export const BASE_URL = "https://www.googleapis.com/youtube/v3";
 export const API_KEY = process.env.REACT_APP_YOUTUBE_API_KEY as string;

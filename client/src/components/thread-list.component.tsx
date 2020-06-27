@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect } from "react";
 
-import { ICommentThread } from "shared/interfaces/youtube.interface";
+import { ICommentThread } from "shared/interfaces/youtube.interfaces";
 import { getVideoCommentThreads } from "apis/youtube.api";
 import { Loader } from "components/loader.component";
 import { Thread } from "components/thread.component";

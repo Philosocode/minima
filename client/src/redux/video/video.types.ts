@@ -1,4 +1,4 @@
-import { IVideo } from "shared/interfaces/youtube.interface";
+import { IVideo } from "shared/interfaces/youtube.interfaces";
 
 export enum VideoConstants {
   SET_CURRENT_VIDEO = "SET_CURRENT_VIDEO",

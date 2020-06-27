@@ -2,7 +2,7 @@ import React, { FC, useState, useEffect } from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { faCalendarDay, faEye, faVideo } from "@fortawesome/free-solid-svg-icons";
 
-import { IChannel, IPlaylistItem, IPlaylist } from "shared/interfaces/youtube.interface";
+import { IChannel, IPlaylistItem, IPlaylist } from "shared/interfaces/youtube.interfaces";
 import { getChannelDetails, getPlaylistVideos, getChannelPlaylists } from "apis/youtube.api";
 
 import { addCommasToNumber, getFormattedDate } from "shared/helpers";

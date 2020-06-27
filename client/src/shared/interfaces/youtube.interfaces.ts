@@ -146,11 +146,14 @@ interface IThumbnail {
 /* ======== */
 // VIDEO
 /* ======== */
-export interface IVideo {
-  id: string;
+export interface IVideoBase {
+  etag: string;
   snippet: IVideoSnippet;
   statistics: IVideoStatistics;
-  player: IVideoPlayer;
+}
+
+export interface IVideo extends IVideoBase {
+  id: string;
 }
 
 export interface IVideoPlayer {
@@ -160,6 +163,7 @@ export interface IVideoPlayer {
 }
 
 export interface IVideosResponse {
+  etag: string;
   items: IVideo[];
   pageInfo: IPageInfo;
 }

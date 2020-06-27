@@ -5,7 +5,7 @@ import {
   ISetStartSecondsAction
 } from "./video.types";
 
-import { IVideo } from "shared/interfaces/youtube.interface";
+import { IVideo } from "shared/interfaces/youtube.interfaces";
 
 export const setCurrentVideo = (video: IVideo): ISetCurrentVideoAction => ({
   type: VideoConstants.SET_CURRENT_VIDEO,

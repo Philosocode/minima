@@ -5,9 +5,10 @@ import { faCalendarDay, faEye, faThumbsUp, faThumbsDown, faPercent } from "@fort
 
 import { setCurrentVideo } from "redux/video";
 
-import { IChannel, IVideo } from "shared/interfaces/youtube.interface";
+import { IChannel, IVideo } from "shared/interfaces/youtube.interfaces";
 import { getQueryParams, roundToTwoDecimals, getFormattedDate, addCommasToNumber } from "shared/helpers";
 import { getChannelDetails, getVideoDetails } from "apis/youtube.api";
+import { addDocToDb, getDocFromDb } from "apis/firebase.api";
 
 import { Divider } from "components/divider.component";
 import { Loader } from "components/loader.component";
@@ -19,6 +20,9 @@ import { VideoPlayer } from "components/video-player.component";
 import { ChannelBox } from "components/channel-box.component";
 import { NotFoundHeading } from "components/not-found-heading.component";
 import { VideoSettingsCard } from "components/video-settings-card.component";
+import { IVideoDocument } from "shared/interfaces/firebase.interfaces";
+import { differenceInDays, toDate } from "date-fns";
+import { VIDEO_CACHE_DAYS } from "shared/constants";
 
 interface IRouteParams {
   videoId: string;
@@ -52,14 +56,15 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
       setIsLoading(true);
 
       try {
-        const videoRes = await getVideoDetails(videoId);
-        setVideoData(videoRes);
-        dispatch(setCurrentVideo(videoRes));
+        const videoData = await getVideoData(videoId);
 
-        const channelRes = await getChannelDetails(videoRes.snippet.channelId);
+        setVideoData(videoData);
+        dispatch(setCurrentVideo(videoData));
+
+        const channelRes = await getChannelDetails(videoData.snippet.channelId);
         setChannelData(channelRes);
 
-        document.title = videoRes.snippet.title;
+        document.title = videoData.snippet.title;
       }
       catch (err) {
         alert("ERROR: couldn't load video data.");
@@ -67,6 +72,41 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
       finally {
         setIsLoading(false);
       }
+    }
+
+    async function getVideoData(videoId: string): Promise<IVideo> {
+      const videoFromDb = await getDocFromDb("videos", videoId) as IVideoDocument;
+      if (!videoFromDb) return await getVideoFromApiAndAddToDb(videoId);
+
+      // Check dates
+      const lastUpdated = toDate(videoFromDb.lastUpdatedMs);
+      const today = new Date();
+
+      // Check distance
+      const daysSince = differenceInDays(today, lastUpdated);
+      if (daysSince > VIDEO_CACHE_DAYS) return await getVideoFromApiAndAddToDb(videoId);
+      
+      // Use value from DB if less than 2 weeks old
+      return {
+        etag: videoFromDb.etag,
+        id: videoId,
+        snippet: videoFromDb.snippet,
+        statistics: videoFromDb.statistics
+      };
+    }
+
+    async function getVideoFromApiAndAddToDb(videoId: string): Promise<IVideo> {
+      const videoData = await getVideoDetails(videoId);
+
+      const { etag, id, snippet, statistics } = videoData;
+      const videoDoc: IVideoDocument = {
+        etag, snippet, statistics,
+        lastUpdatedMs: Date.now()
+      };
+
+      await addDocToDb("videos", id, videoDoc);
+
+      return videoData;
     }
   }, [history, location.search, dispatch]);
 

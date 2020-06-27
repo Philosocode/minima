@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 
-import { IComment } from "shared/interfaces/youtube.interface";
+import { IComment } from "shared/interfaces/youtube.interfaces";
 import { getFormattedDateFromToday } from "shared/helpers";
 import { selectCurrentVideo } from "redux/video";
 import { HTMLTextContainer } from "./html-text-container.component";

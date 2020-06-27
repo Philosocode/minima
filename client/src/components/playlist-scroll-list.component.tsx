@@ -1,6 +1,6 @@
 import React, { FC, useState } from "react";
 
-import { IPlaylist, IPlaylistItem } from "shared/interfaces/youtube.interface";
+import { IPlaylist, IPlaylistItem } from "shared/interfaces/youtube.interfaces";
 import { getPlaylistDetails, getPlaylistVideos, MISSING_THUMBNAIL_URL, getPlaylistVideosUntilCurrentVideo } from "apis/youtube.api";
 
 import { useToggle } from "hooks/use-toggle.hook";

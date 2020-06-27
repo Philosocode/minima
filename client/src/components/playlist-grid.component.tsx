@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { IPlaylist } from "shared/interfaces/youtube.interface";
+import { IPlaylist } from "shared/interfaces/youtube.interfaces";
 import { Loader } from "components/loader.component";
 import { VideoThumbnail } from "./video-thumbnail.component";
 import { NotFoundHeading } from "./not-found-heading.component";

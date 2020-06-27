@@ -15,4 +15,4 @@ export const VideoDescription: FC<IProps> = ({ description }) => {
       <HTMLTextContainer textElement={textWithLinkedTimes} />
     </div>
   )
-  }
+}

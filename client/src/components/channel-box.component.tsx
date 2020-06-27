@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { Link } from "react-router-dom";
 
-import { IChannel } from "shared/interfaces/youtube.interface";
+import { IChannel } from "shared/interfaces/youtube.interfaces";
 import { getAbbreviatedNumber } from "shared/helpers";
 
 type Location = "video-page" | "channel-page";
