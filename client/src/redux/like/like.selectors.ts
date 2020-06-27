@@ -3,7 +3,7 @@ import { AppState } from "redux/root-reducer";
 
 const selectLike = (state: AppState) => state.like;
 
-export const selectSessionPlaybackSpeed = createSelector(
+export const selectLikedVideos = createSelector(
   [selectLike],
   like => like.videos
 );

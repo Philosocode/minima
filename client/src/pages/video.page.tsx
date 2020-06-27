@@ -8,7 +8,7 @@ import { setCurrentVideo } from "redux/video";
 import { IChannel, IVideo } from "shared/interfaces/youtube.interfaces";
 import { getQueryParams, roundToTwoDecimals, getFormattedDate, addCommasToNumber } from "shared/helpers";
 import { getChannelDetails, getVideoDetails } from "apis/youtube.api";
-import { addDocToDb, getDocFromDb } from "apis/firebase.api";
+import { getDocFromDb } from "apis/firebase.api";
 
 import { Divider } from "components/divider.component";
 import { Loader } from "components/loader.component";
@@ -76,15 +76,15 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
 
     async function getVideoData(videoId: string): Promise<IVideo> {
       const videoFromDb = await getDocFromDb("videos", videoId) as IVideoDocument;
-      if (!videoFromDb) return await getVideoFromApiAndAddToDb(videoId);
+      if (!videoFromDb) return await getVideoDetails(videoId);
 
       // Check dates
       const lastUpdated = toDate(videoFromDb.lastUpdatedMs);
       const today = new Date();
 
       // Check distance
-      const daysSince = differenceInDays(today, lastUpdated);
-      if (daysSince > VIDEO_CACHE_DAYS) return await getVideoFromApiAndAddToDb(videoId);
+      const daysSinceLastUpdate = differenceInDays(today, lastUpdated);
+      if (daysSinceLastUpdate > VIDEO_CACHE_DAYS) return await getVideoDetails(videoId);
       
       // Use value from DB if less than 2 weeks old
       return {
@@ -93,20 +93,6 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
         snippet: videoFromDb.snippet,
         statistics: videoFromDb.statistics
       };
-    }
-
-    async function getVideoFromApiAndAddToDb(videoId: string): Promise<IVideo> {
-      const videoData = await getVideoDetails(videoId);
-
-      const { etag, id, snippet, statistics } = videoData;
-      const videoDoc: IVideoDocument = {
-        etag, snippet, statistics,
-        lastUpdatedMs: Date.now()
-      };
-
-      await addDocToDb("videos", id, videoDoc);
-
-      return videoData;
     }
   }, [history, location.search, dispatch]);
 

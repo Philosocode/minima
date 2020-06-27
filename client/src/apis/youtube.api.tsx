@@ -12,6 +12,8 @@ import {
   IPlaylistsResponse,
   IChannel,
 } from "shared/interfaces/youtube.interfaces";
+import { addDocToDb } from "./firebase.api";
+import { IVideoDocument } from "shared/interfaces/firebase.interfaces";
 
 export const BASE_URL = "https://www.googleapis.com/youtube/v3";
 export const API_KEY = process.env.REACT_APP_YOUTUBE_API_KEY as string;
@@ -183,7 +185,7 @@ export function getVideoCommentThreads(videoId: string, nextPageToken?: string):
   return makeApiRequest<ICommentThreadsResponse>(url, params);
 }
 
-export function getVideoDetails(videoId: string): Promise<IVideo> {
+export async function getVideoDetails(videoId: string): Promise<IVideo> {
   const url = BASE_URL + "/videos";
   const part = "snippet,statistics,player";
   const params = {
@@ -192,11 +194,20 @@ export function getVideoDetails(videoId: string): Promise<IVideo> {
     part: part
   };
 
-  return makeApiRequest<IVideosResponse>(url, params)
-    .then(videosRes => videosRes.items[0])
-    .catch(err => {
-      throw new Error(err);
-    });
+  try {
+    const videosRes = await makeApiRequest<IVideosResponse>(url, params);
+    const video = videosRes.items[0];
+
+    const { etag, id, snippet, statistics } = video;
+    const videoDoc: IVideoDocument = { etag, snippet, statistics, lastUpdatedMs: Date.now() };
+
+    addDocToDb("videos", id, videoDoc);
+
+    return video;
+  }
+  catch (err) {
+    throw new Error(err);
+  }
 }
 
 interface IPlaylistVideosParams {
