@@ -3,14 +3,21 @@ import {
   LikeAction, 
   LikeConstants
 } from "./like.types";
-import { addDocToDb } from "apis/firebase.api";
 
 const initialState: ILikeState = {
-  videos: []
+  channels: [],
+  music: [],
+  playlists: [],
+  videos: [],
 }
 
 export const likeReducer = (state = initialState, action: LikeAction) => {
   switch (action.type) {
+    case LikeConstants.LOAD_ALL_LIKES:
+      return {
+        ...state,
+        ...action.payload
+      };
     case LikeConstants.LIKE_VIDEO:
       return {
         ...state,

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Switch, Route } from "react-router-dom";
 
 /* Pages */
@@ -16,8 +16,28 @@ import { Footer } from "components/footer.component";
 /* Contexts */
 import { VideosProvider } from "contexts/videos.context";
 import { SearchProvider } from "contexts/search.context";
+import { getAllLikes } from "apis/firebase.api";
+import { Loader } from "components/loader.component";
+import { useDispatch } from "react-redux";
+import { loadAllLikes } from "redux/like";
 
 export function App() {
+  const [dataFetched, setDataFetched] = useState(false);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    async function loadInitialState() {
+      const allLikes = await getAllLikes();
+      await dispatch(loadAllLikes(allLikes));
+
+      setDataFetched(true);
+    }
+
+    loadInitialState();
+  }, [dispatch]);
+
+  if (!dataFetched) return <Loader position="center-page" />;
+
   return (
     <VideosProvider>
       <SearchProvider>

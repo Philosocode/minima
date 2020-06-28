@@ -7,3 +7,8 @@ export const selectLikedVideos = createSelector(
   [selectLike],
   like => like.videos
 );
+
+export const selectAllLikes = createSelector(
+  [selectLike],
+  like => like
+);
