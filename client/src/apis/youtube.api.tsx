@@ -1,4 +1,5 @@
 import axios from "axios";
+import { differenceInDays, toDate } from "date-fns";
 
 import { 
   IChannelsResponse, 
@@ -12,8 +13,9 @@ import {
   IPlaylistsResponse,
   IChannel,
 } from "shared/interfaces/youtube.interfaces";
-import { addDocToDb } from "./firebase.api";
 import { IVideoDocument } from "shared/interfaces/firebase.interfaces";
+import { VIDEO_CACHE_DAYS } from "shared/constants";
+import { addDocToDb, getDocFromDb } from "./firebase.api";
 
 export const BASE_URL = "https://www.googleapis.com/youtube/v3";
 export const API_KEY = process.env.REACT_APP_YOUTUBE_API_KEY as string;
@@ -186,6 +188,27 @@ export function getVideoCommentThreads(videoId: string, nextPageToken?: string):
 }
 
 export async function getVideoDetails(videoId: string): Promise<IVideo> {
+  const videoFromDb = await getDocFromDb("videos", videoId) as IVideoDocument;
+  if (!videoFromDb) return await fetchVideoDetails(videoId);
+
+  // Check dates
+  const lastUpdated = toDate(videoFromDb.lastUpdatedMs);
+  const today = new Date();
+
+  // Check distance
+  const daysSinceLastUpdate = differenceInDays(today, lastUpdated);
+  if (daysSinceLastUpdate > VIDEO_CACHE_DAYS) return await fetchVideoDetails(videoId);
+  
+  // Use value from DB if less than 2 weeks old
+  return {
+    etag: videoFromDb.etag,
+    id: videoId,
+    snippet: videoFromDb.snippet,
+    statistics: videoFromDb.statistics
+  };
+}
+
+async function fetchVideoDetails(videoId: string): Promise<IVideo> {
   const url = BASE_URL + "/videos";
   const part = "snippet,statistics,player";
   const params = {

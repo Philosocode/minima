@@ -1,13 +1,14 @@
 .c-video-settings {
   &__container {
+    display: flex;
     height: 5rem;
     margin-top: $spacing-tiny;
+    overflow: hidden;
     width: 80%;
   }
 
   &__icon-container {
-    border-left: 1px solid $color-grey;
-    border-right: 1px solid $color-grey;
+    border: 1px solid transparent;
     cursor: pointer;
     display: flex;
       align-items: center;
@@ -17,14 +18,16 @@
     transition: background-color 0.1s ease, color 0.2s ease;
     width: 33%;
 
-    &:hover {
-      color:$color-green-light;
-    }
+    &:hover { color: $color-green-light; }
+    &.is-active { background-color: $color-green-dark; }
+  }
+
+  &__icon-container:first-child {
+    margin-left: 0;
     
     &.is-active {
-      background-color: $color-green-dark;
-      border-left: 1px solid $color-green;
-      border-right: 1px solid $color-green;
+      border-left-color: $color-green-dark;
+      border-right-color: $color-green-dark;
     }
   }
 

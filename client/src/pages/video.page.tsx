@@ -8,7 +8,6 @@ import { setCurrentVideo } from "redux/video";
 import { IChannel, IVideo } from "shared/interfaces/youtube.interfaces";
 import { getQueryParams, roundToTwoDecimals, getFormattedDate, addCommasToNumber } from "shared/helpers";
 import { getChannelDetails, getVideoDetails } from "apis/youtube.api";
-import { getDocFromDb } from "apis/firebase.api";
 
 import { Divider } from "components/divider.component";
 import { Loader } from "components/loader.component";
@@ -20,9 +19,6 @@ import { VideoPlayer } from "components/video-player.component";
 import { ChannelBox } from "components/channel-box.component";
 import { NotFoundHeading } from "components/not-found-heading.component";
 import { VideoSettingsCard } from "components/video-settings-card.component";
-import { IVideoDocument } from "shared/interfaces/firebase.interfaces";
-import { differenceInDays, toDate } from "date-fns";
-import { VIDEO_CACHE_DAYS } from "shared/constants";
 
 interface IRouteParams {
   videoId: string;
@@ -56,7 +52,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
       setIsLoading(true);
 
       try {
-        const videoData = await getVideoData(videoId);
+        const videoData = await getVideoDetails(videoId);
 
         setVideoData(videoData);
         dispatch(setCurrentVideo(videoData));
@@ -72,27 +68,6 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
       finally {
         setIsLoading(false);
       }
-    }
-
-    async function getVideoData(videoId: string): Promise<IVideo> {
-      const videoFromDb = await getDocFromDb("videos", videoId) as IVideoDocument;
-      if (!videoFromDb) return await getVideoDetails(videoId);
-
-      // Check dates
-      const lastUpdated = toDate(videoFromDb.lastUpdatedMs);
-      const today = new Date();
-
-      // Check distance
-      const daysSinceLastUpdate = differenceInDays(today, lastUpdated);
-      if (daysSinceLastUpdate > VIDEO_CACHE_DAYS) return await getVideoDetails(videoId);
-      
-      // Use value from DB if less than 2 weeks old
-      return {
-        etag: videoFromDb.etag,
-        id: videoId,
-        snippet: videoFromDb.snippet,
-        statistics: videoFromDb.statistics
-      };
     }
   }, [history, location.search, dispatch]);
 
@@ -139,7 +114,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
       
       <div className="o-grid__item--left-sidebar">
         <StatsCard statsCardData={getStatsCardData()} />
-        <VideoSettingsCard />
+        <VideoSettingsCard videoId={videoData.id} />
       </div>
 
       <div className="o-grid__item--center">

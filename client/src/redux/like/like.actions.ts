@@ -4,12 +4,12 @@ import {
   IUnlikeVideo
 } from "./like.types";
 
-export const favoriteVideo = (videoId: string): ILikeVideo => ({
+export const likeVideo = (videoId: string): ILikeVideo => ({
   type: LikeConstants.LIKE_VIDEO,
   payload: videoId
 });
 
-export const unfavoriteVideo = (videoId: string): IUnlikeVideo => ({
+export const unlikeVideo = (videoId: string): IUnlikeVideo => ({
   type: LikeConstants.UNLIKE_VIDEO,
   payload: videoId
 });

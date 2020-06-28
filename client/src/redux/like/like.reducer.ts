@@ -3,6 +3,7 @@ import {
   LikeAction, 
   LikeConstants
 } from "./like.types";
+import { addDocToDb } from "apis/firebase.api";
 
 const initialState: ILikeState = {
   videos: []
