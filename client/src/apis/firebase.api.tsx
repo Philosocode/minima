@@ -35,7 +35,9 @@ export function addDocToDb(
     .catch(err => alert("Error updating DB: " + err));
 }
 
-/* LIKES */
+/* ======== */
+// LIKES
+/* ======== */
 export function getLikes(likeType: DbCollectionType) {
   return db.collection("likes").doc(likeType).get()
     .then(doc => {
@@ -67,14 +69,14 @@ export function isLiked(likeType: DbCollectionType, likeId: string) {
 
 export function addLikeToDb(likeType: DbCollectionType, likeId: string) {
   return db.collection("likes").doc(likeType).update({
-    [likeType]: firebase.firestore.FieldValue.arrayUnion(likeId)
+    likes: firebase.firestore.FieldValue.arrayUnion(likeId)
   })
   .catch(err => { throw new Error(err) });
 }
 
 export function removeLikeFromDb(likeType: DbCollectionType, likeId: string) {
   return db.collection("likes").doc(likeType).update({
-    [likeType]: firebase.firestore.FieldValue.arrayRemove(likeId)
+    likes: firebase.firestore.FieldValue.arrayRemove(likeId)
   })
   .catch(err => { throw new Error(err) });
 }
