@@ -5,11 +5,13 @@ import { IVideo } from "shared/interfaces/youtube.interfaces";
 import { getVideosDetails } from "apis/youtube.api";
 import { selectAllLikes } from "redux/like";
 import { Loader } from "components/loader.component";
-import { HomeGrid } from "components/home-grid.component";
+import { HomeVideos } from "components/home-videos.component";
+import { MusicList } from "components/music-list.component";
 
 export const HomePage: FC = () => {
   const allLikes = useSelector(selectAllLikes);
   const [videos, setVideos] = useState<IVideo[]>([]);
+  const [music, setMusic] = useState<IVideo[]>([]);
   const [dataLoaded, setDataLoaded] = useState(false);
 
   useEffect(() => {
@@ -17,6 +19,13 @@ export const HomePage: FC = () => {
       if (allLikes.videos.length > 0) {
         const videos = await getVideosDetails(allLikes.videos);
         setVideos(videos);
+      }
+
+      if (allLikes.music.length > 0) {
+        const music = await getVideosDetails(allLikes.music);
+
+        // Display most recently-added at the top
+        setMusic(music.reverse());
       }
 
       setDataLoaded(true);
@@ -28,8 +37,9 @@ export const HomePage: FC = () => {
   if (!dataLoaded) return <Loader position="center-page" />
 
   return (
-    <div className="o-page o-grid">
-      <HomeGrid videos={videos} />
+    <div className="o-page o-grid__container">
+      <HomeVideos videos={videos} />
+      <MusicList music={music} />
     </div>
   );
  };

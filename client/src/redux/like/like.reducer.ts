@@ -28,6 +28,16 @@ export const likeReducer = (state = initialState, action: LikeAction) => {
         ...state,
         videos: state.videos.filter(videoId => videoId !== action.payload)
       };
+    case LikeConstants.LIKE_MUSIC:
+      return {
+        ...state,
+        music: [...state.music, action.payload]
+      };
+    case LikeConstants.UNLIKE_MUSIC:
+      return {
+        ...state,
+        music: state.music.filter(videoId => videoId !== action.payload)
+      };
     default:
       return state;
   }

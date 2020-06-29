@@ -1,0 +1,45 @@
+.c-music {
+  &__list {
+    background-color: $color-grey-darkest;
+    border-radius: 2px;
+    list-style-type: none;
+    margin: 0 auto;
+    width: 80rem;
+  }
+
+  &__item {
+    padding-right: $spacing-medium;
+
+    &:not(:last-of-type) { border-bottom: 2px solid $color-grey-darker; }
+
+    &:hover { background-color: $color-grey-darker; }
+    &:hover .c-music__text { color: $color-green; }
+  }
+
+  &__thumbnail {
+    height: 8rem;
+  }
+
+  &__link {
+    display: flex;
+      align-items: center;
+    text-decoration: none;
+  }
+
+  &__text {
+    color: $color-grey-lighter;
+    margin-left: $spacing-medium;
+    text-align: left;
+  }
+  
+  &__title {
+    font-size: 1.8rem;
+    font-weight: 600;
+  }
+
+  &__channel {
+    margin-top: $spacing-tiny;
+    font-weight: 500;
+    font-size: 1.4rem;
+  }
+}

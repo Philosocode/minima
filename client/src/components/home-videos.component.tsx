@@ -4,16 +4,16 @@ import { IVideo } from "shared/interfaces/youtube.interfaces";
 import { VideoThumbnail } from "./video-thumbnail.component";
 
 interface IProps {
-  videos?: IVideo[];
+  videos: IVideo[];
 }
-export const HomeGrid: FC<IProps> = ({ videos }) => {
-  function renderVideos() {
-    if (!videos) return;
+export const HomeVideos: FC<IProps> = ({ videos }) => {
+  if (videos.length === 0) return null;
 
-    return (
+  return (
+    <section className="o-grid__item--wide">
       <>
-        <h2 className="c-heading c-heading--huge c-heading--block">Videos</h2>
-        <div className="c-video-thumbnail__grid c-home__grid">
+        <h2 className="c-heading c-heading--huge c-heading--block c-home__heading">Videos</h2>
+        <div className="c-video-thumbnail__grid">
           {
             videos.map((video) => <VideoThumbnail 
               key={video.id} 
@@ -24,12 +24,6 @@ export const HomeGrid: FC<IProps> = ({ videos }) => {
           }
         </div>
       </>
-    )
-  }
-
-  return (
-    <div className="o-grid__item--wide">
-      { renderVideos() }
-    </div>
+    </section>
   )
 }

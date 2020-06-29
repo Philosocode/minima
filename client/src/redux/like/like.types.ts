@@ -2,6 +2,8 @@ export enum LikeConstants {
   LOAD_ALL_LIKES = "LOAD_ALL_LIKES",
   LIKE_VIDEO = "LIKE_VIDEO",
   UNLIKE_VIDEO = "UNLIKE_VIDEO",
+  LIKE_MUSIC = "LIKE_MUSIC",
+  UNLIKE_MUSIC = "UNLIKE_MUSIC"
 };
 
 // TODO: https://stackoverflow.com/questions/47181789/limit-object-properties-to-keyof-interface
@@ -21,6 +23,16 @@ export interface IUnlikeVideo {
   payload: string;
 }
 
+export interface ILikeMusic {
+  type: LikeConstants.LIKE_MUSIC;
+  payload: string;
+}
+
+export interface IUnlikeMusic {
+  type: LikeConstants.UNLIKE_MUSIC;
+  payload: string;
+}
+
 export interface ILikeState {
   channels: string[];
   playlists: string[];
@@ -31,4 +43,6 @@ export interface ILikeState {
 export type LikeAction =
   | ILoadAllLikes
   | ILikeVideo
-  | IUnlikeVideo;
+  | IUnlikeVideo
+  | ILikeMusic
+  | IUnlikeMusic;
