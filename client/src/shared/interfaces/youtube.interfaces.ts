@@ -95,11 +95,12 @@ export interface IPageInfo {
 /* ======== */
 // PLAYLISTS
 /* ======== */
-export interface IPlaylist {
-  id: string;
+export interface IPlaylistBase {
   contentDetails: IPlaylistContentDetails;
   snippet: IVideoSnippet;
 }
+
+export interface IPlaylist extends IPlaylistBase, IHasId {}
 
 interface IPlaylistContentDetails {
   itemCount: number;

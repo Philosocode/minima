@@ -130,11 +130,20 @@ async function fetchPlaylistDetails(playlistId: string): Promise<IPlaylist> {
     part: part,
   }
 
-  return makeApiRequest<IPlaylistsResponse>(url, params)
-    .then(playlistsRes => playlistsRes.items[0])
-    .catch(err => {
-      throw new Error(err);
-    });
+  try {
+    const playlistRes = await makeApiRequest<IPlaylistsResponse>(url, params);
+    const playlist = playlistRes.items[0];
+
+    const { id, contentDetails, snippet } = playlist;
+    const playlistDoc = { contentDetails, snippet };
+
+    addDocToDb("playlists", id, playlistDoc);
+
+    return playlist;
+  }
+  catch (err) {
+    throw new Error(err);
+  }
 }
 
 export async function getPlaylistVideos(playlistId: string, nextPageToken?: string): Promise<IPlaylistItemsResponse> {

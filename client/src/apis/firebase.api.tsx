@@ -3,7 +3,7 @@ import "firebase/firestore";
 
 import { DbCollectionType } from "shared/interfaces/firebase.interfaces";
 import { ILikeState } from "redux/like";
-import { IVideoBase, IChannelBase, IChannel } from "shared/interfaces/youtube.interfaces";
+import { IVideoBase, IChannelBase, IChannel, IPlaylistBase } from "shared/interfaces/youtube.interfaces";
 
 const config = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -46,7 +46,7 @@ export async function getChannelFromDbWithUsername(username: string): Promise<IC
 export function addDocToDb(
   collection: DbCollectionType,
   documentId: string,
-  document: IVideoBase | IChannelBase
+  document: IChannelBase | IPlaylistBase | IVideoBase
 ) {
   const docToAdd = Object.assign({}, document, { lastUpdatedMs: Date.now() });
 
@@ -75,15 +75,6 @@ export async function getAllLikes() {
   });
 
   return allLikes as ILikeState;
-}
-
-export function isLiked(likeType: DbCollectionType, likeId: string) {
-  return db.collection("likes").where(likeType, "==", likeId).get()
-    .then(doc => {
-      if (doc.empty) return false;
-      return true;
-    })
-    .catch(err => { throw new Error(err) });
 }
 
 export function addLikeToDb(likeType: DbCollectionType, likeId: string) {
