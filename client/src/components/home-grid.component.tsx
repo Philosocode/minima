@@ -13,15 +13,16 @@ export const HomeGrid: FC<IProps> = ({ videos }) => {
     return (
       <>
         <h2 className="c-heading c-heading--huge c-heading--block">Videos</h2>
-        {
-          videos.map((video) => <VideoThumbnail 
-            key={video.id} 
-            date={video.snippet.publishedAt}
-            resourceUrl={`/watch?v=${video.id}`}
-            thumbnailUrl={video.snippet.thumbnails.medium.url}
-            title={video.snippet.title}
-          />)
-        }
+        <div className="c-video-thumbnail__grid c-home__grid">
+          {
+            videos.map((video) => <VideoThumbnail 
+              key={video.id} 
+              resourceUrl={`/watch?v=${video.id}`}
+              thumbnailUrl={video.snippet.thumbnails.medium.url}
+              title={video.snippet.title}
+            />)
+          }
+        </div>
       </>
     )
   }

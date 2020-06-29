@@ -4,11 +4,11 @@ import { Link } from "react-router-dom";
 import { getFormattedDateFromToday } from "shared/helpers";
 
 interface IProps {
-  date: string;
   resourceUrl: string;
   thumbnailUrl: string;
   title: string;
   count?: string;
+  date?: string;
   index?: string;
 }
 
@@ -23,7 +23,7 @@ export const VideoThumbnail: FC<IProps> = ({ count, date, index, resourceUrl, th
         </div>
         <div className="c-video-thumbnail__text">
           <h3 className="c-video-thumbnail__title">{title}</h3>
-          <div className="c-video-thumbnail__published">{ getFormattedDateFromToday(date)} ago</div>
+          { date && <div className="c-video-thumbnail__published">{ getFormattedDateFromToday(date)} ago</div> }
         </div>
       </Link>
     </div>
