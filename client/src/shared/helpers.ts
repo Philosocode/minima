@@ -1,5 +1,6 @@
-import { format, formatDistanceToNow, parseISO } from "date-fns";
+import { format, formatDistanceToNow, parseISO, toDate, differenceInDays } from "date-fns";
 import { parseUrl, ParsedQuery } from "query-string";
+import { IDocument } from "./interfaces/firebase.interfaces";
 
 // FROM: https://stackoverflow.com/a/17663871
 export function addCommasToNumber(num: number | string) {
@@ -18,6 +19,14 @@ export function convertTimeToSeconds(minutes: string, seconds: string, hours?: s
   }
 
   return totalSeconds;
+}
+
+export function documentIsOutdated(doc: IDocument, numDays: number) {
+  const lastUpdated = toDate(doc.lastUpdatedMs);
+  const today = new Date();
+  const daysSinceLastUpdate = differenceInDays(today, lastUpdated);
+
+  return daysSinceLastUpdate > numDays;
 }
 
 export function getAbbreviatedNumber(num: number | string): string {

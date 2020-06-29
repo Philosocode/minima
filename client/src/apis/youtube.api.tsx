@@ -1,5 +1,4 @@
 import axios from "axios";
-import { differenceInDays, toDate } from "date-fns";
 
 import { 
   IChannelsResponse, 
@@ -16,6 +15,7 @@ import {
 import { VIDEO_CACHE_DAYS } from "shared/constants";
 import { addDocToDb, getDocFromDb, getChannelFromDbWithUsername } from "./firebase.api";
 import { IDocument } from "shared/interfaces/firebase.interfaces";
+import { documentIsOutdated } from "shared/helpers";
 
 export const BASE_URL = "https://www.googleapis.com/youtube/v3";
 export const API_KEY = process.env.REACT_APP_YOUTUBE_API_KEY as string;
@@ -51,24 +51,15 @@ export async function getChannelDetails(channelId: string, username?: string): P
 
   type ChannelDocument = IChannel & IDocument;
 
-  let channelFromDb = (username)
+  const channelFromDb = (username)
     ? await getChannelFromDbWithUsername(username) as ChannelDocument
     : await getDocFromDb("channels", channelId) as ChannelDocument;
+    
+  if (!channelFromDb || documentIsOutdated(channelFromDb, VIDEO_CACHE_DAYS)) {
+    return await fetchChannelDetails(channelId, username);
+  }
 
-  if (!channelFromDb) return await fetchChannelDetails(channelId, username);
-
-  // Check dates
-  const lastUpdated = toDate(channelFromDb.lastUpdatedMs);
-  const today = new Date();
-
-  // Check distance
-  const daysSinceLastUpdate = differenceInDays(today, lastUpdated);
-  if (daysSinceLastUpdate > VIDEO_CACHE_DAYS) return await fetchChannelDetails(channelId, username);
-
-  // Use value from DB if less than 2 weeks old
-  const { contentDetails, id, snippet, statistics } = channelFromDb;
-
-  return { contentDetails, id, snippet, statistics };
+  return channelFromDb;
 };
 
 async function fetchChannelDetails(channelId?: string, username?: string): Promise<IChannel> {
@@ -113,7 +104,21 @@ export function getChannelPlaylists(channelId: string, nextPageToken?: string): 
   return makeApiRequest<IPlaylistsResponse>(url, params);
 }
 
-export function getPlaylistDetails(playlistId: string): Promise<IPlaylist> {
+export async function getPlaylistDetails(playlistId: string): Promise<IPlaylist> {
+  const playlistFromDb = await getDocFromDb("playlists", playlistId) as (IPlaylist & IDocument);
+
+  if (!playlistFromDb || documentIsOutdated(playlistFromDb, VIDEO_CACHE_DAYS)) {
+    return await fetchPlaylistDetails(playlistId);
+  }
+
+  return {
+    id: playlistId,
+    contentDetails: playlistFromDb.contentDetails,
+    snippet: playlistFromDb.snippet,
+  };
+}
+
+async function fetchPlaylistDetails(playlistId: string): Promise<IPlaylist> {
   const url = BASE_URL + "/playlists";
   const part = "id,contentDetails,snippet";
   const MAX_NUM_PLAYLISTS = 50;
@@ -223,17 +228,10 @@ export function getVideoCommentThreads(videoId: string, nextPageToken?: string):
 
 export async function getVideoDetails(videoId: string): Promise<IVideo> {
   const videoFromDb = await getDocFromDb("videos", videoId) as (IVideo & IDocument);
-  if (!videoFromDb) return await fetchVideoDetails(videoId);
+  if (!videoFromDb || documentIsOutdated(videoFromDb, VIDEO_CACHE_DAYS)) {
+    return fetchVideoDetails(videoId);
+  }
 
-  // Check dates
-  const lastUpdated = toDate(videoFromDb.lastUpdatedMs);
-  const today = new Date();
-
-  // Check distance
-  const daysSinceLastUpdate = differenceInDays(today, lastUpdated);
-  if (daysSinceLastUpdate > VIDEO_CACHE_DAYS) return await fetchVideoDetails(videoId);
-  
-  // Use value from DB if less than 2 weeks old
   return {
     id: videoId,
     snippet: videoFromDb.snippet,
