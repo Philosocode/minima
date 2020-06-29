@@ -12,7 +12,6 @@ import {
   IPlaylist,
   IPlaylistsResponse,
   IChannel,
-  IChannelBase,
 } from "shared/interfaces/youtube.interfaces";
 import { VIDEO_CACHE_DAYS } from "shared/constants";
 import { addDocToDb, getDocFromDb, getChannelFromDbWithUsername } from "./firebase.api";
@@ -50,7 +49,7 @@ export function getCommentThreadReplies(threadId: string, nextPageToken?: string
 export async function getChannelDetails(channelId: string, username?: string): Promise<IChannel> {
   if (!channelId && !username) throw new Error("Must provide channel ID or username");
 
-  type ChannelDocument = IChannelBase & IDocument;
+  type ChannelDocument = IChannel & IDocument;
 
   let channelFromDb = (username)
     ? await getChannelFromDbWithUsername(username) as ChannelDocument
@@ -67,12 +66,12 @@ export async function getChannelDetails(channelId: string, username?: string): P
   if (daysSinceLastUpdate > VIDEO_CACHE_DAYS) return await fetchChannelDetails(channelId, username);
 
   // Use value from DB if less than 2 weeks old
-  const { contentDetails, snippet, statistics } = channelFromDb;
+  const { contentDetails, id, snippet, statistics } = channelFromDb;
 
-  return { contentDetails, id: channelId, snippet, statistics };
+  return { contentDetails, id, snippet, statistics };
 };
 
-async function fetchChannelDetails(channelId: string, username?: string): Promise<IChannel> {
+async function fetchChannelDetails(channelId?: string, username?: string): Promise<IChannel> {
   const url = BASE_URL + "/channels";
   const part = "id,contentDetails,snippet,statistics";
   const params = {
@@ -81,7 +80,7 @@ async function fetchChannelDetails(channelId: string, username?: string): Promis
     forUsername: username,
     part: part
   };
-
+  
   try {
     const channelRes = await makeApiRequest<IChannelsResponse>(url, params);
     const channel = channelRes.items[0];

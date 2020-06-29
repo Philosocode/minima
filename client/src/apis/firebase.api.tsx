@@ -3,7 +3,7 @@ import "firebase/firestore";
 
 import { DbCollectionType } from "shared/interfaces/firebase.interfaces";
 import { ILikeState } from "redux/like";
-import { IVideoBase, IChannelBase } from "shared/interfaces/youtube.interfaces";
+import { IVideoBase, IChannelBase, IChannel } from "shared/interfaces/youtube.interfaces";
 
 const config = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -27,10 +27,20 @@ export function getDocFromDb(collection: DbCollectionType, documentId: string) {
     .catch(err => alert("Error getting doc from DB: " + err));
 }
 
-export async function getChannelFromDbWithUsername(username: string) {
+export async function getChannelFromDbWithUsername(username: string): Promise<IChannel | undefined> {
   const snapshot = await db.collection("channels").where("snippet.customUrl", "==", username.toLowerCase()).get();
 
-  if (snapshot.docs.length === 1) return snapshot.docs[0].data();
+  if (snapshot.docs.length === 1) {
+    const channelData = snapshot.docs[0].data() as IChannelBase;
+    const { contentDetails, snippet, statistics } = channelData;
+
+    return {
+      id: snapshot.docs[0].id,
+      contentDetails,
+      snippet,
+      statistics,
+    }
+  }
 }
 
 export function addDocToDb(
