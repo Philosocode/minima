@@ -12,7 +12,7 @@ export const HomeVideos: FC<IProps> = ({ videos }) => {
   return (
     <section className="o-grid__item--wide">
       <>
-        <h2 className="c-heading c-heading--huge c-heading--block c-home__heading">Videos</h2>
+        <h2 className="c-heading c-heading--huge c-heading--block c-home__heading">Watch Later</h2>
         <div className="c-video-thumbnail__grid">
           {
             videos.map((video) => <VideoThumbnail 
