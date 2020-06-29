@@ -22,7 +22,7 @@ const db = firebase.firestore();
 export function getDocFromDb(collection: DbCollectionType, documentId: string) {
   return db.collection(collection).doc(documentId).get()
     .then(doc => {
-      if (doc.exists) return doc.data();
+      if (doc.exists) return { ...doc.data(), id: doc.id };
     })
     .catch(err => alert("Error getting doc from DB: " + err));
 }

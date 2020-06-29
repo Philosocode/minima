@@ -59,9 +59,7 @@ export async function getChannelDetails(channelId: string, username?: string): P
     return await fetchChannelDetails(channelId, username);
   }
 
-  const { contentDetails, id, snippet, statistics } = channelFromDb;
-  
-  return { id, contentDetails, snippet, statistics };
+  return channelFromDb;
 };
 
 async function fetchChannelDetails(channelId?: string, username?: string): Promise<IChannel> {
@@ -113,11 +111,7 @@ export async function getPlaylistDetails(playlistId: string): Promise<IPlaylist>
     return await fetchPlaylistDetails(playlistId);
   }
 
-  return {
-    id: playlistId,
-    contentDetails: playlistFromDb.contentDetails,
-    snippet: playlistFromDb.snippet,
-  };
+  return playlistFromDb;
 }
 
 async function fetchPlaylistDetails(playlistId: string): Promise<IPlaylist> {
@@ -243,11 +237,7 @@ export async function getVideoDetails(videoId: string): Promise<IVideo> {
     return fetchVideoDetails(videoId);
   }
 
-  return {
-    id: videoId,
-    snippet: videoFromDb.snippet,
-    statistics: videoFromDb.statistics
-  };
+  return videoFromDb;
 }
 
 export async function getVideosDetails(videoIds: string[]) {
