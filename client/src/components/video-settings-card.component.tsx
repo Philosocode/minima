@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import classNames from "classnames";
 import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRedo, faHeart, faMusic } from "@fortawesome/free-solid-svg-icons";
+import { faRedo, faFilm, faMusic } from "@fortawesome/free-solid-svg-icons";
 
 import { selectShouldLoop, setShouldLoop } from "redux/video";
 import { selectLikedVideos, likeVideo, unlikeVideo, selectLikedMusic, unlikeMusic, likeMusic } from "redux/like";
@@ -53,7 +53,7 @@ export const VideoSettingsCard: FC<IProps> = ({ videoId }) => {
   return (
     <div className="o-card c-video-settings__container">
       <div className={likeVideoIconClasses} onClick={toggleVideoLike}>
-        <FontAwesomeIcon className="c-video-settings__icon" icon={faHeart} />
+        <FontAwesomeIcon className="c-video-settings__icon" icon={faFilm} />
       </div>
       <div className={likeMusicIconClasses} onClick={toggleMusicLike}>
         <FontAwesomeIcon className="c-video-settings__icon" icon={faMusic} />
