@@ -12,10 +12,11 @@ import {
   IPlaylist,
   IPlaylistsResponse,
   IChannel,
+  IChannelBase,
 } from "shared/interfaces/youtube.interfaces";
-import { IVideoDocument } from "shared/interfaces/firebase.interfaces";
 import { VIDEO_CACHE_DAYS } from "shared/constants";
-import { addDocToDb, getDocFromDb } from "./firebase.api";
+import { addDocToDb, getDocFromDb, getChannelFromDbWithUsername } from "./firebase.api";
+import { IDocument } from "shared/interfaces/firebase.interfaces";
 
 export const BASE_URL = "https://www.googleapis.com/youtube/v3";
 export const API_KEY = process.env.REACT_APP_YOUTUBE_API_KEY as string;
@@ -46,7 +47,32 @@ export function getCommentThreadReplies(threadId: string, nextPageToken?: string
   return makeApiRequest<ICommentsResponse>(url, params);
 }
 
-export function getChannelDetails(channelId?: string, username?: string): Promise<IChannel> {
+export async function getChannelDetails(channelId: string, username?: string): Promise<IChannel> {
+  if (!channelId && !username) throw new Error("Must provide channel ID or username");
+
+  type ChannelDocument = IChannelBase & IDocument;
+
+  let channelFromDb = (username)
+    ? await getChannelFromDbWithUsername(username) as ChannelDocument
+    : await getDocFromDb("channels", channelId) as ChannelDocument;
+
+  if (!channelFromDb) return await fetchChannelDetails(channelId, username);
+
+  // Check dates
+  const lastUpdated = toDate(channelFromDb.lastUpdatedMs);
+  const today = new Date();
+
+  // Check distance
+  const daysSinceLastUpdate = differenceInDays(today, lastUpdated);
+  if (daysSinceLastUpdate > VIDEO_CACHE_DAYS) return await fetchChannelDetails(channelId, username);
+
+  // Use value from DB if less than 2 weeks old
+  const { contentDetails, snippet, statistics } = channelFromDb;
+
+  return { contentDetails, id: channelId, snippet, statistics };
+};
+
+async function fetchChannelDetails(channelId: string, username?: string): Promise<IChannel> {
   const url = BASE_URL + "/channels";
   const part = "id,contentDetails,snippet,statistics";
   const params = {
@@ -56,12 +82,21 @@ export function getChannelDetails(channelId?: string, username?: string): Promis
     part: part
   };
 
-  return makeApiRequest<IChannelsResponse>(url, params)
-    .then(channelRes => channelRes.items[0])
-    .catch(err => {
-      throw new Error(err);
-    });
-};
+  try {
+    const channelRes = await makeApiRequest<IChannelsResponse>(url, params);
+    const channel = channelRes.items[0];
+
+    const { id, contentDetails, snippet, statistics } = channel;
+    const channelDoc = { contentDetails, snippet, statistics };
+
+    addDocToDb("channels", id, channelDoc);
+
+    return channel;
+  }
+  catch (err) {
+    throw new Error(err);
+  }
+}
 
 export function getChannelPlaylists(channelId: string, nextPageToken?: string): Promise<IPlaylistsResponse> {
   const url = BASE_URL + "/playlists";
@@ -188,7 +223,7 @@ export function getVideoCommentThreads(videoId: string, nextPageToken?: string):
 }
 
 export async function getVideoDetails(videoId: string): Promise<IVideo> {
-  const videoFromDb = await getDocFromDb("videos", videoId) as IVideoDocument;
+  const videoFromDb = await getDocFromDb("videos", videoId) as (IVideo & IDocument);
   if (!videoFromDb) return await fetchVideoDetails(videoId);
 
   // Check dates
@@ -201,7 +236,6 @@ export async function getVideoDetails(videoId: string): Promise<IVideo> {
   
   // Use value from DB if less than 2 weeks old
   return {
-    etag: videoFromDb.etag,
     id: videoId,
     snippet: videoFromDb.snippet,
     statistics: videoFromDb.statistics
@@ -232,8 +266,8 @@ async function fetchVideoDetails(videoId: string): Promise<IVideo> {
     const videosRes = await makeApiRequest<IVideosResponse>(url, params);
     const video = videosRes.items[0];
 
-    const { etag, id, snippet, statistics } = video;
-    const videoDoc: IVideoDocument = { etag, snippet, statistics, lastUpdatedMs: Date.now() };
+    const { id, snippet, statistics } = video;
+    const videoDoc = { snippet, statistics };
 
     addDocToDb("videos", id, videoDoc);
 

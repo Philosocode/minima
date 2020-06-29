@@ -1,12 +1,20 @@
 /* ======== */
+// GENERAL
+/* ======== */
+interface IHasId {
+  id: string;
+}
+
+/* ======== */
 // CHANNEL
 /* ======== */
-export interface IChannel {
-  id: string;
+export interface IChannelBase {
   contentDetails: IChannelContentDetails;
   snippet: IChannelSnippet;
   statistics: IChannelStatistics;
 }
+
+export interface IChannel extends IChannelBase, IHasId {}
 
 interface IChannelContentDetails {
   relatedPlaylists: {
@@ -147,14 +155,11 @@ interface IThumbnail {
 // VIDEO
 /* ======== */
 export interface IVideoBase {
-  etag: string;
   snippet: IVideoSnippet;
   statistics: IVideoStatistics;
 }
 
-export interface IVideo extends IVideoBase {
-  id: string;
-}
+export interface IVideo extends IVideoBase, IHasId {}
 
 export interface IVideoPlayer {
   embedHtml: string;

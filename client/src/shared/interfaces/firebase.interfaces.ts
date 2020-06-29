@@ -1,13 +1,7 @@
-import { IVideoBase } from "./youtube.interfaces";
+import { IVideo } from "./youtube.interfaces";
 
-/* ============ */
-// GENERAL
-/* ============ */
 export type DbCollectionType = "channels" | "music" | "playlists" | "videos";
 
-/* ======== */
-// VIDEO
-/* ======== */
-export interface IVideoDocument extends IVideoBase {
+export interface IDocument {
   lastUpdatedMs: number;
 }
