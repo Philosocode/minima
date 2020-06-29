@@ -208,6 +208,17 @@ export async function getVideoDetails(videoId: string): Promise<IVideo> {
   };
 }
 
+export async function getVideosDetails(videoIds: string[]) {
+  const videos: IVideo[] = [];
+
+  await Promise.all(videoIds.map(async (videoId) => {
+    const video = await getVideoDetails(videoId);
+    videos.push(video);
+  }))
+
+  return videos;
+}
+
 async function fetchVideoDetails(videoId: string): Promise<IVideo> {
   const url = BASE_URL + "/videos";
   const part = "snippet,statistics,player";

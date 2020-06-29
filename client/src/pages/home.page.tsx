@@ -1,49 +1,35 @@
 import React, { FC, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import { IVideo } from "shared/interfaces/youtube.interfaces";
+import { getVideosDetails } from "apis/youtube.api";
 import { selectAllLikes } from "redux/like";
-import { getVideoDetails } from "apis/youtube.api";
+import { Loader } from "components/loader.component";
+import { HomeGrid } from "components/home-grid.component";
 
 export const HomePage: FC = () => {
   const allLikes = useSelector(selectAllLikes);
-  const [songs, setSongs] = useState<IVideo[]>([]);
   const [videos, setVideos] = useState<IVideo[]>([]);
+  const [dataLoaded, setDataLoaded] = useState(false);
 
-  function renderVideos() {
-    const videoIds = allLikes.videos;
+  useEffect(() => {
+    async function loadData() {
+      if (allLikes.videos.length > 0) {
+        const videos = await getVideosDetails(allLikes.videos);
+        setVideos(videos);
+      }
 
-    return (
-      <div className="o-page">
-        <h2 className="c-heading c-heading--huge">Videos</h2>
-        <div>
-        {
-          videoIds.map(videoId => <Link to={`/watch?v=${videoId}`}>{videoId}</Link>)
-        }
-        </div>
-      </div>
-    )
-  }
+      setDataLoaded(true);
+    }
 
-  function renderMusic() {
-    const musicIds = allLikes.music;
+    loadData();
+  }, [allLikes]);
 
-    return (
-      <div className="o-page">
-        <h2 className="c-heading c-heading--huge">Videos</h2>
-        <div>
-        {
-          musicIds.map(musicId => <Link to={`/watch?v=${musicId}`}>{musicId}</Link>)
-        }
-        </div>
-      </div>
-    )
-  }
+  if (!dataLoaded) return <Loader position="center-page" />
 
   return (
-    <div className="o-page">
-      { allLikes.videos && renderVideos() }
+    <div className="o-page o-grid">
+      <HomeGrid videos={videos} />
     </div>
   );
  };
