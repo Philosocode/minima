@@ -59,7 +59,9 @@ export async function getChannelDetails(channelId: string, username?: string): P
     return await fetchChannelDetails(channelId, username);
   }
 
-  return channelFromDb;
+  const { contentDetails, id, snippet, statistics } = channelFromDb;
+  
+  return { id, contentDetails, snippet, statistics };
 };
 
 async function fetchChannelDetails(channelId?: string, username?: string): Promise<IChannel> {
