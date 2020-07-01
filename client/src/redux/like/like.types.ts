@@ -1,35 +1,26 @@
+import { DbCollectionType } from "shared/interfaces/firebase.interfaces";
+
 export enum LikeConstants {
   LOAD_ALL_LIKES = "LOAD_ALL_LIKES",
-  LIKE_VIDEO = "LIKE_VIDEO",
-  UNLIKE_VIDEO = "UNLIKE_VIDEO",
-  LIKE_MUSIC = "LIKE_MUSIC",
-  UNLIKE_MUSIC = "UNLIKE_MUSIC"
+  LIKE_RESOURCE = "LIKE_RESOURCE",
+  UNLIKE_RESOURCE = "UNLIKE_RESOURCE"
 };
 
-// TODO: https://stackoverflow.com/questions/47181789/limit-object-properties-to-keyof-interface
 /* ACTIONS */
 export interface ILoadAllLikes {
   type: LikeConstants.LOAD_ALL_LIKES,
   payload: ILikeState
 };
 
-export interface ILikeVideo {
-  type: LikeConstants.LIKE_VIDEO;
+export interface ILikeResource {
+  type: LikeConstants.LIKE_RESOURCE,
+  collectionName: DbCollectionType,
   payload: string;
 }
 
-export interface IUnlikeVideo {
-  type: LikeConstants.UNLIKE_VIDEO;
-  payload: string;
-}
-
-export interface ILikeMusic {
-  type: LikeConstants.LIKE_MUSIC;
-  payload: string;
-}
-
-export interface IUnlikeMusic {
-  type: LikeConstants.UNLIKE_MUSIC;
+export interface IUnlikeResource {
+  type: LikeConstants.UNLIKE_RESOURCE,
+  collectionName: DbCollectionType,
   payload: string;
 }
 
@@ -42,7 +33,5 @@ export interface ILikeState {
 
 export type LikeAction =
   | ILoadAllLikes
-  | ILikeVideo
-  | IUnlikeVideo
-  | ILikeMusic
-  | IUnlikeMusic;
+  | ILikeResource
+  | IUnlikeResource;

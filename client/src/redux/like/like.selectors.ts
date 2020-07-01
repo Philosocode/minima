@@ -8,12 +8,22 @@ export const selectAllLikes = createSelector(
   like => like
 );
 
-export const selectLikedVideos = createSelector(
+export const selectLikedChannels = createSelector(
   [selectLike],
-  like => like.videos
+  like => like.channels
 );
 
 export const selectLikedMusic = createSelector(
   [selectLike],
   like => like.music
+);
+
+export const selectLikedPlaylists = createSelector(
+  [selectLike],
+  like => like.playlists
+);
+
+export const selectLikedVideos = createSelector(
+  [selectLike],
+  like => like.videos
 );

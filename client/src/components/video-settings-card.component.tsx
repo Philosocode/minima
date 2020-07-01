@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRedo, faFilm, faMusic } from "@fortawesome/free-solid-svg-icons";
 
 import { selectShouldLoop, setShouldLoop } from "redux/video";
-import { selectLikedVideos, likeVideo, unlikeVideo, selectLikedMusic, unlikeMusic, likeMusic } from "redux/like";
+import { selectLikedVideos, selectLikedMusic, likeResource, unlikeResource } from "redux/like";
 
 interface IProps {
   videoId: string; 
@@ -22,14 +22,14 @@ export const VideoSettingsCard: FC<IProps> = ({ videoId }) => {
 
   function toggleVideoLike() {
     videoLiked
-      ? dispatch(unlikeVideo(videoId))
-      : dispatch(likeVideo(videoId));
+      ? dispatch(unlikeResource("videos", videoId))
+      : dispatch(likeResource("videos", videoId));
   }
 
   function toggleMusicLike() {
     musicLiked
-      ? dispatch(unlikeMusic(videoId))
-      : dispatch(likeMusic(videoId));
+      ? dispatch(unlikeResource("music", videoId))
+      : dispatch(likeResource("music", videoId));
   }
 
   const videoLiked = likedVideos.includes(videoId);
