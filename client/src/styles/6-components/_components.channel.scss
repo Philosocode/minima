@@ -1,10 +1,31 @@
 .c-channel {
   &__box {
     margin-bottom: $spacing-small;
+    position: relative;
   }
 
   &__description {
     text-align: left;
+  }
+
+  &__icon {
+    color: $color-grey-light;
+    cursor: pointer;
+    font-size: 5rem;
+    position: absolute;
+      transform: translate(18rem, -5.5rem);
+    transition: color 0.2s ease, opacity 0.2s ease;
+
+    &--regular:hover { color: $color-green; }
+  }
+
+  &__icon--hidden {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  &__icon--solid {
+    color: $color-green;
   }
 
   &__image {

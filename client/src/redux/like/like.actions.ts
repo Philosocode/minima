@@ -19,7 +19,7 @@ export const likeResource = (
   try {
     await addLikeToDb(collectionName, resourceId);
 
-    dispatch({ type: LikeConstants.LIKE_RESOURCE, payload: resourceId });
+    dispatch({ type: LikeConstants.LIKE_RESOURCE, collectionName, payload: resourceId });
   }
   catch (err) {
     throw new Error(err);
@@ -33,7 +33,7 @@ export const unlikeResource = (
   try {
     await removeLikeFromDb(collectionName, resourceId);
 
-    dispatch({ type: LikeConstants.UNLIKE_RESOURCE, payload: resourceId });
+    dispatch({ type: LikeConstants.UNLIKE_RESOURCE, collectionName, payload: resourceId });
   }
   catch (err) {
     throw new Error(err);

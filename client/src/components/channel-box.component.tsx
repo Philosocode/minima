@@ -1,8 +1,12 @@
 import React, { FC } from "react";
 import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import classNames from "classnames";
 
 import { IChannel } from "shared/interfaces/youtube.interfaces";
 import { getAbbreviatedNumber } from "shared/helpers";
+import { useSelector, useDispatch } from "react-redux";
+import { selectLikedChannels, unlikeResource, likeResource } from "redux/like";
 
 type Location = "video-page" | "channel-page";
 
@@ -12,26 +16,51 @@ interface IProps {
 }
 
 export const ChannelBox: FC<IProps> = ({ channelData, location }) => {
-  const channelUrl = `/channel/${channelData.id}`;
+  const likedChannels = useSelector(selectLikedChannels);
+  const dispatch = useDispatch();
+  const channelLiked = likedChannels.includes(channelData.id);
 
+  function toggleChannelLike() {
+    channelLiked
+      ? dispatch(unlikeResource("channels", channelData.id))
+      : dispatch(likeResource("channels", channelData.id));
+  }
+
+  const channelUrl = `/channel/${channelData.id}`;
   const subscriberCount = channelData.statistics.subscriberCount;
   const channelTitle = channelData.snippet.title;
+  const { thumbnails } = channelData.snippet;
 
   // Set classes dynamically
-  let imageUrl = channelData.snippet.thumbnails.default.url;
-  let imageClasses = "o-thumbnail c-channel__image";
-  let headingClasses = "c-heading";
-  let subscriberClasses = "c-channel__subscriber-count";
+  let imageUrl = (location === "channel-page")
+    ? thumbnails.high.url
+    : thumbnails.default.url;
 
-  if (location === "video-page") {
-    headingClasses += " c-heading--small c-heading--link";
-  }
-  else if (location === "channel-page") {
-    headingClasses += " c-heading--large";
-    imageUrl = channelData.snippet.thumbnails.high.url;
-    imageClasses += " c-channel__image--large"; 
-    subscriberClasses += " c-channel__subscriber-count--large"
-  }
+  const headingClasses = classNames({
+    "c-heading": true,
+    "c-heading--large": location === "channel-page",
+    "c-heading--small c-heading--link": location === "video-page"
+  });
+
+  const imageClasses = classNames({
+    "o-thumbnail c-channel__image": true,
+    "c-channel__image--large": location === "channel-page"
+  });
+
+  const regularIconClasses = classNames({
+    "c-channel__icon c-channel__icon--regular": true,
+    "c-channel__icon--hidden": channelLiked
+  });
+
+  const solidIconClasses = classNames({
+    "c-channel__icon c-channel__icon--solid": true,
+    "c-channel__icon--hidden": !channelLiked
+  });
+
+  const subscriberClasses = classNames({
+    "c-channel__subscriber-count": true,
+    "c-channel__subscriber-count--large": location === "channel-page"
+  });
 
   return (
     <div className="o-media c-channel__box">
@@ -47,6 +76,22 @@ export const ChannelBox: FC<IProps> = ({ channelData, location }) => {
             : <div className={headingClasses}>{channelTitle}</div>
         }
         <h3 className={subscriberClasses}>{getAbbreviatedNumber(subscriberCount)} subscribers</h3>
+        {
+          location === "channel-page" && (
+            <div className="c-channel__icon-container">
+              <FontAwesomeIcon
+                className={regularIconClasses}
+                icon={["far", "heart"]} 
+                onClick={toggleChannelLike}
+              />
+              <FontAwesomeIcon
+                className={solidIconClasses}
+                icon={["fas", "heart"]} 
+                onClick={toggleChannelLike}
+              />
+            </div>
+          )
+        }
       </div>
     </div>
   )

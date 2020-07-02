@@ -7,6 +7,7 @@ import { App } from './App';
 import { store } from "redux/store";
 import * as serviceWorker from './serviceWorker';
 
+import "./font-awesome";
 import "./styles/styles.scss";
 
 ReactDOM.render(
