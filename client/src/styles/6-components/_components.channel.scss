@@ -1,31 +1,37 @@
 .c-channel {
   &__box {
     margin-bottom: $spacing-small;
-    position: relative;
   }
 
   &__description {
     text-align: left;
   }
 
+  &__header {
+    display: flex;
+  }
+
+  &__icon-container {
+    position: relative;
+  }
+
   &__icon {
     color: $color-grey-light;
     cursor: pointer;
     font-size: 5rem;
-    position: absolute;
-      transform: translate(18rem, -5.5rem);
+    margin-left: $spacing-small;
     transition: color 0.2s ease, opacity 0.2s ease;
 
     &--regular:hover { color: $color-green; }
-  }
-
-  &__icon--hidden {
-    opacity: 0;
-    visibility: hidden;
-  }
-
-  &__icon--solid {
-    color: $color-green;
+    &--solid {
+      color: $color-green;
+      position: absolute;
+        left: 0;
+    }
+    &--hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
   }
 
   &__image {
@@ -37,9 +43,7 @@
       width: 4.5rem;
     }
 
-    &--large {
-      width: 10rem;
-    }
+    &--large { width: 10rem; }
   }
 
   &__subscriber-count {
@@ -49,8 +53,6 @@
     margin-top: 5px;
     margin-bottom: 0;
 
-    &--large {
-      font-size: 1.6rem;
-    }
+    &--large { font-size: 1.6rem; }
   }
 }

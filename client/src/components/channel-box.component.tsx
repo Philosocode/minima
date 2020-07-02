@@ -26,12 +26,34 @@ export const ChannelBox: FC<IProps> = ({ channelData, location }) => {
       : dispatch(likeResource("channels", channelData.id));
   }
 
+  function renderChannelHeading() {
+    if (location === "video-page") return <Link to={channelUrl} className={headingClasses}>{channelTitle}</Link>;
+
+    return <div className={headingClasses}>{channelTitle}</div>;
+  }
+
+  function renderLikeIcon() {
+    return (
+      <div className="c-channel__icon-container">
+        <FontAwesomeIcon
+          className={regularIconClasses}
+          icon={["far", "heart"]} 
+          onClick={toggleChannelLike}
+        />
+        <FontAwesomeIcon
+          className={solidIconClasses}
+          icon={["fas", "heart"]} 
+          onClick={toggleChannelLike}
+        />
+      </div>
+    );
+  }
+
   const channelUrl = `/channel/${channelData.id}`;
   const subscriberCount = channelData.statistics.subscriberCount;
   const channelTitle = channelData.snippet.title;
   const { thumbnails } = channelData.snippet;
 
-  // Set classes dynamically
   let imageUrl = (location === "channel-page")
     ? thumbnails.high.url
     : thumbnails.default.url;
@@ -70,28 +92,13 @@ export const ChannelBox: FC<IProps> = ({ channelData, location }) => {
           : <div className="o-media__image"><img className={imageClasses} src={imageUrl} alt={channelTitle} /></div>
       }
       <div className="o-media__body o-media__body--center-vertically">
-        {
-          location === "video-page"
-            ? <Link to={channelUrl} className={headingClasses}>{channelTitle}</Link>
-            : <div className={headingClasses}>{channelTitle}</div>
-        }
-        <h3 className={subscriberClasses}>{getAbbreviatedNumber(subscriberCount)} subscribers</h3>
-        {
-          location === "channel-page" && (
-            <div className="c-channel__icon-container">
-              <FontAwesomeIcon
-                className={regularIconClasses}
-                icon={["far", "heart"]} 
-                onClick={toggleChannelLike}
-              />
-              <FontAwesomeIcon
-                className={solidIconClasses}
-                icon={["fas", "heart"]} 
-                onClick={toggleChannelLike}
-              />
-            </div>
-          )
-        }
+        <div className="c-channel__header">
+          <div className="c-channel__header-text">
+            { renderChannelHeading() }
+            <h3 className={subscriberClasses}>{getAbbreviatedNumber(subscriberCount)} subscribers</h3>
+          </div>
+          { location === "channel-page" && renderLikeIcon() }
+        </div>
       </div>
     </div>
   )
