@@ -28,6 +28,10 @@
     margin-bottom: $spacing-medium;
   }
 
+  &__grid {
+    display: flex;
+  }
+
   &__sub-text {
     font-weight: 500;
     font-size: 1.4rem;

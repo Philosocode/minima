@@ -34,7 +34,7 @@ export const ChannelBox: FC<IProps> = ({ channelData, location }) => {
 
   function renderLikeIcon() {
     return (
-      <div className="c-channel__icon-container">
+      <div className="c-like-icon__container">
         <FontAwesomeIcon
           className={regularIconClasses}
           icon={["far", "heart"]} 
@@ -70,13 +70,13 @@ export const ChannelBox: FC<IProps> = ({ channelData, location }) => {
   });
 
   const regularIconClasses = classNames({
-    "c-channel__icon c-channel__icon--regular": true,
-    "c-channel__icon--hidden": channelLiked
+    "c-like-icon__icon c-like-icon__icon--regular": true,
+    "c-like-icon__icon--hidden": channelLiked
   });
 
   const solidIconClasses = classNames({
-    "c-channel__icon c-channel__icon--solid": true,
-    "c-channel__icon--hidden": !channelLiked
+    "c-like-icon__icon c-like-icon__icon--solid": true,
+    "c-like-icon__icon--hidden": !channelLiked
   });
 
   const subscriberClasses = classNames({
