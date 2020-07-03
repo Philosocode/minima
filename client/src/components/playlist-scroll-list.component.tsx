@@ -7,6 +7,7 @@ import { useToggle } from "hooks/use-toggle.hook";
 import { PlaylistScrollVideo } from "components/playlist-scroll-video.component";
 import { Loader } from "components/loader.component";
 import { PlaylistScrollHeader } from "./playlist-scroll-header.component";
+import { useFetchPaginatedResource } from "hooks/use-fetch-paginated-resource.hook";
 
 interface IProps {
   playlistId: string;
@@ -15,11 +16,18 @@ interface IProps {
 
 export const PlaylistScrollList: FC<IProps> = ({ playlistId, watchingVideoId }) => {
   const [hidingPreviousVideos, toggleHidingPreviousVideos] = useToggle(true);
-  const [isLoading, setIsLoading] = useState(false);
-  const [nextPageToken, setNextPageToken] = useState("");
   const [playlistDetails, setPlaylistDetails] = useState<IPlaylist>();
-  const [playlistVideos, setPlaylistVideos] = useState<IPlaylistItem[]>([]);
   const [watchingVideoIdx, setWatchingVideoIdx] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const {
+    hasMore: hasMoreVideos,
+    items: playlistVideos,
+    loadResources: loadMoreVideos,
+    setItems: setPlaylistVideos,
+    setNextPageToken,
+    setHasMore
+  } = useFetchPaginatedResource<IPlaylistItem>(getPlaylistVideos, playlistId);
 
   async function handleLoadPlaylistVideos() {
     setIsLoading(true);
@@ -41,39 +49,6 @@ export const PlaylistScrollList: FC<IProps> = ({ playlistId, watchingVideoId }) 
     }
   }
 
-  async function fetchPlaylistVideos() {
-    setIsLoading(true);
-
-    try {
-      const videosRes = await getPlaylistVideos(playlistId, nextPageToken);
-      const videosFetched = videosRes.items;
-      const updatedVideos = playlistVideos.concat(videosFetched);
-
-      setPlaylistVideos(updatedVideos);
-  
-      // Update nextPageToken
-      if (videosRes.nextPageToken) {
-        setNextPageToken(videosRes.nextPageToken)
-      }
-      else {
-        setNextPageToken("");
-      }
-      
-      return videosFetched;
-    }
-    catch(err) {
-      alert(err);
-    }
-    finally {
-      setIsLoading(false);
-    }
-  }
-
-  function hasMoreVideos() {
-    if (!playlistDetails) return true;
-    return playlistVideos.length < playlistDetails.contentDetails.itemCount;
-  }
-
   async function initialFetchPlaylistVideos() {
     try {
       const [fetchedVideos, pageToken] = await getPlaylistVideosUntilCurrentVideo(
@@ -83,12 +58,9 @@ export const PlaylistScrollList: FC<IProps> = ({ playlistId, watchingVideoId }) 
 
       setPlaylistVideos(fetchedVideos);
 
-      if (pageToken) {
-        setNextPageToken(pageToken);
-      } 
-      else {
-        setNextPageToken("");
-      }
+      pageToken
+        ? setNextPageToken(pageToken)
+        : setHasMore(false);
     }
     catch(err) {
       alert(err);
@@ -122,11 +94,11 @@ export const PlaylistScrollList: FC<IProps> = ({ playlistId, watchingVideoId }) 
   }
 
   function renderLoadMoreVideosButton() {
-    if (!hasMoreVideos()) return;
+    if (!hasMoreVideos) return;
     if (isLoading) return <Loader position="center-horizontal" />
 
     return (
-      <div className="c-playlist-scroll-list__toggle-previous" onClick={async () => await fetchPlaylistVideos()}>LOAD MORE</div>
+      <div className="c-playlist-scroll-list__toggle-previous" onClick={async () => await loadMoreVideos()}>LOAD MORE</div>
     )
   }
 

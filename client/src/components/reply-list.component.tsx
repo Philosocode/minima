@@ -1,10 +1,11 @@
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 
 import { IComment } from "shared/interfaces/youtube.interfaces";
 import { getCommentThreadReplies } from "apis/youtube.api";
 import { Comment } from "components/comment.component";
 import { useToggle } from "hooks/use-toggle.hook";
 import { Loader } from "./loader.component";
+import { useFetchPaginatedResource } from "hooks/use-fetch-paginated-resource.hook";
 
 interface IProps {
   topLevelCommentId: string;
@@ -12,40 +13,19 @@ interface IProps {
 }
 
 export const ReplyList: FC<IProps> = ({ topLevelCommentId, totalReplyCount }) => { 
-  const [replies, setReplies] = useState<IComment[]>([]);
-  const [nextPageToken, setNextPageToken] = useState<string>();
   const [showingReplies, toggleShowingReplies] = useToggle(false);
-  const [hasMoreReplies, setHasMoreReplies] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
+
+  const {
+    hasMore: hasMoreReplies,
+    isLoading,
+    items: replies,
+    loadResources: loadMoreReplies
+  } = useFetchPaginatedResource<IComment>(getCommentThreadReplies, topLevelCommentId, true);
+
 
   function handleShowReplies() {
-    loadReplies();
+    loadMoreReplies();
     toggleShowingReplies();
-  }
-
-  async function loadReplies() {
-    if (!hasMoreReplies) return;
-    
-    try {
-      setIsLoading(true);
-      const res = await getCommentThreadReplies(topLevelCommentId, nextPageToken);
-      setIsLoading(false);
-
-      // A nextPageToken means there are more replies to load
-      if (res.nextPageToken) {
-        setNextPageToken(res.nextPageToken);
-      } else {
-        setHasMoreReplies(false);
-      }
-
-      // Comments are from newest to oldest, but for replies, we want oldest to newest
-      const newComments = res.items.reverse();
-
-      setReplies(replies.concat(newComments));
-    }
-    catch (err) {
-      console.log("ERROR:", err);
-    }
   }
 
   function renderReplies() {
@@ -75,7 +55,7 @@ export const ReplyList: FC<IProps> = ({ topLevelCommentId, totalReplyCount }) =>
       return <Loader position="left" />;
     }
     if (showingReplies && hasMoreReplies) {
-      return <div className="c-link-text" onClick={loadReplies}>Load More Replies</div>;
+      return <div className="c-link-text" onClick={loadMoreReplies}>Load More Replies</div>;
     }
   }
 

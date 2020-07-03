@@ -1,10 +1,11 @@
-import React, { FC, useState, useEffect } from "react";
+import React, { FC } from "react";
 
 import { ICommentThread } from "shared/interfaces/youtube.interfaces";
 import { getVideoCommentThreads } from "apis/youtube.api";
 import { Loader } from "components/loader.component";
 import { Thread } from "components/thread.component";
 import { addCommasToNumber } from "shared/helpers";
+import { useFetchPaginatedResource } from "hooks/use-fetch-paginated-resource.hook";
 
 interface IProps {
   numComments: string;
@@ -12,41 +13,12 @@ interface IProps {
 }
 
 export const ThreadList: FC<IProps> = ({ numComments, videoId }) => {
-  const [threads, setThreads] = useState<ICommentThread[]>([]);
-  const [nextPageToken, setNextPageToken] = useState<string>();
-  const [hasMoreComments, setHasMoreComments] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
-
-  // Make sure component re-renders when video changes
-  useEffect(() => {
-    clearState();
-  }, [videoId]);
-
-  function clearState() {
-    setThreads([]);
-    setHasMoreComments(true);
-    setNextPageToken("");
-  }
-
-  async function loadCommentThreads() {
-    try {
-      setIsLoading(true);
-      const res = await getVideoCommentThreads(videoId, nextPageToken);
-      setIsLoading(false);
-  
-      if (res.nextPageToken) {
-        setNextPageToken(res.nextPageToken);
-      } else {
-        setHasMoreComments(false);
-      }
-  
-      const updatedThreads = threads.concat(res.items);
-      setThreads(updatedThreads);
-    }
-    catch(err) {
-      console.log("ERROR:", err);
-    }
-  }
+  const {
+    hasMore: hasMoreComments,
+    isLoading,
+    items: threads,
+    loadResources: loadCommentThreads
+  } = useFetchPaginatedResource<ICommentThread>(getVideoCommentThreads, videoId);
 
   function renderThreads() {
     return threads.map(t => <Thread key={t.id} thread={t} />);

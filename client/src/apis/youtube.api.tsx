@@ -177,8 +177,6 @@ export async function getPlaylistVideosUntilCurrentVideo(
   let nextPageToken = "";
 
   while (true) {
-    console.log("LOOP");
-    
     const videosRes = await getPlaylistVideos(playlistId, nextPageToken);    
     const videosFetched = videosRes.items;
 
