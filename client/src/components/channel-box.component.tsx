@@ -5,8 +5,8 @@ import classNames from "classnames";
 
 import { IChannel } from "shared/interfaces/youtube.interfaces";
 import { getAbbreviatedNumber } from "shared/helpers";
-import { useSelector, useDispatch } from "react-redux";
-import { selectLikedChannels, unlikeResource, likeResource } from "redux/like";
+import { selectLikedChannels } from "redux/like";
+import { useLike } from "hooks/use-like.hook";
 
 type Location = "video-page" | "channel-page";
 
@@ -16,15 +16,7 @@ interface IProps {
 }
 
 export const ChannelBox: FC<IProps> = ({ channelData, location }) => {
-  const likedChannels = useSelector(selectLikedChannels);
-  const dispatch = useDispatch();
-  const channelLiked = likedChannels.includes(channelData.id);
-
-  function toggleChannelLike() {
-    channelLiked
-      ? dispatch(unlikeResource("channels", channelData.id))
-      : dispatch(likeResource("channels", channelData.id));
-  }
+  const [channelLiked, toggleChannelLiked] = useLike("channels", channelData.id, selectLikedChannels);
 
   function renderChannelHeading() {
     if (location === "video-page") return <Link to={channelUrl} className={headingClasses}>{channelTitle}</Link>;
@@ -38,12 +30,12 @@ export const ChannelBox: FC<IProps> = ({ channelData, location }) => {
         <FontAwesomeIcon
           className={regularIconClasses}
           icon={["far", "heart"]} 
-          onClick={toggleChannelLike}
+          onClick={toggleChannelLiked}
         />
         <FontAwesomeIcon
           className={solidIconClasses}
           icon={["fas", "heart"]} 
-          onClick={toggleChannelLike}
+          onClick={toggleChannelLiked}
         />
       </div>
     );

@@ -1,31 +1,23 @@
 import React, { FC } from "react";
 import { Link } from "react-router-dom";
+import classNames from "classnames";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { IPlaylist } from "shared/interfaces/youtube.interfaces";
+import { useLike } from "hooks/use-like.hook";
 import { getFormattedDate } from "shared/helpers";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import classNames from "classnames";
-import { useSelector, useDispatch } from "react-redux";
-import { selectLikedPlaylists, unlikeResource, likeResource } from "redux/like";
+import { selectLikedPlaylists } from "redux/like";
 
 interface IProps {
   playlist: IPlaylist;
 }
 
 export const PlaylistDetails: FC<IProps> = ({ playlist }) => {
-  const likedPlaylists = useSelector(selectLikedPlaylists);
-  const dispatch = useDispatch();
-  const playlistLiked = likedPlaylists.includes(playlist.id);
-
   const { channelId, channelTitle, description, publishedAt, title } = playlist.snippet;
   const numVideos = playlist.contentDetails.itemCount;
   const channelUrl = `/channel/${channelId}`;
+  const [playlistLiked, togglePlaylistLiked] = useLike("playlists", playlist.id, selectLikedPlaylists);
 
-  function togglePlaylistLike() {
-    playlistLiked
-      ? dispatch(unlikeResource("playlists", playlist.id))
-      : dispatch(likeResource("playlists", playlist.id));
-  }
 
   const regularIconClasses = classNames({
     "c-like-icon__icon c-like-icon__icon--regular": true,
@@ -53,12 +45,12 @@ export const PlaylistDetails: FC<IProps> = ({ playlist }) => {
           <FontAwesomeIcon
             className={regularIconClasses}
             icon={["far", "heart"]} 
-            onClick={togglePlaylistLike}
+            onClick={togglePlaylistLiked}
           />
           <FontAwesomeIcon
             className={solidIconClasses}
             icon={["fas", "heart"]} 
-            onClick={togglePlaylistLike}
+            onClick={togglePlaylistLiked}
           />
         </div>
       </div>
