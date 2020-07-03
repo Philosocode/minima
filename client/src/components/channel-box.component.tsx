@@ -1,12 +1,12 @@
 import React, { FC } from "react";
 import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames";
 
 import { IChannel } from "shared/interfaces/youtube.interfaces";
 import { getAbbreviatedNumber } from "shared/helpers";
 import { selectLikedChannels } from "redux/like";
 import { useLike } from "hooks/use-like.hook";
+import { HeartIcon } from "./heart-icon.component";
 
 type Location = "video-page" | "channel-page";
 
@@ -17,34 +17,17 @@ interface IProps {
 
 export const ChannelBox: FC<IProps> = ({ channelData, location }) => {
   const [channelLiked, toggleChannelLiked] = useLike("channels", channelData.id, selectLikedChannels);
+  
+  const channelUrl = `/channel/${channelData.id}`;
+  const subscriberCount = channelData.statistics.subscriberCount;
+  const channelTitle = channelData.snippet.title;
+  const { thumbnails } = channelData.snippet;
 
   function renderChannelHeading() {
     if (location === "video-page") return <Link to={channelUrl} className={headingClasses}>{channelTitle}</Link>;
 
     return <div className={headingClasses}>{channelTitle}</div>;
   }
-
-  function renderLikeIcon() {
-    return (
-      <div className="c-like-icon__container">
-        <FontAwesomeIcon
-          className={regularIconClasses}
-          icon={["far", "heart"]} 
-          onClick={toggleChannelLiked}
-        />
-        <FontAwesomeIcon
-          className={solidIconClasses}
-          icon={["fas", "heart"]} 
-          onClick={toggleChannelLiked}
-        />
-      </div>
-    );
-  }
-
-  const channelUrl = `/channel/${channelData.id}`;
-  const subscriberCount = channelData.statistics.subscriberCount;
-  const channelTitle = channelData.snippet.title;
-  const { thumbnails } = channelData.snippet;
 
   let imageUrl = (location === "channel-page")
     ? thumbnails.high.url
@@ -59,16 +42,6 @@ export const ChannelBox: FC<IProps> = ({ channelData, location }) => {
   const imageClasses = classNames({
     "o-thumbnail c-channel__image": true,
     "c-channel__image--large": location === "channel-page"
-  });
-
-  const regularIconClasses = classNames({
-    "c-like-icon__icon c-like-icon__icon--regular": true,
-    "c-like-icon__icon--hidden": channelLiked
-  });
-
-  const solidIconClasses = classNames({
-    "c-like-icon__icon c-like-icon__icon--solid": true,
-    "c-like-icon__icon--hidden": !channelLiked
   });
 
   const subscriberClasses = classNames({
@@ -89,7 +62,9 @@ export const ChannelBox: FC<IProps> = ({ channelData, location }) => {
             { renderChannelHeading() }
             <h3 className={subscriberClasses}>{getAbbreviatedNumber(subscriberCount)} subscribers</h3>
           </div>
-          { location === "channel-page" && renderLikeIcon() }
+          {
+            location === "channel-page" && <HeartIcon isLiked={channelLiked} toggleIsLiked={toggleChannelLiked} />
+          }
         </div>
       </div>
     </div>

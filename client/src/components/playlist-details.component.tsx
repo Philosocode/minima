@@ -1,12 +1,11 @@
 import React, { FC } from "react";
 import { Link } from "react-router-dom";
-import classNames from "classnames";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { IPlaylist } from "shared/interfaces/youtube.interfaces";
 import { useLike } from "hooks/use-like.hook";
 import { getFormattedDate } from "shared/helpers";
 import { selectLikedPlaylists } from "redux/like";
+import { HeartIcon } from "./heart-icon.component";
 
 interface IProps {
   playlist: IPlaylist;
@@ -17,17 +16,6 @@ export const PlaylistDetails: FC<IProps> = ({ playlist }) => {
   const numVideos = playlist.contentDetails.itemCount;
   const channelUrl = `/channel/${channelId}`;
   const [playlistLiked, togglePlaylistLiked] = useLike("playlists", playlist.id, selectLikedPlaylists);
-
-
-  const regularIconClasses = classNames({
-    "c-like-icon__icon c-like-icon__icon--regular": true,
-    "c-like-icon__icon--hidden": playlistLiked
-  });
-
-  const solidIconClasses = classNames({
-    "c-like-icon__icon c-like-icon__icon--solid": true,
-    "c-like-icon__icon--hidden": !playlistLiked
-  });
 
   return (
     <div className="c-playlist-details__container">
@@ -40,19 +28,7 @@ export const PlaylistDetails: FC<IProps> = ({ playlist }) => {
             <span className="c-playlist-details__count">{numVideos} videos</span> • <span className="c-playlist-details__date">{getFormattedDate(publishedAt, "MMM io, yyyy")}</span>
           </div>
         </div>
-
-        <div className="c-like-icon__container">
-          <FontAwesomeIcon
-            className={regularIconClasses}
-            icon={["far", "heart"]} 
-            onClick={togglePlaylistLiked}
-          />
-          <FontAwesomeIcon
-            className={solidIconClasses}
-            icon={["fas", "heart"]} 
-            onClick={togglePlaylistLiked}
-          />
-        </div>
+        <HeartIcon isLiked={playlistLiked} toggleIsLiked={togglePlaylistLiked} />
       </div>
 
       {
