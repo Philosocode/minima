@@ -11,10 +11,10 @@ export const MusicList: FC<IProps> = ({ music }) => {
 
   return (
     <section className="c-home__section o-grid__item--full">
-      <h2 className="c-heading c-heading--huge c-heading--block c-home__heading">Recently Listened</h2>
+      <h2 className="c-heading c-heading--huge c-heading--block c-home__heading c-home__heading--first">Recently Listened</h2>
       <ul className="c-music__list">
         {
-          music.slice(0, 10).map(video => (
+          music.map(video => (
             <li className="c-music__item" key={video.id}>
               <Link className="c-music__link" to={`/watch?v=${video.id}`}>
                 <img className="c-music__thumbnail" src={video.snippet.thumbnails.default.url} alt={video.snippet.title} />

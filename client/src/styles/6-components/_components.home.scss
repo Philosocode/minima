@@ -2,7 +2,10 @@
   $transition: 0.3s ease-in-out;
 
   &__heading {
+    margin-top: $spacing-large;
     margin-bottom: $spacing-medium;
+
+    &--first { margin-top: 0; }
   }
 
   &__section {

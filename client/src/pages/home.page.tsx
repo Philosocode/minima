@@ -51,10 +51,10 @@ export const HomePage: FC = () => {
 
   return (
     <div className="o-page o-grid__container">
-      <HomeGrid videos={videos} />
       <MusicList music={music} />
+      <HomeGrid videos={videos} headingText="Watch Later" />
+      <HomeGrid playlists={playlists} headingText="Playlists" />
       <HomeChannels channels={channels} />
-      <HomeGrid playlists={playlists} />
     </div>
   );
  };
