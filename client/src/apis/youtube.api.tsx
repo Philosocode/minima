@@ -46,6 +46,20 @@ export function getCommentThreadReplies(threadId: string, nextPageToken?: string
   return makeApiRequest<ICommentsResponse>(url, params);
 }
 
+export async function getResourcesByIds<ResourceType>(
+  ids: string[],
+  getResourceCb: (id: string) => Promise<ResourceType>
+): Promise<ResourceType[]> {
+  const resources: ResourceType[] = [];
+
+  await Promise.all(ids.map(async (id) => {
+    const resource = await getResourceCb(id);
+    resources.push(resource);
+  }));
+
+  return resources;
+}
+
 export async function getChannelDetails(channelId: string, username?: string): Promise<IChannel> {
   if (!channelId && !username) throw new Error("Must provide channel ID or username");
 
@@ -236,17 +250,6 @@ export async function getVideoDetails(videoId: string): Promise<IVideo> {
   }
 
   return videoFromDb;
-}
-
-export async function getVideosDetails(videoIds: string[]) {
-  const videos: IVideo[] = [];
-
-  await Promise.all(videoIds.map(async (videoId) => {
-    const video = await getVideoDetails(videoId);
-    videos.push(video);
-  }))
-
-  return videos;
 }
 
 async function fetchVideoDetails(videoId: string): Promise<IVideo> {

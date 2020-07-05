@@ -10,7 +10,7 @@ export const MusicList: FC<IProps> = ({ music }) => {
   if (music.length === 0) return null;
 
   return (
-    <section className="c-music__section o-grid__item--full">
+    <section className="c-home__section o-grid__item--full">
       <h2 className="c-heading c-heading--huge c-heading--block c-home__heading">Recently Listened</h2>
       <ul className="c-music__list">
         {
