@@ -35,8 +35,8 @@ export const ChannelBox: FC<IProps> = ({ channelData, location }) => {
 
   const headingClasses = classNames({
     "c-heading": true,
-    "c-heading--large": location === "channel-page",
-    "c-heading--small c-heading--link": location === "video-page"
+    "c-heading--subsubtitle": location === "channel-page",
+    "c-heading c-heading--link": location === "video-page"
   });
 
   const imageClasses = classNames({
@@ -45,8 +45,8 @@ export const ChannelBox: FC<IProps> = ({ channelData, location }) => {
   });
 
   const subscriberClasses = classNames({
-    "c-channel__subscriber-count": true,
-    "c-channel__subscriber-count--large": location === "channel-page"
+    "c-channel__subscribers c-channel__subscribers--grey": true,
+    "c-channel__subscribers--large": location === "channel-page"
   });
 
   return (

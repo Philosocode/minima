@@ -1,25 +1,30 @@
 .c-heading {
-  color: $color-off-white;
-  display: inline-block;
   font-family: $font-primary;
   font-weight: bold;
   margin-bottom: 0;
-  text-decoration: none;
 
-  &--huge { font-size: 3rem; }
-  &--large { font-size: 2.4rem; }
-  &--medium { font-size: 2rem; }
-  &--small { font-size: 1.6rem; }
-  &--tiny { font-size: 1.4rem; }
-
-  &--block { display: block; }
-  &--left-align { text-align: left; }
-  &--center { text-align: center; }
   &--link {
+    color: inherit;
     cursor: pointer;
-
-    &:hover {
-      color: $color-green;
-    }
+    text-decoration: none;
+    
+    &:hover { color: $color-green; }
   }
+
+  &--title,
+  &--subtitle {
+    margin-top: $spacing-medium;
+    margin-bottom: $spacing-medium;
+  }
+
+  &--title { font-size: $font-size-largest; }
+  &--subtitle { font-size: $font-size-larger; }
+  &--subsubtitle { font-size: $font-size-large; }
+
+  &--light { color: $color-grey-lightest; }
+  &--dim { color: $color-grey-light; }
+  &--dark { color: $color-grey-darkest; }
+
+  &--left-align { text-align: left; }
+  &--centered { text-align: center; }
 }

@@ -1,6 +1,7 @@
 .c-footer {
   color: $color-green-dark;
-  font-size: 1.4rem;
+  font-size: $font-size-small;
+  font-weight: 500;
   position: absolute;
     bottom: $spacing-tiny;
   text-align: center;

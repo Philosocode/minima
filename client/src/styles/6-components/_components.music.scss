@@ -12,13 +12,14 @@
   &__item {
     padding-right: $spacing-medium;
 
-    &:not(:last-of-type) { border-bottom: 2px solid $color-grey-darker; }
+    &:not(:last-of-type) { border-bottom: 1px solid $color-grey-darker; }
 
     &:hover { background-color: $color-grey-darker; }
     &:hover .c-music__text { color: $color-green; }
   }
 
   &__thumbnail {
+    display: block;
     height: 8rem;
   }
 
@@ -30,18 +31,24 @@
 
   &__text {
     color: $color-grey-lighter;
+    display: flex;
+      flex-direction: column;
     margin-left: $spacing-medium;
     text-align: left;
+    width: 82%;
   }
   
   &__title {
     font-size: 1.8rem;
     font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   &__channel {
     margin-top: $spacing-tiny;
     font-weight: 500;
-    font-size: 1.4rem;
+    font-size: $font-size-small;
   }
 }

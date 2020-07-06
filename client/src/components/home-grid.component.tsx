@@ -12,8 +12,8 @@ export const HomeGrid: FC<IProps> = ({ headingText, playlists, videos }) => {
   if (videos?.length === 0 || playlists?.length === 0) return null;
 
   return (
-    <section className="o-grid__item--wide">
-      <h2 className="c-heading c-heading--huge c-heading--block c-home__heading">{headingText}</h2>
+    <section className="o-grid__item--wide o-section">
+      <h2 className="c-heading c-heading--subtitle">{headingText}</h2>
       <div className="c-video-thumbnail__grid">
         {
           videos?.map((video) => <VideoThumbnail 

@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { IPlaylistItem } from "shared/interfaces/youtube.interfaces";
 import { Loader } from "components/loader.component";
 import { VideoThumbnail } from "components/video-thumbnail.component";
-import { NotFoundHeading } from "./not-found-heading.component";
+import { NotFoundHeading } from "components/not-found-heading.component";
 import { MISSING_THUMBNAIL_URL } from "apis/youtube.api";
 
 interface IProps {

@@ -7,7 +7,7 @@ import { selectAllLikes } from "redux/like";
 import { Loader } from "components/loader.component";
 import { HomeGrid } from "components/home-grid.component";
 import { MusicList } from "components/music-list.component";
-import { HomeChannels } from "components/home-channels.component";
+import { ChannelGrid } from "components/channel-grid.component";
 
 export const HomePage: FC = () => {
   const allLikes = useSelector(selectAllLikes);
@@ -54,7 +54,7 @@ export const HomePage: FC = () => {
       <MusicList music={music} />
       <HomeGrid videos={videos} headingText="Watch Later" />
       <HomeGrid playlists={playlists} headingText="Playlists" />
-      <HomeChannels channels={channels} />
+      <ChannelGrid channels={channels} />
     </div>
   );
  };

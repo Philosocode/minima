@@ -10,8 +10,8 @@ export const MusicList: FC<IProps> = ({ music }) => {
   if (music.length === 0) return null;
 
   return (
-    <section className="c-home__section o-grid__item--full">
-      <h2 className="c-heading c-heading--huge c-heading--block c-home__heading c-home__heading--first">Recently Listened</h2>
+    <section className="o-grid__item--full">
+      <h2 className="c-heading c-heading--subtitle">Recently Listened</h2>
       <ul className="c-music__list">
         {
           music.map(video => (
@@ -19,8 +19,8 @@ export const MusicList: FC<IProps> = ({ music }) => {
               <Link className="c-music__link" to={`/watch?v=${video.id}`}>
                 <img className="c-music__thumbnail" src={video.snippet.thumbnails.default.url} alt={video.snippet.title} />
                 <div className="c-music__text">
-                  <div className="c-music__title">{video.snippet.title}</div>
-                  <div className="c-music__channel">{video.snippet.channelTitle}</div>
+                  <h4 className="c-music__title">{video.snippet.title}</h4>
+                  <h5 className="c-music__channel">{video.snippet.channelTitle}</h5>
                 </div>
               </Link>
             </li>

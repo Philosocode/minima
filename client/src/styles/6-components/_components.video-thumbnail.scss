@@ -16,7 +16,7 @@
   &__count {
     background-color: $color-grey-darkest;
     border-radius: 5px;
-    color: $color-off-white;
+    color: $color-grey-lightest;
     font-size: 1.4rem;
     font-weight: bold;
     display: block;
@@ -24,6 +24,7 @@
     position: absolute;
       bottom: 1.2rem;
       right: 1rem;
+    transition: background-color 0.1s ease;
   }
 
   &__image {
@@ -31,11 +32,11 @@
     border-radius: 8px;
     height: 17rem;
     width: 100%;
-    transition: border 0.1s ease;
+    transition: border 0.1s;
   }
 
   &__image-container {
-    margin-bottom: $spacing-small;
+    margin-bottom: $spacing-tiny;
     position: relative;
   }
 
@@ -45,43 +46,40 @@
     border-bottom-right-radius: 5px;
     border-top-left-radius: 5px;
     color: $color-off-white;
+    display: block;
     font-size: 1.3rem;
     font-weight: bold;
-    display: block;
-    transition: background-color 0.1s ease, border 0.1s ease;
     padding: 5px 0.8rem;
     position: absolute;
-      top: 0px;
       left: 0rem;
+      top: 0px;
+    transition: background-color 0.1s, border 0.1s;
   }
 
   &__link {
     text-decoration: none;
+  }
 
-    &:hover {
-      .c-video-thumbnail__text {
-        color: $color-green;
-      }
-
-      .c-video-thumbnail__image {
-        border: 1px solid $color-green;
-      }
-
-      .c-video-thumbnail__index {
-        background-color: $color-green-darker;
-        border: 1px solid $color-green;
-      }
-    }
+  &__link:hover {
+    .c-video-thumbnail__title { color: $color-green; }
+    .c-video-thumbnail__published { color: $color-green-dark; }
+    .c-video-thumbnail__image { border: 1px solid $color-green; }
+    .c-video-thumbnail__count { background-color: $color-green-darker; }
   }
 
   &__text {
-    color: $color-off-white;
     text-align: left;
-    transition: color 0.1s ease;
+
+    & > * { transition: color 0.1s; }
   }
 
   &__title {
-    font-size: 1.6rem;
-    margin-bottom: 5px;
+    color: $color-grey-lightest;
+    margin-bottom: 3px;
+  }
+
+  &__published {
+    color: $color-grey-light;
+    font-weight: 500;
   }
 }

@@ -16,7 +16,6 @@
 @import "3-generics/generics.box-sizing";
 @import "3-generics/generics.reset";
 @import "3-generics/generics.selection";
-@import "3-generics/generics.shared";
 
 // 4. Elements
 @import "4-elements/elements.a";
@@ -30,6 +29,7 @@
 @import "5-objects/objects.list";
 @import "5-objects/objects.media";
 @import "5-objects/objects.page";
+@import "5-objects/objects.section";
 @import "5-objects/objects.site";
 @import "5-objects/objects.text-container";
 @import "5-objects/objects.thumbnail";
@@ -43,20 +43,19 @@
 @import "6-components/components.footer";
 @import "6-components/components.header";
 @import "6-components/components.heading";
-@import "6-components/components.home";
 @import "6-components/components.icon";
 @import "6-components/components.loader";
 @import "6-components/components.music";
 @import "6-components/components.search-bar";
 @import "6-components/components.like-icon";
 @import "6-components/components.link-text";
+@import "6-components/components.overlay-image";
 @import "6-components/components.playlist-details";
 @import "6-components/components.playlist-scroll-list";
 @import "6-components/components.playlist-scroll-video";
 @import "6-components/components.progress-bar";
 @import "6-components/components.stats-card";
 @import "6-components/components.thread";
-@import "6-components/components.video";
 @import "6-components/components.video-list";
 @import "6-components/components.video-player";
 @import "6-components/components.video-settings";

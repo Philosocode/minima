@@ -7,6 +7,7 @@ interface IProps {
   resourceUrl: string;
   thumbnailUrl: string;
   title: string;
+  centered?: boolean;
   count?: string;
   date?: string;
   index?: string;
