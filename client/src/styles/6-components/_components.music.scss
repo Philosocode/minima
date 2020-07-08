@@ -6,6 +6,7 @@
     margin: 0 auto;
     max-height: 100vh;
     overflow-y: auto;
+    position: relative;
     width: 80rem;
   }
 
@@ -52,5 +53,17 @@
     margin-top: $spacing-tiny;
     font-weight: 500;
     font-size: $font-size-small;
+  }
+
+  &__view-all {
+    color: inherit;
+    display: inline-block;
+    font-size: $font-size-medium;
+    font-weight: 600;
+    position: absolute;
+    transform: translate(20rem, 1rem);
+    text-decoration: none;
+
+    &:hover { color: $color-green; }
   }
 }
