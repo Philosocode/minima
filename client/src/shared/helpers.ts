@@ -78,6 +78,15 @@ export function getQueryStringFromObject(params: { [key: string] : string } ) {
   return "?" + Object.keys(params).map(key => key + '=' + params[key]).join('&');
 }
 
+// FROM: https://stackoverflow.com/a/679937
+export function objectIsEmpty(obj: object) {
+  for(let prop in obj) {
+    if (obj.hasOwnProperty(prop)) return false;
+  }
+
+  return true;
+}
+
 // FROM: https://stackoverflow.com/a/7394814
 export function parseHtmlEntities(str: string) {
   return str.replace(/&#([0-9]{1,3});/gi, function(match, numStr) {

@@ -1,0 +1,53 @@
+.c-music-list {
+  background-color: $color-grey-darkest;
+  border-radius: 1rem;
+  margin: 0 auto;
+  overflow: hidden;
+  width: 80rem;
+
+  &__arrow {
+    color: inherit;
+    position: absolute;
+      right: 3rem;
+      top: 3rem;
+    transition: transform ease-in-out;
+    transition-delay: 0.1s;
+    
+    &.is-facing-up { transform: rotateZ(-180deg); }
+  }
+
+  &__channel-header {
+    background-color: $color-grey-darkest;
+    color: $color-grey-lightest;
+    cursor: pointer;
+    list-style-type: none;
+    position: relative;
+    transition: color $transition-append;
+    
+    &:hover, &.is-showing { color: $color-green; }
+    &:not(:last-child) { border-bottom: 1px solid $color-grey-dark; }
+  }
+
+  &__channel-title {
+    color: inherit;
+    font-size: $font-size-larger;
+    font-weight: 400;
+    padding-top: $spacing-medium;
+    padding-bottom: $spacing-medium;
+  }
+
+  &__inner-list {
+    height: 0;
+    opacity: 0;
+    transition: height 0.2s ease-in-out, opacity 0.2s ease-in-out;
+
+    &.is-showing {
+      height: 100%;
+      opacity: 1;
+    }
+  }
+
+  &__song-container {
+    list-style-type: none;
+  }
+}

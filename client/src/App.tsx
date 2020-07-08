@@ -1,24 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { Switch, Route } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 /* Pages */
 import { HomePage } from "pages/home.page";
 import { ChannelPage } from "pages/channel.page";
+import { MusicPage } from "pages/music.page";
+import { NotFoundPage } from "pages/not-found.page";
 import { PlaylistPage } from "pages/playlist.page";
 import { SearchPage } from "pages/search.page";
 import { VideoPage } from "pages/video.page";
-import { NotFoundPage } from "pages/not-found.page";
 
 /* Components */
 import { Header } from "components/header.component";
 import { Footer } from "components/footer.component";
 
 /* Contexts */
+import { getAllLikes } from "apis/firebase.api";
 import { VideosProvider } from "contexts/videos.context";
 import { SearchProvider } from "contexts/search.context";
-import { getAllLikes } from "apis/firebase.api";
 import { Loader } from "components/loader.component";
-import { useDispatch } from "react-redux";
 import { loadAllLikes } from "redux/like";
 
 export function App() {
@@ -28,7 +29,7 @@ export function App() {
   useEffect(() => {
     async function loadInitialState() {
       const allLikes = await getAllLikes();
-      await dispatch(loadAllLikes(allLikes));
+      dispatch(loadAllLikes(allLikes));
 
       setDataFetched(true);
     }
@@ -45,6 +46,7 @@ export function App() {
           <Header />
             <Switch>
               <Route exact path="/" component={HomePage} />
+              <Route exact path="/music" component={MusicPage} />
               <Route exact path="/search" component={SearchPage} />
               <Route exact path="/channel/:channelId" component={(props: any) => <ChannelPage key={window.location.pathname} {...props} />} />
               <Route exact path="/user/:userName" component={(props: any) => <ChannelPage key={window.location.pathname} {...props} />} />

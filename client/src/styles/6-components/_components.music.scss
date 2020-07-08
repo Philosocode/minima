@@ -10,7 +10,9 @@
   }
 
   &__item {
+    background-color: darken($color-grey-darkest, 4%);
     padding-right: $spacing-medium;
+    list-style-type: none;
 
     &:not(:last-of-type) { border-bottom: 1px solid $color-grey-darker; }
 
