@@ -99,6 +99,7 @@ const _SearchBar: FC<RouteComponentProps> = ({ history }) => {
         autoComplete="0"
         type="text"
         className="c-search-bar__input"
+        placeholder="Enter a YouTube video, channel, or playlist URL"
         value={searchInputText}
         onChange={handleChange}
         onKeyPress={handleSubmit}
