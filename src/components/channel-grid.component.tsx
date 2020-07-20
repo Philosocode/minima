@@ -7,7 +7,7 @@ interface IProps {
   channels: IChannel[];
 }
 export const ChannelGrid: FC<IProps> = ({ channels }) => { 
-  if (channels?.length) return null;
+  if (!channels?.length) return null;
 
   return (
     <section className="o-grid__item--full o-section">
