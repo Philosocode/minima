@@ -13,12 +13,18 @@ interface IProps {
 }
 
 interface IMusicDict {
-  [key: string]: IVideo[]
+  [key: string]: IVideo[];
 }
+
+interface IExpandedChannels {
+  [key: string]: boolean;
+}
+
 export const MusicPage: FC<IProps> = () => {
   const allLikes = useSelector(selectAllLikes);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [musicDict, setMusicDict] = useState<IMusicDict>({});
+  const [expandedChannels, setExpandedChannels] = useState<IExpandedChannels>({});
 
   useEffect(() => {
     async function loadData() {
@@ -55,8 +61,24 @@ export const MusicPage: FC<IProps> = () => {
 
     return Object.keys(musicDict).sort().map(channelTitle => {
       const songsForChannel = musicDict[channelTitle];
-      return <MusicChannelHeader channelTitle={channelTitle} songsForChannel={songsForChannel} />
+      const channelIsExpanded = expandedChannels[channelTitle] === true;
+
+      return (
+        <MusicChannelHeader
+          channelTitle={channelTitle}
+          songsForChannel={songsForChannel} 
+          showingSongs={channelIsExpanded}
+          toggleShowingSongs={toggleShowingSongs.bind(null, channelTitle)}
+        />
+      );
     });
+  }
+
+  function toggleShowingSongs(channelTitle: string) {
+    const updatedValue = !expandedChannels[channelTitle];
+    const updatedDict = Object.assign({}, expandedChannels, { [channelTitle]: updatedValue });
+
+    setExpandedChannels(updatedDict);
   }
 
   if (!dataLoaded) return <Loader position="center-page" />

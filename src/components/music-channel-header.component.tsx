@@ -3,35 +3,35 @@ import { IVideo } from "shared/interfaces/youtube.interfaces";
 import { Link } from "react-router-dom";
 import classNames from "classnames";
 
-import { useToggle } from "hooks/use-toggle.hook";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 
 interface IProps {
   channelTitle: string;
   songsForChannel: IVideo[];
+  showingSongs: boolean;
+  toggleShowingSongs: () => void;
 }
-export const MusicChannelHeader: FC<IProps> = ({ channelTitle, songsForChannel }) => {
-  const [showingInnerList, toggleShowingInnerList] = useToggle(false);
-  
+
+export const MusicChannelHeader: FC<IProps> = ({ channelTitle, showingSongs, songsForChannel, toggleShowingSongs }) => {  
   const arrowClasses = classNames({
     "c-music-list__arrow": true,
-    "is-facing-up": showingInnerList
+    "is-facing-up": showingSongs
   });
 
   const headerClasses = classNames({
     "c-music-list__channel-header": true,
-    "is-showing": showingInnerList
+    "is-showing": showingSongs
   });
 
   const innerListClasses = classNames({
     "c-music-list__inner-list": true,
-    "is-showing": showingInnerList
+    "is-showing": showingSongs
   });
 
   return (
     <li className={headerClasses} key={channelTitle}>
-      <h2 onClick={toggleShowingInnerList} className="c-heading c-music-list__channel-title">
+      <h2 onClick={toggleShowingSongs} className="c-heading c-music-list__channel-title">
         {channelTitle}
         <FontAwesomeIcon className={arrowClasses} icon={faChevronDown} />
       </h2>
