@@ -101,13 +101,41 @@ export const MusicPage: FC<IProps> = () => {
           channelTitle={channelTitle}
           songsForChannel={songsForChannel} 
           showingSongs={channelIsExpanded}
-          toggleShowingSongs={toggleShowingSongs.bind(null, channelTitle)}
+          toggleChannelExpanded={toggleChannelExpanded.bind(null, channelTitle)}
         />
       );
     });
   }
 
-  function toggleShowingSongs(channelTitle: string) {
+  function toggleAllExpandedChannels() {
+    // If all channels are expanded, minimize them all
+    // If there's a minimized channel, then expand them all
+    const shouldExpand = !allChannelsExpanded();
+    toggleAllChannels(shouldExpand);
+  }
+
+  function allChannelsExpanded() {
+    const channelTitles = Object.keys(matchedSongs);
+
+    for (let idx = 0; idx < channelTitles.length; idx++) {
+      const channelTitle = channelTitles[idx];
+      if (!expandedChannels[channelTitle]) return false;
+    }
+
+    return true;
+  }
+
+  function toggleAllChannels(shouldExpand: boolean) {
+    const updatedExpandedChannels = {...expandedChannels};
+
+    Object.keys(musicDict).forEach(channelTitle => {
+      updatedExpandedChannels[channelTitle] = shouldExpand;
+    });
+
+    setExpandedChannels(updatedExpandedChannels);
+  }
+
+  function toggleChannelExpanded(channelTitle: string) {
     const updatedValue = !expandedChannels[channelTitle];
     const updatedDict = Object.assign({}, expandedChannels, { [channelTitle]: updatedValue });
 
@@ -126,7 +154,10 @@ export const MusicPage: FC<IProps> = () => {
             className="c-music-list__search" 
             onChange={handleFilterTextChange}
           />
-          <button className="c-music-list__show-all">Show All</button>
+          <button
+            onClick={toggleAllExpandedChannels}
+            className="c-music-list__expand-toggle"
+          >{allChannelsExpanded() ? "Minimize All ↑" : "Expand All ↓"}</button>
         </div>
 
         <ul className="c-music-list">

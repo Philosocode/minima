@@ -10,10 +10,10 @@ interface IProps {
   channelTitle: string;
   songsForChannel: IVideo[];
   showingSongs: boolean;
-  toggleShowingSongs: () => void;
+  toggleChannelExpanded: () => void;
 }
 
-export const MusicChannelHeader: FC<IProps> = ({ channelTitle, showingSongs, songsForChannel, toggleShowingSongs }) => {  
+export const MusicChannelHeader: FC<IProps> = ({ channelTitle, showingSongs, songsForChannel, toggleChannelExpanded }) => {  
   const arrowClasses = classNames({
     "c-music-list__arrow": true,
     "is-facing-up": showingSongs
@@ -31,7 +31,7 @@ export const MusicChannelHeader: FC<IProps> = ({ channelTitle, showingSongs, son
 
   return (
     <li className={headerClasses} key={channelTitle}>
-      <h2 onClick={toggleShowingSongs} className="c-heading c-music-list__channel-title">
+      <h2 onClick={toggleChannelExpanded} className="c-heading c-music-list__channel-title">
         {channelTitle}
         <FontAwesomeIcon className={arrowClasses} icon={faChevronDown} />
       </h2>
