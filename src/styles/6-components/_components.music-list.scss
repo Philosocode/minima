@@ -36,6 +36,15 @@
     padding-bottom: $spacing-medium;
   }
 
+  &__controls {
+    display: flex;
+      justify-content: space-between;
+    height: 4rem;
+    margin: 0 auto;
+    margin-bottom: $spacing-medium;
+    width: 79rem;
+  }
+
   &__inner-list {
     height: 0;
     opacity: 0;
@@ -45,6 +54,23 @@
       height: 100%;
       opacity: 1;
     }
+  }
+
+  &__search {
+    font-size: $font-size-medium;
+    height: 100%;
+    margin-bottom: $spacing-large;
+    outline: none;
+    padding-left: $spacing-medium;
+    padding-right: $spacing-medium;
+    width: 100%; max-width: 60rem;
+  }
+
+  &__show-all {
+    cursor: pointer;
+    height: 100%;
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 
   &__song-container {

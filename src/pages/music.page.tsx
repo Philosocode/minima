@@ -24,6 +24,7 @@ export const MusicPage: FC<IProps> = () => {
   const allLikes = useSelector(selectAllLikes);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [musicDict, setMusicDict] = useState<IMusicDict>({});
+  const [matchedSongs, setMatchedSongs] = useState<IMusicDict>({});
   const [expandedChannels, setExpandedChannels] = useState<IExpandedChannels>({});
 
   useEffect(() => {
@@ -49,18 +50,50 @@ export const MusicPage: FC<IProps> = () => {
       });
 
       setMusicDict(dict);
+      setMatchedSongs(dict);
     }
 
     loadData();
   }, [allLikes]);
 
+  function handleFilterTextChange(ev: React.FormEvent<HTMLInputElement>) {
+    const filterTerm = ev.currentTarget.value.toLowerCase();
+    if (!filterTerm) setMatchedSongs(musicDict); // Show all songs if no filter
+
+    updateMatchedSongsWithFilter(filterTerm);
+  }
+
+  function updateMatchedSongsWithFilter(filterTerm: string) {
+    const matchedSongsDict: IMusicDict = {};
+
+    // Loop through songs for each channel
+    Object.keys(musicDict).forEach(channelTitle => {
+      const matchedSongs = filterSongsByTerm(musicDict[channelTitle], filterTerm);
+
+      if (matchedSongs.length > 0) matchedSongsDict[channelTitle] = matchedSongs;
+    });
+
+    setMatchedSongs(matchedSongsDict);
+  }
+  
+  function filterSongsByTerm(songs: IVideo[], filterTerm: string) {
+    return songs.filter(song => {
+      const { channelTitle, title, description } = song.snippet;
+
+      // Only include song if title or description includes `filterTerm`
+      return channelTitle.toLowerCase().includes(filterTerm) ||
+             title.toLowerCase().includes(filterTerm) || 
+             description.toLowerCase().includes(filterTerm);
+    });
+  }
+
   function renderMusic() {
-    if (objectIsEmpty(musicDict)) return (
-      <h2 className="c-heading c-heading--subsubtitle c-heading--500">You haven't liked any music...</h2>
+    if (objectIsEmpty(matchedSongs)) return (
+      <h2 className="c-heading c-heading--subsubtitle c-heading--500">No songs found...</h2>
     );
 
-    return Object.keys(musicDict).sort().map(channelTitle => {
-      const songsForChannel = musicDict[channelTitle];
+    return Object.keys(matchedSongs).sort().map(channelTitle => {
+      const songsForChannel = matchedSongs[channelTitle];
       const channelIsExpanded = expandedChannels[channelTitle] === true;
 
       return (
@@ -87,6 +120,15 @@ export const MusicPage: FC<IProps> = () => {
     <div className="o-page o-grid__container">
       <div className="o-grid__item--wide">
         <h1 className="c-heading c-heading--title">Music</h1>
+        <div className="c-music-list__controls">
+          <input
+            type="search"
+            className="c-music-list__search" 
+            onChange={handleFilterTextChange}
+          />
+          <button className="c-music-list__show-all">Show All</button>
+        </div>
+
         <ul className="c-music-list">
           { renderMusic() }
         </ul>
