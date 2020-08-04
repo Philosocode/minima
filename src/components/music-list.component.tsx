@@ -17,7 +17,7 @@ export const MusicList: FC<IProps> = ({ music }) => {
       </h2>
       <ul className="c-music__list">
         {
-          music.map(video => (
+          music.slice(0, 10).map(video => (
             <li className="c-music__item" key={video.id}>
               <Link className="c-music__link" to={`/watch?v=${video.id}`}>
                 <img className="c-music__thumbnail" src={video.snippet.thumbnails.default.url} alt={video.snippet.title} />
