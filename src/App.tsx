@@ -21,6 +21,7 @@ import { VideosProvider } from "contexts/videos.context";
 import { SearchProvider } from "contexts/search.context";
 import { Loader } from "components/loader.component";
 import { loadAllLikes } from "redux/like";
+import { LoginPage } from "pages/login.page";
 
 export function App() {
   const [dataFetched, setDataFetched] = useState(false);
@@ -46,6 +47,7 @@ export function App() {
           <Header />
             <Switch>
               <Route exact path="/" component={HomePage} />
+              <Route exact path="/login" component={LoginPage} />
               <Route exact path="/music" component={MusicPage} />
               <Route exact path="/search" component={SearchPage} />
               <Route exact path="/channel/:channelId" component={(props: any) => <ChannelPage key={window.location.pathname} {...props} />} />

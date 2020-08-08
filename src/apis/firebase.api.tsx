@@ -1,9 +1,11 @@
 import * as firebase from "firebase/app";
 import "firebase/firestore";
+import "firebase/auth";
 
 import { DbCollectionType } from "shared/interfaces/firebase.interfaces";
 import { ILikeState } from "redux/like";
 import { IVideoBase, IChannelBase, IChannel, IPlaylistBase } from "shared/interfaces/youtube.interfaces";
+import { store } from "redux/store";
 
 const config = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -16,9 +18,47 @@ const config = {
 };
   
 firebase.initializeApp(config);
-const db = firebase.firestore();
 
-/* REGULAR DOCS */
+// react-redux-firebase config
+const rrfConfig = {
+  userProfile: "users",
+  useFirestoreForProfile: true
+};
+
+export const rrfProps = {
+  firebase,
+  config: rrfConfig,
+  dispatch: store.dispatch
+};
+
+export default firebase;
+const db = firebase.firestore();
+const auth = firebase.auth();
+
+/* ======== */
+// AUTH
+/* ======== */
+export async function login(email: string, password: string) {
+  try {
+    await auth.signInWithEmailAndPassword(email, password);
+  }
+  catch (err) {
+    throw new Error("Invalid username or password.");
+  }
+}
+
+export async function logout() {
+  try {
+    await auth.signOut();
+  }
+  catch (err) {
+    console.log("Error signing out: ", err);
+  }
+}
+
+/* ============ */
+// REGULAR DOCS
+/* ============ */
 export async function getDocFromDb(collection: DbCollectionType, documentId: string) {
   return db.collection(collection).doc(documentId).get()
     .then(doc => {

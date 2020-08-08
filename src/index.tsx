@@ -9,13 +9,17 @@ import * as serviceWorker from './serviceWorker';
 
 import "./font-awesome";
 import "./styles/styles.scss";
+import { rrfProps } from "apis/firebase.api";
+import { ReactReduxFirebaseProvider } from "react-redux-firebase";
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <ReactReduxFirebaseProvider {...rrfProps}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </ReactReduxFirebaseProvider>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')
