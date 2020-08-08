@@ -1,11 +1,13 @@
 import React, { FC, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import _ from "lodash";
 
 import { IVideo } from "shared/interfaces/youtube.interfaces";
-import { selectAllLikes } from "redux/like";
-import { fetchLikedSongs, getResourcesByIds, getVideoDetails } from "apis/youtube.api";
-import { Loader } from "components/loader.component";
 import { objectIsEmpty } from "shared/helpers";
+import { getResourcesByIds, getVideoDetails } from "apis/youtube.api";
+import { selectAllLikes } from "redux/like";
+import { Loader } from "components/loader.component";
 import { MusicChannelHeader } from "components/music-channel-header.component";
 
 interface IProps {
@@ -139,12 +141,14 @@ export const MusicPage: FC<IProps> = () => {
   }
 
   if (!dataLoaded) return <Loader position="center-page" />
+  const randomChannel = _.sample(Object.keys(musicDict)) as string;
+  const randomSongId = _.sample(musicDict[randomChannel])?.id;
 
   return (
     <div className="o-page o-grid__container">
       <div className="o-grid__item--wide">
         <h1 className="c-heading c-heading--title">Music</h1>
-        <button onClick={fetchLikedSongs}>Play All</button>
+        <Link to={`/watch?v=${randomSongId}&list=music`}>Play All</Link>
         <div className="c-music-list__controls">
           <input
             type="search"

@@ -24,7 +24,7 @@ export const ScrollListVideos: FC<IProps> = ({
   }
 
   async function handleLoadMoreVideos() {
-    await loadMoreVideos();
+    loadMoreVideos && await loadMoreVideos();
   }
 
   function renderLoadMoreVideosButton() {

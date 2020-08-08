@@ -32,7 +32,7 @@ export async function getDocsFromDb(collection: DbCollectionType, documentIds: s
   const docRefs = documentIds.map(id => db.collection(collection).doc(id).get());
 
   return Promise.all(docRefs)
-    .then(docs => docs.map(doc => doc.data()))
+    .then(docs => docs.map(doc => ({...doc.data(), id: doc.id })))
     .catch(err => console.log(err));
 }
 

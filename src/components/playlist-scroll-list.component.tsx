@@ -80,7 +80,6 @@ export const PlaylistScrollList: FC<IProps> = ({ playlistId, watchingVideoId }) 
         thumbnailUrl: thumbnailUrl,
         channelTitle: video.snippet.channelTitle,
         videoId: video.snippet.resourceId.videoId,
-        watchingVideoId: watchingVideoId
       };
     });
   }

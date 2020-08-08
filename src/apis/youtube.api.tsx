@@ -133,7 +133,6 @@ export async function fetchLikedSongs() {
   const likedSongs = await getLikes("music") as { likes: string[] };
   const likedSongIds = likedSongs.likes;
   
-
   // Get all videos from DB
   const songs = await getDocsFromDb("videos", likedSongIds) as IVideo[];
 

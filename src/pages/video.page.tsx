@@ -19,6 +19,8 @@ import { VideoPlayer } from "components/video-player.component";
 import { ChannelBox } from "components/channel-box.component";
 import { NotFoundHeading } from "components/not-found-heading.component";
 import { VideoSettingsCard } from "components/video-settings-card.component";
+import { CustomScrollList } from "components/custom-scroll-list.component";
+import { CustomPlaylistTypes } from "shared/interfaces/custom.interfaces";
 
 interface IRouteParams {
   videoId: string;
@@ -93,6 +95,16 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
     ];
   }
 
+  function renderScrollList() {
+    if (!playlistId || !videoData) return;
+
+    if (playlistId === CustomPlaylistTypes.CHANNEL || playlistId === CustomPlaylistTypes.MUSIC) {
+      return <CustomScrollList key={playlistId} customPlaylistType={playlistId} watchingVideoId={videoData.id} />
+    }
+
+    return <PlaylistScrollList key={playlistId} playlistId={playlistId} watchingVideoId={videoData.id} />;
+  }
+
   // Render
   if (!channelData || !videoData) {
     return <Loader position="center-page" />;
@@ -131,7 +143,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
       </div>
 
       <div className="o-grid__item--right-sidebar">
-        { playlistId && <PlaylistScrollList key={playlistId} playlistId={playlistId} watchingVideoId={videoData.id} /> }
+        { renderScrollList() }
       </div>
     </div>
   );
