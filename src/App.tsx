@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Switch, Route, useHistory } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 /* Pages */
@@ -44,7 +44,7 @@ export function App() {
       
       setDataFetched(true);
     }
-  }, [authLoaded, userId]);
+  }, [authLoaded, dispatch, userId]);
 
   function renderRoutes() {
     return (
@@ -62,7 +62,7 @@ export function App() {
     )
   }
 
-  if (!authLoaded) return <Loader position="center-page" />;
+  if (!authLoaded || (authLoaded && !dataFetched)) return <Loader position="center-page" />;
 
   return (
     <VideosProvider>

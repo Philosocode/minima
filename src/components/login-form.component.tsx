@@ -7,6 +7,10 @@ import { loginUser, selectAuthError } from "redux/auth";
 import { useHistory } from "react-router-dom";
 
 export const LoginForm: FC = () => {
+  const error = useSelector(selectAuthError)
+  const dispatch = useDispatch();
+  const history = useHistory();
+
   const { values, handleChange } = useForm({
     email: "",
     password: "",
@@ -18,9 +22,6 @@ export const LoginForm: FC = () => {
   });
 
   const { email, password } = values;
-  const error = useSelector(selectAuthError)
-  const dispatch = useDispatch();
-  const history = useHistory();
 
   function handleBlur(ev: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) {
     const inputName = ev.target.name as "email" | "password";
@@ -40,6 +41,7 @@ export const LoginForm: FC = () => {
   
   return (
     <div className="o-grid__item--wide">
+      <h1 className="c-heading c-heading--title">Login</h1>
       <form
         acceptCharset="UTF-8" 
         action="https://usebasin.com/f/6a332af71053"
