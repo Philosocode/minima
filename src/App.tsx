@@ -8,7 +8,6 @@ import { ChannelPage } from "pages/channel.page";
 import { MusicPage } from "pages/music.page";
 import { NotFoundPage } from "pages/not-found.page";
 import { PlaylistPage } from "pages/playlist.page";
-import { SearchPage } from "pages/search.page";
 import { VideoPage } from "pages/video.page";
 
 /* Components */
@@ -17,8 +16,6 @@ import { Footer } from "components/footer.component";
 
 /* Contexts */
 import { getUserData } from "apis/firebase.api";
-import { VideosProvider } from "contexts/videos.context";
-import { SearchProvider } from "contexts/search.context";
 import { Loader } from "components/loader.component";
 import { selectAuthLoaded } from "redux/auth";
 import { loadAllLikes } from "redux/like";
@@ -52,7 +49,6 @@ export function App() {
         <Route exact path="/login" component={LoginPage} />
         <PrivateRoute exact path="/" component={HomePage} />  
         <PrivateRoute exact path="/music" component={MusicPage} />
-        <PrivateRoute exact path="/search" component={SearchPage} />
         <PrivateRoute exact path="/channel/:channelId" component={(props: any) => <ChannelPage key={window.location.pathname} {...props} />} />
         <PrivateRoute exact path="/user/:userName" component={(props: any) => <ChannelPage key={window.location.pathname} {...props} />} />
         <PrivateRoute exact path="/playlist" component={PlaylistPage} />
@@ -65,14 +61,10 @@ export function App() {
   if (!authLoaded || (userId && !dataFetched)) return <Loader position="center-page" />;
 
   return (
-    <VideosProvider>
-      <SearchProvider>
-        <div className="o-site__container">
-          <Header />
-            { renderRoutes() }
-          <Footer />
-        </div>
-      </SearchProvider>
-    </VideosProvider>
+    <div className="o-site__container">
+      <Header />
+        { renderRoutes() }
+      <Footer />
+    </div>
   );
 }
