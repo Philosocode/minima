@@ -1,4 +1,4 @@
-import React, { FC, Dispatch, SetStateAction } from "react";
+import React, { FC } from "react";
 
 import { IScrollListVideos } from "shared/interfaces/custom.interfaces";
 import { useToggle } from "hooks/use-toggle.hook";
@@ -7,13 +7,11 @@ import { ScrollListVideo } from "components/scroll-list-video.component";
 
 interface IProps {
   isLoading: boolean;
-  setWatchingVideoIdx: Dispatch<SetStateAction<number>>;
   videosDetails: IScrollListVideos;
   watchingVideoIdx: number;
 }
 export const ScrollListVideos: FC<IProps> = ({
   isLoading,
-  setWatchingVideoIdx,
   watchingVideoIdx,
   videosDetails
 }) => {
@@ -58,14 +56,13 @@ export const ScrollListVideos: FC<IProps> = ({
         ? watchingVideoIdx + idx
         : idx;
 
-      const watchingVideoId = videos[watchingVideoIdx].videoId;
+      const isCurrentVideo = (watchingVideoIdx === currentVideoIdx);
 
       return (
         <ScrollListVideo
           key={video.videoId}
           idxInList={currentVideoIdx}
-          setWatchingVideoIdx={setWatchingVideoIdx}
-          watchingVideoId={watchingVideoId}
+          isCurrentVideo={isCurrentVideo}
           videoDetails={video}
         />
       )

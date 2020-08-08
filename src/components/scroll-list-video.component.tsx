@@ -1,4 +1,4 @@
-import React, { FC, useEffect, SetStateAction, Dispatch } from "react";
+import React, { FC } from "react";
 import { Link } from "react-router-dom";
 import classNames from "classnames";
 
@@ -7,24 +7,17 @@ import { IScrollListVideo } from "shared/interfaces/custom.interfaces";
 
 interface IProps {
   idxInList: number;
-  setWatchingVideoIdx: Dispatch<SetStateAction<number>>;
+  isCurrentVideo: boolean;
   videoDetails: IScrollListVideo;
-  watchingVideoId: string;
 }
 
-export const ScrollListVideo: FC<IProps> = ({ idxInList, setWatchingVideoIdx, videoDetails, watchingVideoId }) => {
+export const ScrollListVideo: FC<IProps> = ({ idxInList, isCurrentVideo, videoDetails }) => {
   const { channelTitle, playlistId, thumbnailUrl, title, videoId } = videoDetails;
   const videoUrl = `/watch?v=${videoId}&list=${playlistId}&index=${idxInList}`;
 
-  useEffect(() => {
-    if (videoId === watchingVideoId) {
-      setWatchingVideoIdx(idxInList);
-    }
-  }, [idxInList, videoId, watchingVideoId, setWatchingVideoIdx])
-
   const containerClass = classNames({
     "c-playlist-scroll-video__container": true,
-    "is-current": videoId === watchingVideoId
+    "is-current": isCurrentVideo
   });
 
   return (

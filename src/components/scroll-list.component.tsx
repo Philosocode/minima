@@ -37,10 +37,9 @@ export const ScrollList: FC<IProps> = ({ isLoading, headerDetails, videosDetails
       />
 
       <ScrollListVideos
-        videosDetails={videosDetails}
         isLoading={isLoading}
+        videosDetails={videosDetails}
         watchingVideoIdx={watchingVideoIdx}
-        setWatchingVideoIdx={setWatchingVideoIdx}
       />
     </div>
   );
