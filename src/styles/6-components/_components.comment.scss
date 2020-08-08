@@ -11,7 +11,7 @@
   // Last reply might be above a "Load More Comments" button, so check last 2 children
   &:last-child,
   &:nth-last-child(2) {
-    margin-bottom: $spacing-tiny;
+    margin-bottom: $spacing-smallest;
   }
 }
 
@@ -23,7 +23,7 @@
 
   &__content {
     color: $color-off-white;
-    margin-top: $spacing-tiny;
+    margin-top: $spacing-smallest;
     margin-bottom: $spacing-small;
   }
 

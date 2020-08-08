@@ -1,7 +1,11 @@
 $spacing-unit: 2.5rem;
 
-$spacing-tiny: $spacing-unit / 4;
+$spacing-smallest: $spacing-unit / 4;
+$spacing-smaller: $spacing-unit / 3;
 $spacing-small: $spacing-unit / 2;
+
 $spacing-medium: $spacing-unit;
+
 $spacing-large: $spacing-unit * 2;
-$spacing-huge: $spacing-unit * 4;
+$spacing-larger: $spacing-unit * 3;
+$spacing-largest: $spacing-unit * 4;

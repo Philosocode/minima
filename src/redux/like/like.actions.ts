@@ -5,7 +5,7 @@ import {
   ILikeState,
 } from "./like.types";
 import { addLikeToDb, removeLikeFromDb } from "apis/firebase.api";
-import { DbCollectionType } from "shared/interfaces/firebase.interfaces";
+import { DbLikeType } from "shared/interfaces/firebase.interfaces";
 
 export const loadAllLikes = (allLikes: ILikeState) => ({
   type: LikeConstants.LOAD_ALL_LIKES,
@@ -13,11 +13,12 @@ export const loadAllLikes = (allLikes: ILikeState) => ({
 });
 
 export const likeResource = (
-  collectionName: DbCollectionType,
+  collectionName: DbLikeType,
   resourceId: string,
+  userId: string
 ) => async (dispatch: Dispatch) => {
   try {
-    await addLikeToDb(collectionName, resourceId);
+    await addLikeToDb(collectionName, resourceId, userId);
 
     dispatch({ type: LikeConstants.LIKE_RESOURCE, collectionName, payload: resourceId });
   }
@@ -27,11 +28,12 @@ export const likeResource = (
 }
 
 export const unlikeResource = (
-  collectionName: DbCollectionType,
+  collectionName: DbLikeType,
   resourceId: string,
+  userId: string,
 ) => async (dispatch: Dispatch) => {
   try {
-    await removeLikeFromDb(collectionName, resourceId);
+    await removeLikeFromDb(collectionName, resourceId, userId);
 
     dispatch({ type: LikeConstants.UNLIKE_RESOURCE, collectionName, payload: resourceId });
   }

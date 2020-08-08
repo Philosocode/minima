@@ -15,7 +15,7 @@
     display: flex;
       justify-content: flex-start;
     &:not(:last-child) {
-      margin-bottom: $spacing-tiny;
+      margin-bottom: $spacing-smallest;
     }
   }
 

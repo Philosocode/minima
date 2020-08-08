@@ -1,4 +1,4 @@
-import React, { FC, ChangeEvent } from "react";
+import React, { FC, ChangeEvent, FocusEvent, useState } from "react";
 
 import { useForm } from "hooks/use-form.hook";
 import { FormGroup } from "./form-group.component";
@@ -11,10 +11,26 @@ export const LoginForm: FC = () => {
     email: "",
     password: "",
   });
+
+  const [touched, setTouched] = useState({
+    email: false,
+    password: false
+  });
+
   const { email, password } = values;
   const error = useSelector(selectAuthError)
   const dispatch = useDispatch();
   const history = useHistory();
+
+  function handleBlur(ev: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    const inputName = ev.target.name as "email" | "password";
+    if (touched[inputName]) return;
+
+    setTouched({
+      ...touched,
+      [inputName]: true
+    });
+  }
 
   function handleSubmit(ev: ChangeEvent<HTMLFormElement>) {
     ev.preventDefault();
@@ -31,24 +47,27 @@ export const LoginForm: FC = () => {
         name="login"
         className="c-form__container" 
         method="POST"
-        autoComplete="off"
       >
         <FormGroup
           name="email"
           type="email"
+          onBlur={handleBlur}
           onChange={handleChange}
+          touched={touched["email"]}
           value={email}
         />
 
         <FormGroup
           name="password"
           type="password"
+          onBlur={handleBlur}
           onChange={handleChange}
+          touched={touched["password"]}
           value={password}
         />
         
         <div className="c-form__group">
-          { error && <p className="c-form__error">{error}</p> }
+          <p className={`c-form__error ${error && "is-visible"}`}>{error}</p>
           <button className="c-button c-button--black c-form__submit" type="submit">SUBMIT</button>
         </div>
       </form>

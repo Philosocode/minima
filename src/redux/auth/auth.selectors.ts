@@ -10,6 +10,11 @@ export const selectAuthError = createSelector(
   auth => auth.error
 );
 
+export const selectAuthLoaded = createSelector(
+  [selectFirebase],
+  firebase => firebase.auth.isLoaded
+);
+
 export const selectUserId = createSelector(
   [selectFirebase],
   firebase => firebase.auth.uid

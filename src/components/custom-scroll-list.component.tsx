@@ -6,6 +6,7 @@ import { MISSING_THUMBNAIL_URL, fetchLikedVideos } from "apis/youtube.api";
 import { Loader } from "components/loader.component";
 import { ScrollList } from "./scroll-list.component";
 import { IVideo } from "shared/interfaces/youtube.interfaces";
+import { useAuth } from "hooks/use-auth.hook";
 
 interface IProps {
   customPlaylistType: "music" | "videos";
@@ -15,13 +16,14 @@ interface IProps {
 export const CustomScrollList: FC<IProps> = ({ customPlaylistType, watchingVideoId }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [videos, setVideos] = useState<IScrollListVideo[]>([]);
+  const userId = useAuth();
 
   async function loadVideos() {
     setIsLoading(true);
 
     const likedVideos = (customPlaylistType === "videos")
-      ? await fetchLikedVideos("videos")
-      : await fetchLikedVideos("music");
+      ? await fetchLikedVideos("videos", userId)
+      : await fetchLikedVideos("music", userId);
 
     const [currentVideo] = _.remove(likedVideos, (video) => video.id === watchingVideoId);
 

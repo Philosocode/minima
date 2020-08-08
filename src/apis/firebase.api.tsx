@@ -2,8 +2,7 @@ import * as firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
 
-import { DbCollectionType } from "shared/interfaces/firebase.interfaces";
-import { ILikeState } from "redux/like";
+import { DbCollectionType, DbLikeType, IUser } from "shared/interfaces/firebase.interfaces";
 import { IVideoBase, IChannelBase, IChannel, IPlaylistBase } from "shared/interfaces/youtube.interfaces";
 import { store } from "redux/store";
 
@@ -95,7 +94,7 @@ export async function getChannelFromDbWithUsername(username: string): Promise<IC
 export async function addDocToDb(
   collection: DbCollectionType,
   documentId: string,
-  document: IChannelBase | IPlaylistBase | IVideoBase
+  document: IChannelBase | IPlaylistBase | IVideoBase | IUser
 ) {
   const docToAdd = Object.assign({}, document, { lastUpdatedMs: Date.now() });
 
@@ -106,36 +105,59 @@ export async function addDocToDb(
 /* ======== */
 // LIKES
 /* ======== */
-export function getLikes(likeType: DbCollectionType) {
-  return db.collection("likes").doc(likeType).get()
-    .then(doc => {
-      if (doc.exists) return doc.data();
-    })
-    .catch(err => { throw new Error(err); });
+export async function getLikes(likeType: DbLikeType, userId: string) {
+  try {
+    const userData = await getUserData(userId);
+    return userData.likes[likeType];
+  }
+  catch (err) {
+    throw new Error(err);
+  }
 }
 
-export async function getAllLikes() {
-  const snapshot = await db.collection("likes").get();
+export async function getUserData(userId: string) {
+  try {
+    const userDoc = await db.collection("users").doc(userId).get();
 
-  const allLikes: any = {};
-  
-  snapshot.docs.forEach(doc => {
-    allLikes[doc.id] = doc.data().likes
-  });
+    if (userDoc.exists) return userDoc.data() as IUser;
 
-  return allLikes as ILikeState;
+    return await initNewUser(userId);
+  }
+  catch (err) {
+    throw new Error(err);
+  }
 }
 
-export async function addLikeToDb(likeType: DbCollectionType, likeId: string) {
-  return db.collection("likes").doc(likeType).update({
-    likes: firebase.firestore.FieldValue.arrayUnion(likeId)
+async function initNewUser(userId: string) {
+  try {
+    const newUserData: IUser = {
+      likes: {
+        channels: [],
+        music: [],
+        playlists: [],
+        videos: []
+      }
+    };
+    await addDocToDb("users", userId, newUserData);
+    return newUserData;
+  }
+  catch (err) {
+    throw new Error("Failed to initiate user data");
+  }
+}
+
+export async function addLikeToDb(likeType: DbLikeType, likeId: string, userId: string) {
+  const nestedField = "likes." + likeType;
+  return db.collection("users").doc(userId).update({
+    [nestedField]: firebase.firestore.FieldValue.arrayUnion(likeId)
   })
   .catch(err => { throw new Error(err) });
 }
 
-export async function removeLikeFromDb(likeType: DbCollectionType, likeId: string) {
-  return db.collection("likes").doc(likeType).update({
-    likes: firebase.firestore.FieldValue.arrayRemove(likeId)
+export async function removeLikeFromDb(likeType: DbLikeType, likeId: string, userId: string) {
+  const nestedField = "likes." + likeType;
+  return db.collection("users").doc(userId).update({
+    [nestedField]: firebase.firestore.FieldValue.arrayRemove(likeId)
   })
   .catch(err => { throw new Error(err) });
 }

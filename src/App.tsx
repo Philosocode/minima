@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Switch, Route, useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 /* Pages */
 import { HomePage } from "pages/home.page";
@@ -16,10 +16,11 @@ import { Header } from "components/header.component";
 import { Footer } from "components/footer.component";
 
 /* Contexts */
-import { getAllLikes } from "apis/firebase.api";
+import { getUserData } from "apis/firebase.api";
 import { VideosProvider } from "contexts/videos.context";
 import { SearchProvider } from "contexts/search.context";
 import { Loader } from "components/loader.component";
+import { selectAuthLoaded } from "redux/auth";
 import { loadAllLikes } from "redux/like";
 import { LoginPage } from "pages/login.page";
 import { PrivateRoute } from "components/private-route.component";
@@ -27,20 +28,23 @@ import { useAuth } from "hooks/use-auth.hook";
 
 export function App() {
   const [dataFetched, setDataFetched] = useState(false);
-  const history = useHistory();
-  const user = useAuth();
+  const userId = useAuth();
   const dispatch = useDispatch();
+  const authLoaded = useSelector(selectAuthLoaded);
 
   useEffect(() => {
-    async function loadInitialState() {
-      const allLikes = await getAllLikes();
-      dispatch(loadAllLikes(allLikes));
+    if (!authLoaded) return;
+    if (userId) loadInitialState();
 
+    async function loadInitialState() {
+      const userData = await getUserData(userId);      
+      const allLikes = userData.likes;
+      
+      dispatch(loadAllLikes(allLikes));
+      
       setDataFetched(true);
     }
-
-    loadInitialState();
-  }, [dispatch, user, history]);
+  }, [authLoaded, userId]);
 
   function renderRoutes() {
     return (
@@ -58,7 +62,7 @@ export function App() {
     )
   }
 
-  if (!dataFetched) return <Loader position="center-page" />;
+  if (!authLoaded) return <Loader position="center-page" />;
 
   return (
     <VideosProvider>

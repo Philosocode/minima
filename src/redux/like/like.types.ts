@@ -1,4 +1,4 @@
-import { DbCollectionType } from "shared/interfaces/firebase.interfaces";
+import { DbLikeType } from "shared/interfaces/firebase.interfaces";
 
 export enum LikeConstants {
   LOAD_ALL_LIKES = "LOAD_ALL_LIKES",
@@ -14,13 +14,13 @@ export interface ILoadAllLikes {
 
 export interface ILikeResource {
   type: LikeConstants.LIKE_RESOURCE,
-  collectionName: DbCollectionType,
+  collectionName: DbLikeType,
   payload: string;
 }
 
 export interface IUnlikeResource {
   type: LikeConstants.UNLIKE_RESOURCE,
-  collectionName: DbCollectionType,
+  collectionName: DbLikeType,
   payload: string;
 }
 

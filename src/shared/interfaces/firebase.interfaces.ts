@@ -1,13 +1,17 @@
-import { IVideo } from "./youtube.interfaces";
+export type DbCollectionType = "channels" | "playlists" | "users" | "videos";
+export type DbLikeType = "channels" | "music" | "playlists" | "videos";
 
-export type DbCollectionType = "channels" | "music" | "playlists" | "videos";
+export interface IUser {
+  likes: IUserLikes;
+}
+
+interface IUserLikes {
+  channels: string[];
+  music: string[];
+  playlists: string[];
+  videos: string[];
+}
 
 export interface IDocument {
   lastUpdatedMs: number;
-}
-
-export interface ISignInResult {
-  status: "success" | "fail";
-  data?: object;
-  error?: string;
 }
