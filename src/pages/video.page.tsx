@@ -98,7 +98,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
   function renderScrollList() {
     if (!playlistId || !videoData) return;
 
-    if (playlistId === CustomPlaylistTypes.CHANNEL || playlistId === CustomPlaylistTypes.MUSIC) {
+    if (playlistId === CustomPlaylistTypes.MUSIC || playlistId === CustomPlaylistTypes.VIDEOS) {
       return <CustomScrollList key={playlistId} customPlaylistType={playlistId} watchingVideoId={videoData.id} />
     }
 

@@ -2,13 +2,13 @@ import React, { FC, useState } from "react";
 import _ from "lodash";
 
 import { IScrollListHeader, IScrollListVideo, IScrollListVideos } from "shared/interfaces/custom.interfaces";
-import { MISSING_THUMBNAIL_URL, fetchLikedSongs } from "apis/youtube.api";
+import { MISSING_THUMBNAIL_URL, fetchLikedVideos } from "apis/youtube.api";
 import { Loader } from "components/loader.component";
 import { ScrollList } from "./scroll-list.component";
 import { IVideo } from "shared/interfaces/youtube.interfaces";
 
 interface IProps {
-  customPlaylistType: "channel" | "music";
+  customPlaylistType: "music" | "videos";
   watchingVideoId: string;
 }
 
@@ -16,22 +16,25 @@ export const CustomScrollList: FC<IProps> = ({ customPlaylistType, watchingVideo
   const [isLoading, setIsLoading] = useState(false);
   const [videos, setVideos] = useState<IScrollListVideo[]>([]);
 
-  async function handleLoadPlaylistVideos() {
+  async function loadVideos() {
     setIsLoading(true);
 
-    const likedSongs = await fetchLikedSongs();
-    const [currentSong] = _.remove(likedSongs, (video) => video.id === watchingVideoId);
+    const likedVideos = (customPlaylistType === "videos")
+      ? await fetchLikedVideos("videos")
+      : await fetchLikedVideos("music");
 
-    const shuffledLikedSongs = _.shuffle(likedSongs);
+    const [currentVideo] = _.remove(likedVideos, (video) => video.id === watchingVideoId);
 
-    setVideos(getScrollListVideos([currentSong, ...shuffledLikedSongs]));
+    const shuffledLikedVideos = _.shuffle(likedVideos);
+
+    setVideos(getScrollListVideos([currentVideo, ...shuffledLikedVideos]));
 
     setIsLoading(false);
   }
 
   function renderLoadPlaylistsButton() {
     return (
-      <button className="c-button" onClick={handleLoadPlaylistVideos}>LOAD PLAYLIST</button>
+      <button className="c-button" onClick={loadVideos}>LOAD PLAYLIST</button>
     )
   }
 

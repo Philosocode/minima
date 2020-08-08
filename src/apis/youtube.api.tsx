@@ -128,15 +128,15 @@ export async function getPlaylistDetails(playlistId: string) {
   return playlistFromDb;
 }
 
-export async function fetchLikedSongs() {
-  // Get liked song IDs from DB
-  const likedSongs = await getLikes("music") as { likes: string[] };
-  const likedSongIds = likedSongs.likes;
+export async function fetchLikedVideos(likeType: "music" | "videos") {
+  // Get liked video IDs from DB
+  const likedVideos = await getLikes(likeType) as { likes: string[] };
+  const likedVideoIds = likedVideos.likes;
   
   // Get all videos from DB
-  const songs = await getDocsFromDb("videos", likedSongIds) as IVideo[];
+  const videos = await getDocsFromDb("videos", likedVideoIds) as IVideo[];
 
-  return songs;
+  return videos;
 }
 
 async function fetchPlaylistDetails(playlistId: string): Promise<IPlaylist> {

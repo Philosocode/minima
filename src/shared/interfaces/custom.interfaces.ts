@@ -1,6 +1,6 @@
 export enum CustomPlaylistTypes {
-  CHANNEL = "channel",
-  MUSIC = "music"
+  MUSIC = "music",
+  VIDEOS = "videos",
 };
 
 export interface IScrollListVideos {
