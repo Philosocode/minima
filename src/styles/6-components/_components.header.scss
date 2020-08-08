@@ -29,4 +29,15 @@
 
     &:hover { color: $color-green; }
   }
+
+  &__link {
+    color: $color-grey-lightest;
+    cursor: pointer;
+    font-weight: 500;
+    text-decoration: none;    
+    position: absolute;
+      right: $grid-gutter-width;
+
+    &:hover { color: $color-green; }
+  }
 }

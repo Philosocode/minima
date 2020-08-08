@@ -52,7 +52,7 @@ export async function logout() {
     await auth.signOut();
   }
   catch (err) {
-    console.log("Error signing out: ", err);
+    throw new Error("Error signing out.");
   }
 }
 

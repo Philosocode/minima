@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 /* Pages */
@@ -22,9 +22,13 @@ import { SearchProvider } from "contexts/search.context";
 import { Loader } from "components/loader.component";
 import { loadAllLikes } from "redux/like";
 import { LoginPage } from "pages/login.page";
+import { PrivateRoute } from "components/private-route.component";
+import { useAuth } from "hooks/use-auth.hook";
 
 export function App() {
   const [dataFetched, setDataFetched] = useState(false);
+  const history = useHistory();
+  const user = useAuth();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -36,7 +40,23 @@ export function App() {
     }
 
     loadInitialState();
-  }, [dispatch]);
+  }, [dispatch, user, history]);
+
+  function renderRoutes() {
+    return (
+      <Switch>
+        <Route exact path="/login" component={LoginPage} />
+        <PrivateRoute exact path="/" component={HomePage} />  
+        <PrivateRoute exact path="/music" component={MusicPage} />
+        <PrivateRoute exact path="/search" component={SearchPage} />
+        <PrivateRoute exact path="/channel/:channelId" component={(props: any) => <ChannelPage key={window.location.pathname} {...props} />} />
+        <PrivateRoute exact path="/user/:userName" component={(props: any) => <ChannelPage key={window.location.pathname} {...props} />} />
+        <PrivateRoute exact path="/playlist" component={PlaylistPage} />
+        <PrivateRoute exact path="/watch" component={VideoPage} />
+        <PrivateRoute component={NotFoundPage} />
+      </Switch>
+    )
+  }
 
   if (!dataFetched) return <Loader position="center-page" />;
 
@@ -45,17 +65,7 @@ export function App() {
       <SearchProvider>
         <div className="o-site__container">
           <Header />
-            <Switch>
-              <Route exact path="/" component={HomePage} />
-              <Route exact path="/login" component={LoginPage} />
-              <Route exact path="/music" component={MusicPage} />
-              <Route exact path="/search" component={SearchPage} />
-              <Route exact path="/channel/:channelId" component={(props: any) => <ChannelPage key={window.location.pathname} {...props} />} />
-              <Route exact path="/user/:userName" component={(props: any) => <ChannelPage key={window.location.pathname} {...props} />} />
-              <Route exact path="/playlist" component={PlaylistPage} />
-              <Route exact path="/watch" render={() => <VideoPage />} />
-              <Route component={NotFoundPage} />
-            </Switch>
+            { renderRoutes() }
           <Footer />
         </div>
       </SearchProvider>
