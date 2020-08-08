@@ -62,7 +62,7 @@ export function App() {
     )
   }
 
-  if (!authLoaded || (authLoaded && !dataFetched)) return <Loader position="center-page" />;
+  if (!authLoaded || (userId && !dataFetched)) return <Loader position="center-page" />;
 
   return (
     <VideosProvider>
