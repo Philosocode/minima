@@ -55,7 +55,7 @@ export const HomePage: FC = () => {
   return (
     <div className="o-page o-grid__container">
       <MusicList music={music} />
-      <HomeGrid videos={videos} headingText="Watch Later" />
+      <HomeGrid videos={videos} headingText="Videos" />
       <HomeGrid playlists={playlists} headingText="Playlists" />
       <ChannelGrid channels={channels} />
     </div>
