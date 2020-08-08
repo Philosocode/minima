@@ -13,7 +13,7 @@ import {
   IChannel,
 } from "shared/interfaces/youtube.interfaces";
 import { VIDEO_CACHE_DAYS } from "shared/constants";
-import { addDocToDb, getDocFromDb, getChannelFromDbWithUsername } from "./firebase.api";
+import { addDocToDb, getDocFromDb, getChannelFromDbWithUsername, getLikes, getDocsFromDb } from "./firebase.api";
 import { IDocument } from "shared/interfaces/firebase.interfaces";
 import { documentIsOutdated } from "shared/helpers";
 
@@ -118,7 +118,7 @@ export function getChannelPlaylists(channelId: string, nextPageToken?: string): 
   return makeApiRequest<IPlaylistsResponse>(url, params);
 }
 
-export async function getPlaylistDetails(playlistId: string): Promise<IPlaylist> {
+export async function getPlaylistDetails(playlistId: string) {
   const playlistFromDb = await getDocFromDb("playlists", playlistId) as (IPlaylist & IDocument);
 
   if (!playlistFromDb || documentIsOutdated(playlistFromDb, VIDEO_CACHE_DAYS)) {
@@ -126,6 +126,18 @@ export async function getPlaylistDetails(playlistId: string): Promise<IPlaylist>
   }
 
   return playlistFromDb;
+}
+
+export async function fetchLikedSongs() {
+  // Get liked song IDs from DB
+  const likedSongs = await getLikes("music") as { likes: string[] };
+  const likedSongIds = likedSongs.likes;
+  
+
+  // Get all videos from DB
+  const songs = await getDocsFromDb("videos", likedSongIds) as IVideo[];
+
+  return songs;
 }
 
 async function fetchPlaylistDetails(playlistId: string): Promise<IPlaylist> {

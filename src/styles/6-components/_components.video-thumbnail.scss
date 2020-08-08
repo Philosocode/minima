@@ -64,7 +64,7 @@
     .c-video-thumbnail__title { color: $color-green; }
     .c-video-thumbnail__published { color: $color-green-dark; }
     .c-video-thumbnail__image { border: 1px solid $color-green; }
-    .c-video-thumbnail__count { background-color: $color-green-darker; }
+    .c-video-thumbnail__count, .c-video-thumbnail__index { background-color: $color-green-darker; }
   }
 
   &__text {

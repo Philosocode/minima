@@ -12,8 +12,8 @@ export const MusicList: FC<IProps> = ({ music }) => {
   return (
     <section className="o-grid__item--full">
       <h2 className="c-heading c-heading--subtitle">
-        Recently Listened
-        <Link className="c-music__view-all" to="/music">View All</Link>
+        Recent Music
+        { music.length > 10 && <Link className="c-music__view-all" to="/music">View All</Link> }
       </h2>
       <ul className="c-music__list">
         {

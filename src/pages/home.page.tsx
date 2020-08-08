@@ -11,6 +11,7 @@ import { ChannelGrid } from "components/channel-grid.component";
 
 export const HomePage: FC = () => {
   const allLikes = useSelector(selectAllLikes);
+
   const [videos, setVideos] = useState<IVideo[]>([]);
   const [music, setMusic] = useState<IVideo[]>([]);
   const [channels, setChannels] = useState<IChannel[]>([]);
@@ -21,24 +22,26 @@ export const HomePage: FC = () => {
     async function loadData() {
       const { channels, music, playlists, videos } = allLikes;
 
+      // use of reverse: display the most recently added item at the top
+
       if (videos.length > 0) {
         const fetchedVideos = await getResourcesByIds<IVideo>(videos, getVideoDetails);
-        setVideos(fetchedVideos);
+        setVideos(fetchedVideos.reverse());
       }
 
       if (music.length > 0) {
         const fetchedMusic = await getResourcesByIds<IVideo>(music, getVideoDetails);
-        setMusic(fetchedMusic.reverse()); // Display most recently-added at the top
+        setMusic(fetchedMusic.reverse());
       }
 
       if (channels.length > 0) {
         const fetchedChannels = await getResourcesByIds<IChannel>(channels, getChannelDetails);
-        setChannels(fetchedChannels);
+        setChannels(fetchedChannels.reverse());
       }
 
       if (playlists.length > 0) {
         const fetchedPlaylists = await getResourcesByIds<IPlaylist>(playlists, getPlaylistDetails);
-        setPlaylists(fetchedPlaylists);
+        setPlaylists(fetchedPlaylists.reverse());
       }
 
       setDataLoaded(true);

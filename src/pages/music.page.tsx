@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 
 import { IVideo } from "shared/interfaces/youtube.interfaces";
 import { selectAllLikes } from "redux/like";
-import { getResourcesByIds, getVideoDetails } from "apis/youtube.api";
+import { fetchLikedSongs, getResourcesByIds, getVideoDetails } from "apis/youtube.api";
 import { Loader } from "components/loader.component";
 import { objectIsEmpty } from "shared/helpers";
 import { MusicChannelHeader } from "components/music-channel-header.component";
@@ -88,10 +88,6 @@ export const MusicPage: FC<IProps> = () => {
   }
 
   function renderMusic() {
-    if (objectIsEmpty(matchedSongs)) return (
-      <h2 className="c-heading c-heading--subsubtitle c-heading--500">No songs found...</h2>
-    );
-
     return Object.keys(matchedSongs).sort().map(channelTitle => {
       const songsForChannel = matchedSongs[channelTitle];
       const channelIsExpanded = expandedChannels[channelTitle] === true;
@@ -148,6 +144,7 @@ export const MusicPage: FC<IProps> = () => {
     <div className="o-page o-grid__container">
       <div className="o-grid__item--wide">
         <h1 className="c-heading c-heading--title">Music</h1>
+        <button onClick={fetchLikedSongs}>Play All</button>
         <div className="c-music-list__controls">
           <input
             type="search"
@@ -160,9 +157,11 @@ export const MusicPage: FC<IProps> = () => {
           >{allChannelsExpanded() ? "Minimize All ↑" : "Expand All ↓"}</button>
         </div>
 
-        <ul className="c-music-list">
-          { renderMusic() }
-        </ul>
+        {
+          objectIsEmpty(matchedSongs)
+            ? <h2 className="c-heading c-heading--subsubtitle c-heading--500">No songs found...</h2>
+            : <ul className="c-music-list">{ renderMusic() }</ul>
+        }
       </div>
     </div>
   );

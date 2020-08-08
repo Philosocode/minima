@@ -1,13 +1,12 @@
 import React, { FC, useState } from "react";
 
 import { IPlaylist, IPlaylistItem } from "shared/interfaces/youtube.interfaces";
+import { IScrollListHeader, IScrollListVideo, IScrollListVideos } from "shared/interfaces/custom.interfaces";
 import { getPlaylistDetails, getPlaylistVideos, MISSING_THUMBNAIL_URL, getPlaylistVideosUntilCurrentVideo } from "apis/youtube.api";
 
-import { useToggle } from "hooks/use-toggle.hook";
-import { PlaylistScrollVideo } from "components/playlist-scroll-video.component";
 import { Loader } from "components/loader.component";
-import { PlaylistScrollHeader } from "./playlist-scroll-header.component";
 import { useFetchPaginatedResource } from "hooks/use-fetch-paginated-resource.hook";
+import { ScrollList } from "./scroll-list.component";
 
 interface IProps {
   playlistId: string;
@@ -15,9 +14,7 @@ interface IProps {
 }
 
 export const PlaylistScrollList: FC<IProps> = ({ playlistId, watchingVideoId }) => {
-  const [hidingPreviousVideos, toggleHidingPreviousVideos] = useToggle(true);
   const [playlistDetails, setPlaylistDetails] = useState<IPlaylist>();
-  const [watchingVideoIdx, setWatchingVideoIdx] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
   const {
@@ -67,85 +64,44 @@ export const PlaylistScrollList: FC<IProps> = ({ playlistId, watchingVideoId }) 
     }
   }
 
-  function getVideosToShow() {
-    if (hidingPreviousVideos) {
-      return playlistVideos.slice(watchingVideoIdx);
-    }
-
-    return playlistVideos;
-  }
-
   function renderLoadPlaylistsButton() {
     return (
       <button className="c-button" onClick={handleLoadPlaylistVideos}>LOAD PLAYLIST</button>
     )
   }
 
-  function renderShowPreviousVideosToggle() {
-    if (watchingVideoIdx === 0) return;
-
-    const toggleText = hidingPreviousVideos
-      ? "Show Previous Videos"
-      : "Hide Previous Videos";
-
-    return (
-      <div className="c-playlist-scroll-list__toggle-previous" onClick={toggleHidingPreviousVideos}>{toggleText}</div>
-    )
-  }
-
-  function renderLoadMoreVideosButton() {
-    if (!hasMoreVideos) return;
-    if (isLoading) return <Loader position="center-horizontal" />
-
-    return (
-      <div className="c-playlist-scroll-list__toggle-previous" onClick={async () => await loadMoreVideos()}>LOAD MORE</div>
-    )
-  }
-
-  function renderPlaylistVideos() {
-    return getVideosToShow().map((v, idx) => { 
-      // If not hiding, start at 0
-      // If hiding, start at watchingVideoIdx
-      const currentVideoIdx = hidingPreviousVideos
-        ? watchingVideoIdx + idx
-        : idx;
+  function getVideos(): IScrollListVideo[] {
+    return playlistVideos.map(video => {
+      const thumbnailUrl = video.snippet.thumbnails.medium?.url ?? MISSING_THUMBNAIL_URL;
       
-      const thumbnailUrl = v.snippet.thumbnails.medium?.url ?? MISSING_THUMBNAIL_URL;
-
-      return (
-        <PlaylistScrollVideo 
-          key={v.snippet.resourceId.videoId}
-          indexInPlaylist={currentVideoIdx}
-          playlistId={playlistId}
-          setWatchingVideoIdx={setWatchingVideoIdx}
-          title={v.snippet.title}
-          thumbnailUrl={thumbnailUrl}
-          uploaderName={v.snippet.channelTitle}
-          videoId={v.snippet.resourceId.videoId}
-          watchingVideoId={watchingVideoId}
-        />
-      )
-    })
+      return {
+        playlistId: playlistId,
+        title: video.snippet.title,
+        thumbnailUrl: thumbnailUrl,
+        channelTitle: video.snippet.channelTitle,
+        videoId: video.snippet.resourceId.videoId,
+        watchingVideoId: watchingVideoId
+      };
+    });
   }
 
   // Render
   if (isLoading && playlistVideos.length <= 0) return <Loader position="center-horizontal" />
   if (!playlistDetails || playlistVideos.length <= 0) return renderLoadPlaylistsButton();
-  
-  return (
-    <div className="o-card c-playlist-scroll-list__container">
-      <PlaylistScrollHeader 
-        channelTitle={playlistDetails.snippet.channelTitle} 
-        currentVideoIdx={watchingVideoIdx}
-        totalVideos={playlistDetails.contentDetails.itemCount}
-        videoTitle={playlistDetails.snippet.title}
-      />
 
-      <div className="c-playlist-scroll-list__videos">
-        { renderShowPreviousVideosToggle() }
-        { renderPlaylistVideos() }
-        { renderLoadMoreVideosButton() }
-      </div>
-    </div>
+  const headerDetails: IScrollListHeader = {
+    channelTitle: playlistDetails.snippet.channelTitle,
+    totalVideos: playlistDetails.contentDetails.itemCount,
+    playlistTitle: playlistDetails.snippet.title
+  };
+
+  const videosDetails: IScrollListVideos = { hasMoreVideos, loadMoreVideos, videos: getVideos() };
+
+  return (
+    <ScrollList
+      headerDetails={headerDetails} 
+      videosDetails={videosDetails}
+      isLoading={isLoading}
+    />
   );
 }

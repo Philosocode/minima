@@ -19,12 +19,21 @@ firebase.initializeApp(config);
 const db = firebase.firestore();
 
 /* REGULAR DOCS */
-export function getDocFromDb(collection: DbCollectionType, documentId: string) {
+export async function getDocFromDb(collection: DbCollectionType, documentId: string) {
   return db.collection(collection).doc(documentId).get()
     .then(doc => {
       if (doc.exists) return { ...doc.data(), id: doc.id };
     })
     .catch(err => alert("Error getting doc from DB: " + err));
+}
+
+export async function getDocsFromDb(collection: DbCollectionType, documentIds: string[]) {
+  // FROM: https://medium.com/@cambaughn/firestore-use-promise-all-instead-of-getall-on-the-web-301f4678bd05
+  const docRefs = documentIds.map(id => db.collection(collection).doc(id).get());
+
+  return Promise.all(docRefs)
+    .then(docs => docs.map(doc => doc.data()))
+    .catch(err => console.log(err));
 }
 
 export async function getChannelFromDbWithUsername(username: string): Promise<IChannel | undefined> {
@@ -43,7 +52,7 @@ export async function getChannelFromDbWithUsername(username: string): Promise<IC
   }
 }
 
-export function addDocToDb(
+export async function addDocToDb(
   collection: DbCollectionType,
   documentId: string,
   document: IChannelBase | IPlaylistBase | IVideoBase
@@ -77,14 +86,14 @@ export async function getAllLikes() {
   return allLikes as ILikeState;
 }
 
-export function addLikeToDb(likeType: DbCollectionType, likeId: string) {
+export async function addLikeToDb(likeType: DbCollectionType, likeId: string) {
   return db.collection("likes").doc(likeType).update({
     likes: firebase.firestore.FieldValue.arrayUnion(likeId)
   })
   .catch(err => { throw new Error(err) });
 }
 
-export function removeLikeFromDb(likeType: DbCollectionType, likeId: string) {
+export async function removeLikeFromDb(likeType: DbCollectionType, likeId: string) {
   return db.collection("likes").doc(likeType).update({
     likes: firebase.firestore.FieldValue.arrayRemove(likeId)
   })

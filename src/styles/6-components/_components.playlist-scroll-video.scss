@@ -19,7 +19,7 @@
     &:hover { background-color: $color-grey-dark; }
 
     // Don't use hover colour on currently selected video
-    &--current { 
+    &.is-current { 
       background-color: $selected-color; 
       
       &:hover { 
