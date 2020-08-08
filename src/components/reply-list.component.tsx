@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 
 import { IComment } from "shared/interfaces/youtube.interfaces";
-import { getCommentThreadReplies } from "apis/youtube.api";
+import { getCommentThreadReplies } from "services/youtube.service";
 import { Comment } from "components/comment.component";
 import { useToggle } from "hooks/use-toggle.hook";
 import { Loader } from "./loader.component";

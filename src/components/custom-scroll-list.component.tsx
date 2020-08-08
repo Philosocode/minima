@@ -2,7 +2,7 @@ import React, { FC, useState } from "react";
 import _ from "lodash";
 
 import { IScrollListHeader, IScrollListVideo, IScrollListVideos } from "shared/interfaces/custom.interfaces";
-import { MISSING_THUMBNAIL_URL, fetchLikedVideos } from "apis/youtube.api";
+import { MISSING_THUMBNAIL_URL, fetchLikedVideos } from "services/youtube.service";
 import { Loader } from "components/loader.component";
 import { ScrollList } from "./scroll-list.component";
 import { IVideo } from "shared/interfaces/youtube.interfaces";

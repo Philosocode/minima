@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 import { IVideo, IChannel, IPlaylist } from "shared/interfaces/youtube.interfaces";
-import { getResourcesByIds, getVideoDetails, getChannelDetails, getPlaylistDetails } from "apis/youtube.api";
+import { getResourcesByIds, getVideoDetails, getChannelDetails, getPlaylistDetails } from "services/youtube.service";
 import { selectAllLikes } from "redux/like";
 import { Loader } from "components/loader.component";
 import { HomeGrid } from "components/home-grid.component";

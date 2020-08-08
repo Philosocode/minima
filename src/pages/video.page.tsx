@@ -7,7 +7,7 @@ import { setCurrentVideo } from "redux/video";
 
 import { IChannel, IVideo } from "shared/interfaces/youtube.interfaces";
 import { getQueryParams, roundToTwoDecimals, getFormattedDate, addCommasToNumber } from "shared/helpers";
-import { getChannelDetails, getVideoDetails } from "apis/youtube.api";
+import { getChannelDetails, getVideoDetails } from "services/youtube.service";
 
 import { Divider } from "components/divider.component";
 import { Loader } from "components/loader.component";

@@ -2,7 +2,7 @@ import React, { FC, useState, useEffect } from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 
 import { IPlaylist, IPlaylistItem } from "shared/interfaces/youtube.interfaces";
-import { getPlaylistDetails, getPlaylistVideos } from "apis/youtube.api";
+import { getPlaylistDetails, getPlaylistVideos } from "services/youtube.service";
 import { Loader } from "components/loader.component";
 import { VideoGrid } from "components/video-grid.component";
 import { PlaylistDetails } from "components/playlist-details.component";

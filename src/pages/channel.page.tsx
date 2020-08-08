@@ -3,7 +3,7 @@ import { RouteComponentProps, withRouter } from "react-router-dom";
 import { faCalendarDay, faEye, faVideo } from "@fortawesome/free-solid-svg-icons";
 
 import { IChannel, IPlaylistItem, IPlaylist } from "shared/interfaces/youtube.interfaces";
-import { getChannelDetails, getPlaylistVideos, getChannelPlaylists } from "apis/youtube.api";
+import { getChannelDetails, getPlaylistVideos, getChannelPlaylists } from "services/youtube.service";
 
 import { addCommasToNumber, getFormattedDate } from "shared/helpers";
 import { linkifyText } from "shared/jsx-helpers";

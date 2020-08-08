@@ -2,7 +2,7 @@ import React, { FC, useState } from "react";
 
 import { IPlaylist, IPlaylistItem } from "shared/interfaces/youtube.interfaces";
 import { IScrollListHeader, IScrollListVideo, IScrollListVideos } from "shared/interfaces/custom.interfaces";
-import { getPlaylistDetails, getPlaylistVideos, MISSING_THUMBNAIL_URL, getPlaylistVideosUntilCurrentVideo } from "apis/youtube.api";
+import { getPlaylistDetails, getPlaylistVideos, MISSING_THUMBNAIL_URL, getPlaylistVideosUntilCurrentVideo } from "services/youtube.service";
 
 import { Loader } from "components/loader.component";
 import { useFetchPaginatedResource } from "hooks/use-fetch-paginated-resource.hook";

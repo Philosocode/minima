@@ -1,7 +1,7 @@
 import { Dispatch } from "redux";
 
 import { AuthConstants } from "./auth.types";
-import { login, logout } from "apis/firebase.api";
+import { login, logout } from "services/firebase.service";
 
 export const loginUser = (
   email: string,

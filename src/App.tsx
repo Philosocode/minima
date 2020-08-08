@@ -15,7 +15,7 @@ import { Header } from "components/header.component";
 import { Footer } from "components/footer.component";
 
 /* Contexts */
-import { getUserData } from "apis/firebase.api";
+import { getUserData } from "services/firebase.service";
 import { Loader } from "components/loader.component";
 import { selectAuthLoaded } from "redux/auth";
 import { loadAllLikes } from "redux/like";

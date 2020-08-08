@@ -13,7 +13,7 @@ import {
   IChannel,
 } from "shared/interfaces/youtube.interfaces";
 import { VIDEO_CACHE_DAYS } from "shared/constants";
-import { addDocToDb, getDocFromDb, getChannelFromDbWithUsername, getLikes, getDocsFromDb } from "./firebase.api";
+import { addDocToDb, getDocFromDb, getChannelFromDbWithUsername, getLikes, getDocsFromDb } from "./firebase.service";
 import { IDocument } from "shared/interfaces/firebase.interfaces";
 import { documentIsOutdated } from "shared/helpers";
 

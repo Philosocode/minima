@@ -4,7 +4,7 @@ import { IPlaylistItem } from "shared/interfaces/youtube.interfaces";
 import { Loader } from "components/loader.component";
 import { VideoThumbnail } from "components/video-thumbnail.component";
 import { NotFoundHeading } from "components/not-found-heading.component";
-import { MISSING_THUMBNAIL_URL } from "apis/youtube.api";
+import { MISSING_THUMBNAIL_URL } from "services/youtube.service";
 
 interface IProps {
   isLoading: boolean;

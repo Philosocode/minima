@@ -5,7 +5,7 @@ import _ from "lodash";
 
 import { IVideo } from "shared/interfaces/youtube.interfaces";
 import { objectIsEmpty } from "shared/helpers";
-import { getResourcesByIds, getVideoDetails } from "apis/youtube.api";
+import { getResourcesByIds, getVideoDetails } from "services/youtube.service";
 import { selectAllLikes } from "redux/like";
 import { Loader } from "components/loader.component";
 import { MusicChannelHeader } from "components/music-channel-header.component";

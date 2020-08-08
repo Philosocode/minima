@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 
 import { ICommentThread } from "shared/interfaces/youtube.interfaces";
-import { getVideoCommentThreads } from "apis/youtube.api";
+import { getVideoCommentThreads } from "services/youtube.service";
 import { Loader } from "components/loader.component";
 import { Thread } from "components/thread.component";
 import { addCommasToNumber } from "shared/helpers";
