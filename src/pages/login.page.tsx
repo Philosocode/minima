@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { LoginForm } from "components/login-form.component";
+import { LoginForm } from "components/form/login-form.component";
 
 export const LoginPage: FC = () => (
   <div className="o-grid__container">

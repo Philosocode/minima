@@ -1,3 +1,7 @@
+/*------------------------------------*\
+  #FORM
+\*------------------------------------*/
+
 .c-form {
   &__container {
     font-family: $font-primary;
@@ -17,9 +21,8 @@
     position: relative;
     width: 100%;
 
-    &:nth-last-of-type(2) {
-      margin-bottom: 0;
-    }
+    // Remove margin-bottom for the form group above the submit button
+    &:nth-last-of-type(2) { margin-bottom: 0; }
 
     @include respond(tab-land) { margin-bottom: $spacing-large; }
   }
@@ -29,11 +32,13 @@
     position: relative;
       left: 2px;
     transition: all $transition-append;
-    order: -1; // position above input
+    order: -1; // position label above input
     opacity: 1;
+    font-weight: normal;
   }
 
   &__input {
+    // Inputs are transparent and only have a solid bottom border
     background-color: transparent;
     border: none;
     border-bottom: 1px solid $color-grey-darker;
@@ -48,37 +53,21 @@
     
     &:focus { outline: none; }
 
-    // Expand border on focus or if touched + invalid
+    // Expand gradient border on focus or if input has been touched and is invalid
     &:focus + .c-form__border,
     &.is-touched:invalid + .c-form__border {
       transform: scale(1);
     }
 
-    // Red border for invalid input
+    // Red gradient border for invalid inputs
     &.is-touched:invalid + .c-form__border {
       background-color: $color-red;
       background: $gradient-red;
     }
-    
-    &::-webkit-input-placeholder {
-      color: $color-grey-dark;
-      letter-spacing: 0.5px;
-      line-height: 2.4rem;
-      transition: opacity 0.2s ease-in;
-    }
-
-    &::-moz-placeholder {
-      color: $color-grey;
-      letter-spacing: 1px;
-      line-height: 2.4rem;
-      transition: opacity 0.2s ease-in;
-    }
-
-    &:focus::-webkit-input-placeholder { opacity: 0;}
-    &:focus::-moz-placeholder { opacity: 0; }
   }
 
   &__border {
+    // Colourful line that expands when an input is clicked
     background-color: $color-green;
     background: $gradient-green;
     height: 2px; width: 100%;
@@ -90,17 +79,15 @@
   }
 
   &__error {
+    // Styles for error text that displays if there are problems logging in
     color: $color-red;
     font-size: $font-size-small;
     font-weight: 500;
-    margin-bottom: $spacing-medium;
-    margin-top: $spacing-medium;
+    margin: $spacing-medium auto;
     opacity: 0;
     transition: opacity $transition-append;
 
     &.is-visible { opacity: 1; }
-
-    @include respond(tab-port) { font-size: $font-size-normal; }
   }
 
   &__submit {

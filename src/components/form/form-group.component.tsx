@@ -7,11 +7,19 @@ interface IProps {
   type: "email" | "password" | "text" | "textarea";
   touched: boolean;
   value: string;
-  customClasses?: string;
+  className?: string;
   placeholder?: string;
 }
 
-export const FormGroup: FC<IProps> = ({ name, onBlur, onChange, placeholder, touched, type, value }) => { 
+export const FormGroup: FC<IProps> = ({
+  name, 
+  onBlur, 
+  onChange, 
+  placeholder, 
+  touched, 
+  type, 
+  value 
+}) => {
   function renderInput() {
     return (
       <input
@@ -45,9 +53,8 @@ export const FormGroup: FC<IProps> = ({ name, onBlur, onChange, placeholder, tou
   }
 
   const nameCapitalized = name.charAt(0).toUpperCase() + name.slice(1);
-  const inputClasses = touched
-    ? "c-form__input is-touched"
-    : "c-form__input";
+  let inputClasses = "c-form__input";
+  if (touched) inputClasses += " is-touched";
 
   return (
     <div className="c-form__group">
@@ -56,7 +63,7 @@ export const FormGroup: FC<IProps> = ({ name, onBlur, onChange, placeholder, tou
           ? renderTextArea()
           : renderInput()
       }
-      <div className="c-form__border"></div>
+      <div className="c-form__border" />
       <label htmlFor={name} className="c-form__label">{nameCapitalized}</label>
     </div>
   )

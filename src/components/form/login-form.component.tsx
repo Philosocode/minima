@@ -1,29 +1,25 @@
-import React, { FC, ChangeEvent, FocusEvent, useState } from "react";
+import React, { FC, ChangeEvent, FocusEvent } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
+import classNames from "classnames";
 
 import { useForm } from "hooks/use-form.hook";
-import { FormGroup } from "./form-group.component";
-import { useDispatch, useSelector } from "react-redux";
 import { loginUser, selectAuthError } from "redux/auth";
-import { useHistory } from "react-router-dom";
+import { FormGroup } from "./form-group.component";
 
 export const LoginForm: FC = () => {
-  const error = useSelector(selectAuthError)
+  const error = useSelector(selectAuthError);
   const dispatch = useDispatch();
   const history = useHistory();
-
-  const { values, handleChange } = useForm({
-    email: "",
-    password: "",
-  });
-
-  const [touched, setTouched] = useState({
-    email: false,
-    password: false
-  });
-
+  const { values, handleChange, touched, setTouched } = useForm({ email: "", password: "" });
   const { email, password } = values;
 
   function handleBlur(ev: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    /**
+     * When a user clicks out of an input, mark it as touched
+     *
+     * @param ev - Event object
+     */
     const inputName = ev.target.name as "email" | "password";
     if (touched[inputName]) return;
 
@@ -34,17 +30,26 @@ export const LoginForm: FC = () => {
   }
 
   function handleSubmit(ev: ChangeEvent<HTMLFormElement>) {
+    /**
+     * Dispatch a login call. If successful, redirect to home page
+     *
+     * @param ev - Event object
+     */
     ev.preventDefault();
 
     dispatch(loginUser(email, password, () => history.push("/")));
   }
+
+  const errorClasses = classNames({
+    "c-form__error": true,
+    "is-visible": error
+  });
   
   return (
     <div className="o-grid__item--wide">
       <h1 className="c-heading c-heading--title">Login</h1>
       <form
         acceptCharset="UTF-8" 
-        action="https://usebasin.com/f/6a332af71053"
         onSubmit={handleSubmit}
         name="login"
         className="c-form__container" 
@@ -69,9 +74,10 @@ export const LoginForm: FC = () => {
         />
         
         <div className="c-form__group">
-          <p className={`c-form__error ${error && "is-visible"}`}>{error}</p>
-          <button className="c-button c-button--black c-form__submit" type="submit">SUBMIT</button>
+          <div className={errorClasses}>{error}</div>
+          <button className="c-button c-form__submit" type="submit">SUBMIT</button>
         </div>
+
       </form>
     </div>
   )
