@@ -1,0 +1,9 @@
+.c-demo {
+  margin-top: $spacing-large;
+  
+  & > h3 {
+    color: $color-green;
+    font-weight: 400;
+    font-size: $font-size-large;
+  }
+}
