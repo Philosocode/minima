@@ -1,10 +1,10 @@
 import React, { FC } from "react";
-import { IVideo } from "shared/interfaces/youtube.interfaces";
-import { Link } from "react-router-dom";
 import classNames from "classnames";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
+
+import { IVideo } from "shared/interfaces/youtube.interfaces";
+import { Song } from "./song.component";
 
 interface IProps {
   channelTitle: string;
@@ -15,38 +15,29 @@ interface IProps {
 
 export const MusicChannelHeader: FC<IProps> = ({ channelTitle, showingSongs, songsForChannel, toggleChannelExpanded }) => {  
   const arrowClasses = classNames({
-    "c-music-list__arrow": true,
+    "c-music__arrow": true,
     "is-facing-up": showingSongs
   });
 
   const headerClasses = classNames({
-    "c-music-list__channel-header": true,
+    "c-music__channel-header": true,
     "is-showing": showingSongs
   });
 
   const innerListClasses = classNames({
-    "c-music-list__inner-list": true,
+    "c-music__dropdown": true,
     "is-showing": showingSongs
   });
 
   return (
     <li className={headerClasses} key={channelTitle}>
-      <h2 onClick={toggleChannelExpanded} className="c-heading c-music-list__channel-title">
+      <h2 onClick={toggleChannelExpanded} className="c-music__channel-title">
         {channelTitle}
         <FontAwesomeIcon className={arrowClasses} icon={faChevronDown} />
       </h2>
       <ul className={innerListClasses}>
         {
-          songsForChannel.map(song => (
-          <li className="c-music__item" key={song.id}>
-            <Link className="c-music__link" to={`/watch?v=${song.id}`}>
-              <img className="c-music__thumbnail" src={song.snippet.thumbnails.default.url} alt={song.snippet.title} />
-              <div className="c-music__text">
-                <h4 className="c-music__title">{song.snippet.title}</h4>
-                <h5 className="c-music__channel">{song.snippet.channelTitle}</h5>
-              </div>
-            </Link>
-          </li>))
+          songsForChannel.map(song => <Song key={song.id} song={song} />)
         }
       </ul>
     </li>

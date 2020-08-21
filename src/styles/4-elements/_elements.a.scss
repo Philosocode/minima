@@ -1,3 +1,5 @@
 a {
-  color: $color-green;
+  color: var(--color-lighter);
+
+  &:hover { color: var(--color-lightest); }
 }

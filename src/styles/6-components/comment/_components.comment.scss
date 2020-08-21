@@ -1,0 +1,48 @@
+.c-comment--reply {
+  margin-top: $spacing-medium;
+  margin-bottom: $spacing-medium;
+
+  // Decrease margin-top for first reply (below the Show/Hide Replies toggle)
+  &:nth-child(2) { margin-top: $spacing-small; }
+
+  // Decrease the space below the last reply
+  // Last reply might be above a "Load More Comments" button, so apply to last 2 children
+  &:last-child,
+  &:nth-last-child(2) {
+    margin-bottom: $spacing-smallest;
+  }
+}
+
+.c-comment {
+  &__replies {
+    margin-left: 7rem;
+    margin-top: $spacing-small;
+  }
+
+  &__date {
+    color: $color-grey;
+    font-size: $font-size-small;
+    font-weight: 600;
+    margin-top: 3px;
+  }
+
+  &__uploader {
+    background-color: var(--color-darker);
+    border-radius: 1em;
+    color: $color-grey-lightest;
+    margin-bottom: $spacing-largest;
+    text-decoration: none;
+    padding: 0.3em 0.7em;
+
+    // Add some space between uploader pill and date
+    & + .c-comment__date { margin-top: $spacing-smaller; }
+  }
+
+  &__link {
+    font-size: $font-size-small;
+  }
+
+  &__thread {
+    margin-bottom: $spacing-large;
+  }
+}

@@ -12,7 +12,7 @@ export const Thread: FC<IProps> = ({ thread }) => {
   const { topLevelComment, totalReplyCount } = thread.snippet;
   
   return (
-    <div className="o-container c-thread__container">
+    <div className="c-comment__thread">
       <Comment comment={topLevelComment} type="comment" />
 
       {totalReplyCount > 0 && (

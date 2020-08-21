@@ -1,0 +1,21 @@
+.c-overlay-image__container {
+  position: relative;
+
+  &::before {
+    background-color: rgba($color-black, 0.4);
+    content: "";
+    height: 100%; width: 100%;
+    transition: background-color $transition-append;
+    position: absolute;
+      top: 0;
+      left: 0;
+    z-index: $z-index-overlay-image;
+  }
+}
+
+.c-overlay-image {
+  display: block;
+  height: 100%; width: 100%;
+  object-fit: cover;
+  transition: transform $transition-append;
+}

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp } from "@fortawesome/free-solid-svg-icons";
+import classNames from "classnames";
 
 import { IComment } from "shared/interfaces/youtube.interfaces";
 import { getFormattedDateFromToday } from "shared/helpers";
@@ -44,31 +45,26 @@ export const Comment: FC<IProps> = ({ comment, type }) => {
   }
 
   function getChannelNameClasses(): string {
-    let classes = "c-heading c-heading--small";
-
     const commentAuthorId = comment.snippet.authorChannelId.value;
     const uploaderId = currentVideo?.snippet.channelId;
 
-    if (commentAuthorId === uploaderId) {
-      classes += " c-comment__uploader";
-    }
-    else {
-      classes += " c-heading--link";
-    }
+    const isUploader = (commentAuthorId === uploaderId);
 
-    return classes;
+    const channelHeadingClasses = classNames(
+      "c-heading c-heading--small c-text--link", 
+      { "c-comment__uploader": isUploader }
+    );
+
+    return channelHeadingClasses;
   }
 
-  function getContainerClasses(): string {
-    let classes = "o-media c-comment__container";
-    if (type === "reply") classes += " c-comment__container--reply"
-
-    return classes;
-  }
+  const containerClasses = classNames({
+    "o-media c-comment": true,
+    "c-comment--reply": type === "reply"
+  });
 
   return (
-    <div className={getContainerClasses()}>
-
+    <div className={containerClasses}>
       <Link to={channelUrl} className="o-media__image">
         <img className={getChannelImageClasses()} src={authorProfileImageUrl} alt={authorDisplayName} />
       </Link>
@@ -77,7 +73,7 @@ export const Comment: FC<IProps> = ({ comment, type }) => {
         <Link className={getChannelNameClasses()} to={channelUrl}>{authorDisplayName}</Link>
         <div className="c-comment__date">{formattedDate} ago { commentWasUpdated() && "(edited)"}</div>
         <HTMLTextContainer textElement={linkifyText(textDisplay)} />
-        <div><FontAwesomeIcon className="c-icon__icon" icon={faThumbsUp} /> <span className="c-icon__text">{likeCount.toLocaleString()}</span></div>
+        <div><FontAwesomeIcon className="c-icon" icon={faThumbsUp} /> <span className="c-icon__text">{likeCount.toLocaleString()}</span></div>
       </div>
 
     </div>

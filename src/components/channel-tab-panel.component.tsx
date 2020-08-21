@@ -5,7 +5,7 @@ interface IProps {
 }
 export const ChannelTabPanel: FC<IProps> = ({ children, isActive }) => {
   return (
-    <div className={`c-channel-tab__panel ${isActive && "c-channel-tab__panel--visible"}`}>
+    <div className={`c-tab__panel ${isActive && "is-visible"}`}>
       { children }
     </div>
   )

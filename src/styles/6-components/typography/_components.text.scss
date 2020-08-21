@@ -1,0 +1,28 @@
+.c-text {
+  &--link {
+    color: inherit;
+    cursor: pointer;
+    display: inline-block;
+    font-weight: bold;
+    text-decoration: none;
+    transition: color 0.1s ease;
+
+    &:hover { color: var(--color-lighter); }
+  }
+
+  /* 1-Liners */
+  // Alignment
+  &--left { text-align: left; }
+  &--right { text-align: left; }
+  &--centered { text-align: center; }
+
+  // Weights
+  &--normal { font-weight: 400; }
+  &--medium { font-weight: 500; }
+  &--semibold { font-weight: 600; }
+  &--bold { font-weight: 700; }
+
+  // Other
+  &--underline { text-decoration: underline; }
+  &--html { white-space: pre-line; }
+}

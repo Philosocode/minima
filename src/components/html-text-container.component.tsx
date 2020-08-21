@@ -6,7 +6,7 @@ interface IProps {
 
 export const HTMLTextContainer: FC<IProps> = ({ textElement }) => {
   return (
-    <div className="o-text-container o-text-container--html o-text-container--left c-toggle-text__container">
+    <div className="c-text--html c-text--left c-body-text">
       {textElement}
     </div>
   )

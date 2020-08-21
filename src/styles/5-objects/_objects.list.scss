@@ -1,6 +1,13 @@
+// Use for laying out ELs horizontally or vertically with centres aligned
 .o-list {
   display: flex;
+
+  &--horizontal {
+    align-items: center;
+  }
+
+  &--vertical {
     flex-direction: column;
-    align-items: flex-start;
-  text-align: left;
+    justify-content: center;
+  }
 }

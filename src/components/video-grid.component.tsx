@@ -5,6 +5,7 @@ import { Loader } from "components/loader.component";
 import { VideoThumbnail } from "components/video-thumbnail.component";
 import { NotFoundHeading } from "components/not-found-heading.component";
 import { MISSING_THUMBNAIL_URL } from "services/youtube.service";
+import { Button } from "./button/button.component";
 
 interface IProps {
   isLoading: boolean;
@@ -31,7 +32,7 @@ export class VideoGrid extends Component<IProps> {
     if (isLoading) return <Loader position="center-horizontal" />
 
     if (!isLoading && hasMoreVideos) {
-      return <button className="c-button" onClick={loadVideos}>LOAD MORE</button> 
+      return <Button centered onClick={loadVideos}>LOAD MORE</Button>
     }
   }
 

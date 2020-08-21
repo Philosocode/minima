@@ -57,7 +57,7 @@ export class YouTubePlayer extends Component {
     return (
       <section>
         <div
-          className="c-video-player__iframe"
+          className="c-video__iframe"
           ref={(r) => {
             this.youtubePlayerAnchor = r;
           }}

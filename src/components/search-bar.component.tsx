@@ -94,7 +94,7 @@ const _SearchBar: FC<RouteComponentProps> = ({ history }) => {
   }
 
   return (
-    <div className="c-search-bar__container">
+    <div className="c-search-bar">
       <input
         autoComplete="0"
         type="text"

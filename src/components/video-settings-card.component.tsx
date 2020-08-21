@@ -37,15 +37,15 @@ export const VideoSettingsCard: FC<IProps> = ({ videoId }) => {
   });
 
   return (
-    <div className="o-card c-video-settings__container">
+    <div className="c-card c-video-settings__container">
       <div className={likeVideoIconClasses} onClick={toggleVideoLiked}>
-        <FontAwesomeIcon className="c-video-settings__icon" icon={faFilm} />
+        <FontAwesomeIcon className="c-icon c-icon--large c-video-settings__icon" icon={faFilm} />
       </div>
       <div className={likeMusicIconClasses} onClick={toggleMusicLiked}>
-        <FontAwesomeIcon className="c-video-settings__icon" icon={faMusic} />
+        <FontAwesomeIcon className="c-icon c-icon--large c-video-settings__icon" icon={faMusic} />
       </div>
       <div className={loopIconClasses} onClick={toggleLooping}>
-        <FontAwesomeIcon className="c-video-settings__icon" icon={faRedo} />
+        <FontAwesomeIcon className="c-icon c-icon--large c-video-settings__icon" icon={faRedo} />
       </div>
     </div>
   )

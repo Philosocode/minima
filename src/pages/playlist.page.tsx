@@ -80,10 +80,10 @@ const _PlaylistPage: FC<RouteComponentProps<IRouteParams>> = ({ location }) => {
   }
 
   return (
-    <div className="o-page o-page--playlist o-grid__container">
+    <div className="o-page o-grid">
       <div className="o-grid__item--center">
         <PlaylistDetails playlist={playlistDetails} />
-        <Divider customClass="c-playlist-details__divider" />
+        <Divider />
       </div>
 
       <div className="o-grid__item--wide">

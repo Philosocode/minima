@@ -83,7 +83,7 @@ const _VideoPlayer: FC<RouteComponentProps & IProps> = ({ location, isLoading, p
   }
 
   return (
-    <div className="o-container c-video-player__container">
+    <div className="c-video__player">
       {
         isLoading
           ? <Loader position="center-page" />

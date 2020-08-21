@@ -1,0 +1,26 @@
+.c-like-icon {
+  &__container {
+    position: relative;
+  }
+
+  &__icon {
+    color: $color-grey-light;
+    cursor: pointer;
+    font-size: 5rem;
+    margin-left: $spacing-small;
+    transition: color 0.2s ease, opacity 0.2s ease;
+  
+    &--regular:hover { color: var(--color-lighter); }
+    
+    &--solid {
+      color: var(--color-lighter);
+      position: absolute;
+        left: 0;
+    }
+
+    &--hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+}

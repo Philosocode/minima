@@ -4,9 +4,10 @@ import _ from "lodash";
 import { IScrollListHeader, IScrollListVideo, IScrollListVideos } from "shared/interfaces/custom.interfaces";
 import { MISSING_THUMBNAIL_URL, fetchLikedVideos } from "services/youtube.service";
 import { Loader } from "components/loader.component";
-import { ScrollList } from "./scroll-list.component";
+import { PlaylistScrollList } from "./playlist-scroll-list.component";
 import { IVideo } from "shared/interfaces/youtube.interfaces";
 import { useAuth } from "hooks/use-auth.hook";
+import { Button } from "./button/button.component";
 
 interface IProps {
   customPlaylistType: "music" | "videos";
@@ -36,7 +37,7 @@ export const CustomScrollList: FC<IProps> = ({ customPlaylistType, watchingVideo
 
   function renderLoadPlaylistsButton() {
     return (
-      <button className="c-button" onClick={loadVideos}>LOAD PLAYLIST</button>
+      <Button centered onClick={loadVideos}>LOAD PLAYLIST</Button>
     )
   }
 
@@ -69,7 +70,7 @@ export const CustomScrollList: FC<IProps> = ({ customPlaylistType, watchingVideo
   };
 
   return (
-    <ScrollList
+    <PlaylistScrollList
       headerDetails={headerDetails} 
       videosDetails={videosDetails}
       isLoading={isLoading}

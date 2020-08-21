@@ -13,7 +13,7 @@ import { PlaylistGrid } from "components/playlist-grid.component";
 import { ChannelTabPanel } from "components/channel-tab-panel.component";
 import { VideoGrid } from "components/video-grid.component";
 import { Loader } from "components/loader.component";
-import { StatsCard } from "components/stats-card.component";
+import { StatsCard } from "components/card/stats-card.component";
 import { HTMLTextContainer } from "components/html-text-container.component";
 
 interface IRouteParams {
@@ -141,7 +141,7 @@ const _ChannelPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
     return <Loader position="center-page" />;
   }
   return (
-    <div className="o-page o-page--channel o-grid__container">
+    <div className="o-page o-grid">
       <div className="o-grid__item--center">
         <ChannelBox channelData={channelData} location="channel-page" />
         <ChannelTabs currentTab={currentTab} tabNames={channelTabs} setCurrentTab={setCurrentTab} />

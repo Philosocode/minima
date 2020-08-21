@@ -23,10 +23,10 @@ export const ChannelBox: FC<IProps> = ({ channelData, location }) => {
   const channelTitle = channelData.snippet.title;
   const { thumbnails } = channelData.snippet;
 
-  function renderChannelHeading() {
+  function renderChannelName() {
     if (location === "video-page") return <Link to={channelUrl} className={headingClasses}>{channelTitle}</Link>;
 
-    return <div className={headingClasses}>{channelTitle}</div>;
+    return <h1 className={headingClasses}>{channelTitle}</h1>;
   }
 
   let imageUrl = (location === "channel-page")
@@ -36,7 +36,7 @@ export const ChannelBox: FC<IProps> = ({ channelData, location }) => {
   const headingClasses = classNames({
     "c-heading": true,
     "c-heading--subsubtitle": location === "channel-page",
-    "c-heading c-heading--link": location === "video-page"
+    "c-text--link": location === "video-page"
   });
 
   const imageClasses = classNames({
@@ -45,21 +45,21 @@ export const ChannelBox: FC<IProps> = ({ channelData, location }) => {
   });
 
   const subscriberClasses = classNames({
-    "c-channel__subscribers c-channel__subscribers--grey": true,
+    "c-heading--small c-channel__subscribers c-channel__subscribers--grey": true,
     "c-channel__subscribers--large": location === "channel-page"
   });
 
   return (
-    <div className="o-media c-channel__box">
+    <div className="o-media c-channel__media">
       {
         location === "video-page"
           ? <Link to={channelUrl} className="o-media__image"><img className={imageClasses} src={imageUrl} alt={channelTitle} /></Link>
           : <div className="o-media__image"><img className={imageClasses} src={imageUrl} alt={channelTitle} /></div>
       }
-      <div className="o-media__body o-media__body--center-vertically">
-        <div className="c-channel__header">
-          <div className="c-channel__header-text">
-            { renderChannelHeading() }
+      <div className="o-media__body o-media__body--vertical-center">
+        <div className="c-channel__media-body">
+          <div className="c-channel__media-text">
+            { renderChannelName() }
             <h3 className={subscriberClasses}>{getAbbreviatedNumber(subscriberCount)} subscribers</h3>
           </div>
           {

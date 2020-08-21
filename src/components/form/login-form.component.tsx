@@ -6,6 +6,7 @@ import classNames from "classnames";
 import { useForm } from "hooks/use-form.hook";
 import { loginUser, selectAuthError } from "redux/auth";
 import { FormGroup } from "./form-group.component";
+import { Button } from "components/button/button.component";
 
 export const LoginForm: FC = () => {
   const error = useSelector(selectAuthError);
@@ -47,7 +48,7 @@ export const LoginForm: FC = () => {
   
   return (
     <div className="o-grid__item--wide">
-      <h1 className="c-heading c-heading--title">Login</h1>
+      <h1 className="c-heading c-heading--title c-heading--spaced c-text--centered">Login</h1>
       <form
         acceptCharset="UTF-8" 
         onSubmit={handleSubmit}
@@ -75,7 +76,7 @@ export const LoginForm: FC = () => {
         
         <div className="c-form__group">
           <div className={errorClasses}>{error}</div>
-          <button className="c-button c-form__submit" type="submit">SUBMIT</button>
+          <Button className="c-form__submit" type="submit">SUBMIT</Button>
         </div>
 
       </form>

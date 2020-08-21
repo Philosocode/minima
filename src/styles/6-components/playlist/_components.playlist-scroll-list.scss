@@ -1,0 +1,65 @@
+.c-playlist-scroll-list {
+  $spacing-bottom: 5px;
+  $playlist-divider: 1px solid $color-grey-darker;
+
+  &__button {
+    background-color: transparent;
+    border: $playlist-divider;
+    border-left: 0; border-right: 0;
+    color: $color-off-white;
+    cursor: pointer;
+    font-family: $font-primary;
+    font-size: $font-size-small;
+    font-weight: 600;
+    padding: 1rem 0;
+    text-align: center;
+    width: 100%;
+
+    &:hover { background-color: $color-grey-darker; }
+    &:active, &:focus { outline: none; }
+  }
+
+  &__text {
+    color: $color-off-white;
+    margin: 0 auto;
+    padding: 1.6rem 0;
+    width: 90%;
+  }
+
+  &__creator {
+    margin-bottom: $spacing-bottom;
+  }
+
+  &__header {
+    border-bottom: $playlist-divider;
+  }
+
+  &__title {
+    margin-bottom: $spacing-bottom;
+  }
+
+  &__videos {
+    max-height: 100vh;
+    overflow-y: scroll;
+    width: 100%;
+  }
+
+  &__video {
+    $selected-color: $color-grey-darker;
+
+    border-bottom: 1px solid $color-grey-dark;
+    display: flex;
+      flex-direction: column;
+      align-items: center;
+    padding: $spacing-medium 5% $spacing-medium 4%;
+    transition: background-color 0.1s;
+    text-decoration: none;
+  
+    &:last-child { border-bottom: none; }
+    &.is-current, &:hover { background-color: $selected-color; }
+  }
+
+  &__video-channel {
+    margin-top: $spacing-smallest;
+  }
+}

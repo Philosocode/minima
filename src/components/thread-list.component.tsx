@@ -6,6 +6,7 @@ import { Loader } from "components/loader.component";
 import { Thread } from "components/thread.component";
 import { addCommasToNumber } from "shared/helpers";
 import { useFetchPaginatedResource } from "hooks/use-fetch-paginated-resource.hook";
+import { Button } from "./button/button.component";
 
 interface IProps {
   numComments: string;
@@ -20,26 +21,27 @@ export const ThreadList: FC<IProps> = ({ numComments, videoId }) => {
     loadResources: loadCommentThreads
   } = useFetchPaginatedResource<ICommentThread>(getVideoCommentThreads, videoId);
 
-  function renderThreads() {
-    return threads.map(t => <Thread key={t.id} thread={t} />);
-  }
-
   function renderLoadCommentsButton() {
-    if (isLoading) {
-      return <Loader position="center-horizontal" />;
-    }
+    if (isLoading) return <Loader position="center-horizontal" />;
 
     const loadMoreText = threads.length <= 0
       ? `LOAD COMMENTS`
       : `LOAD MORE`;
 
-    return <button className="c-button c-button--centered c-thread__button" onClick={loadCommentThreads}>{loadMoreText}</button>
+    return (
+      <Button
+        centered
+        onClick={loadCommentThreads}
+      >{loadMoreText}</Button>
+    )
   }
 
   return (
-    <div className="o-list">
-      { threads.length > 0 && <h2 className="c-comment__total">{addCommasToNumber(numComments)} Comments</h2> }
-      { renderThreads() }
+    <div>
+      { threads.length > 0 && <h2 className="c-heading c-heading--subsubtitle c-heading--spaced">{addCommasToNumber(numComments)} Comments</h2> }
+      {
+        threads.map(t => <Thread key={t.id} thread={t} />)
+      }
       { hasMoreComments && renderLoadCommentsButton() }
     </div>
   );

@@ -6,7 +6,7 @@ import { getResourcesByIds, getVideoDetails, getChannelDetails, getPlaylistDetai
 import { selectAllLikes } from "redux/like";
 import { Loader } from "components/loader.component";
 import { HomeGrid } from "components/home-grid.component";
-import { MusicList } from "components/music-list.component";
+import { HomeMusic } from "components/home-music.component";
 import { ChannelGrid } from "components/channel-grid.component";
 
 export const HomePage: FC = () => {
@@ -53,8 +53,8 @@ export const HomePage: FC = () => {
   if (!dataLoaded) return <Loader position="center-page" />
 
   return (
-    <div className="o-page o-grid__container">
-      <MusicList music={music} />
+    <div className="o-page o-grid">
+      <HomeMusic music={music} />
       <HomeGrid videos={videos} headingText="Videos" />
       <HomeGrid playlists={playlists} headingText="Playlists" />
       <ChannelGrid channels={channels} />

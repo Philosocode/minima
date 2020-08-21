@@ -4,6 +4,7 @@ import { IPlaylist } from "shared/interfaces/youtube.interfaces";
 import { Loader } from "components/loader.component";
 import { VideoThumbnail } from "./video-thumbnail.component";
 import { NotFoundHeading } from "./not-found-heading.component";
+import { Button } from "./button/button.component";
 
 interface IProps {
   isLoading: boolean;
@@ -28,7 +29,7 @@ export class PlaylistGrid extends Component<IProps> {
     if (isLoading) return <Loader position="center-horizontal" />
 
     if (!isLoading && hasMorePlaylists) {
-      return <button className="c-button" onClick={loadPlaylists}>LOAD MORE</button> 
+      return <Button centered onClick={loadPlaylists}>LOAD MORE</Button>
     }
   }
 
@@ -45,9 +46,9 @@ export class PlaylistGrid extends Component<IProps> {
           { playlists.map(p =>  
             <VideoThumbnail 
               key={p.id} 
-              count={p.contentDetails.itemCount.toString()}
               date={p.snippet.publishedAt}
               resourceUrl={`/playlist?list=${p.id}`}
+              numVideos={p.contentDetails.itemCount.toString()}
               thumbnailUrl={p.snippet.thumbnails.medium.url}
               title={p.snippet.title}
             />

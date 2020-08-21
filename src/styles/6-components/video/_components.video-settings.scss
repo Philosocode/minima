@@ -1,0 +1,26 @@
+.c-video-settings {
+  &__container {
+    display: flex;
+    margin-top: $spacing-smallest;
+    overflow: hidden;
+  }
+
+  &__icon-container {
+    border: 1px solid transparent;
+    cursor: pointer;
+    display: flex;
+      align-items: center;
+      justify-content: center;
+    margin: 0 auto;
+    transition: background-color 0.1s ease, color 0.2s ease;
+    padding: 1rem 0;
+    width: 33%;
+
+    &:hover { color: var(--color-light); }
+    &.is-active { background-color: var(--color-dark); }
+  }
+
+  &__icon-container:first-child {
+    margin-left: 0;
+  }
+}

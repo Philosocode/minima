@@ -9,9 +9,9 @@ interface IProps {
 }
 export const ChannelGridCell: FC<IProps> = ({ channel }) => (
   <Link to={`/channel/${channel.id}`} className="c-channel__grid-cell" key={channel.id}>
-    <div className="c-overlay-image">
+    <div className="c-overlay-image__container">
       <img
-        className="c-overlay-image__img"
+        className="c-overlay-image"
         src={channel.snippet.thumbnails.medium.url}
         alt={channel.snippet.title} 
       />

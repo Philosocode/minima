@@ -1,14 +1,12 @@
 .o-grid {
-  &__container {
-    display: grid;
-      grid-template-columns: 
-        [full-start] $grid-gutter-width
-        [left-sidebar-start] $sidebar-width
-        [left-sidebar-end center-start] 1fr
-        [center-end right-sidebar-start] $sidebar-width
-        [right-sidebar-end] $grid-gutter-width
-        [full-end];
-  }
+  display: grid;
+    grid-template-columns: 
+      [full-start] $grid-edge-gap
+      [left-sidebar-start] $sidebar-width
+      [left-sidebar-end center-start] 1fr
+      [center-end right-sidebar-start] $sidebar-width
+      [right-sidebar-end] $grid-edge-gap
+      [full-end];
 
   &__item {
     &--full { grid-column: full-start / full-end; }

@@ -18,14 +18,16 @@ export const PlaylistDetails: FC<IProps> = ({ playlist }) => {
   const [playlistLiked, togglePlaylistLiked] = useLike("playlists", playlist.id, selectLikedPlaylists);
 
   return (
-    <div className="c-playlist-details__container">
-      <h2 className="c-heading c-heading--block c-heading--huge c-playlist-details__title">{title}</h2>
+    <div>
+      <h2 className="c-heading">{title}</h2>
 
-      <div className="c-playlist-details__grid">
+      <div className="c-playlist-details__row">
         <div>
-          <Link className="c-heading c-heading--medium c-heading--link c-playlist-details__channel" to={channelUrl}>{channelTitle}</Link>
+          <Link className="c-heading c-text--link c-text--underline" to={channelUrl}>{channelTitle}</Link>
           <div className="c-playlist-details__sub-text">
-            <span className="c-playlist-details__count">{numVideos} videos</span> • <span className="c-playlist-details__date">{getFormattedDate(publishedAt, "MMM io, yyyy")}</span>
+            <span>{numVideos} videos</span> 
+            <span className="c-playlist-details__dot"> • </span>
+            <span>{getFormattedDate(publishedAt, "MMM io, yyyy")}</span>
           </div>
         </div>
         <HeartIcon isLiked={playlistLiked} toggleIsLiked={togglePlaylistLiked} />
@@ -33,7 +35,7 @@ export const PlaylistDetails: FC<IProps> = ({ playlist }) => {
 
       {
         description && (
-          <div className="o-text-container o-text-container--html c-playlist-details__description">{description}</div>
+          <div className="c-body-text c-text--html c-playlist-details__description">{description}</div>
         )
       }
     </div>

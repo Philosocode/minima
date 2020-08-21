@@ -11,9 +11,9 @@ import { getChannelDetails, getVideoDetails } from "services/youtube.service";
 
 import { Divider } from "components/divider.component";
 import { Loader } from "components/loader.component";
-import { PlaylistScrollList } from "components/playlist-scroll-list.component";
+import { YouTubePlaylistScrollList } from "components/youtube-playlist-scroll-list.component";
 import { ThreadList } from "components/thread-list.component";
-import { StatsCard } from "components/stats-card.component";
+import { StatsCard } from "components/card/stats-card.component";
 import { VideoDescription } from "components/video-description.component";
 import { VideoPlayer } from "components/video-player.component";
 import { ChannelBox } from "components/channel-box.component";
@@ -102,7 +102,7 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
       return <CustomScrollList key={playlistId} customPlaylistType={playlistId} watchingVideoId={videoData.id} />
     }
 
-    return <PlaylistScrollList key={playlistId} playlistId={playlistId} watchingVideoId={videoData.id} />;
+    return <YouTubePlaylistScrollList key={playlistId} playlistId={playlistId} watchingVideoId={videoData.id} />;
   }
 
   // Render
@@ -110,40 +110,37 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
     return <Loader position="center-page" />;
   }
   return (
-    <div className="o-page o-page--watch o-grid__container">
-      <div className="o-grid__item--full">
-        <VideoPlayer 
-          isLoading={isLoading}
-          videoId={videoData.id}
-          playlistId={playlistId} 
-        />
-      </div>
+    <div className="o-page o-page--watch o-grid">
+      <VideoPlayer 
+        isLoading={isLoading}
+        videoId={videoData.id}
+        playlistId={playlistId} 
+      />
 
-      <div className="o-grid__item--wide">
-        <h2 className="c-heading c-heading--subtitle c-heading--left-align">{videoData.snippet.title}</h2>
-      </div>
-      
-      <div className="o-grid__item--left-sidebar">
-        <StatsCard statsCardData={getStatsCardData()} />
-        <VideoSettingsCard videoId={videoData.id} />
-      </div>
+      <div className="o-grid__item--wide c-video__grid">
+        <h2 className="c-video__grid-item--full c-heading c-heading--subtitle c-heading--spaced">{videoData.snippet.title}</h2>
 
-      <div className="o-grid__item--center">
-        <ChannelBox channelData={channelData} location="video-page" />
-        <VideoDescription description={videoData.snippet.description} />
-        <Divider />
-        {
-          +videoData.statistics.commentCount > 0
-            ? <ThreadList
-                numComments={videoData.statistics.commentCount} 
-                videoId={videoData.id}  
-              />
-            : <NotFoundHeading>No Comments</NotFoundHeading>
-        }
-      </div>
+        <div className="c-video__grid-item">
+          <StatsCard statsCardData={getStatsCardData()} />
+          <VideoSettingsCard videoId={videoData.id} />
+        </div>
 
-      <div className="o-grid__item--right-sidebar">
-        { renderScrollList() }
+        <div className="c-video__grid-item">
+          <ChannelBox channelData={channelData} location="video-page" />
+          <VideoDescription description={videoData.snippet.description} />
+          <Divider />
+          {
+            +videoData.statistics.commentCount > 0
+              ? <ThreadList
+                  numComments={videoData.statistics.commentCount} 
+                  videoId={videoData.id}  
+                />
+              : <NotFoundHeading>No Comments</NotFoundHeading>
+          }
+        </div>
+        <div className="c-video__grid-item">
+          { renderScrollList() }
+        </div>
       </div>
     </div>
   );

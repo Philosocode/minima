@@ -1,0 +1,102 @@
+.c-music {
+  $width: 80rem;
+
+  &__arrow {
+    color: inherit;
+    position: absolute;
+      right: 3rem;
+      top: 2.9rem;
+    transition: transform ease-in-out;
+    transition-delay: 0.1s;
+    
+    &.is-facing-up { transform: rotate(180deg); }
+  }
+
+  &__channel-header {
+    background-color: $color-off-black;
+    color: $color-grey-lightest;
+    cursor: pointer;
+    list-style-type: none;
+    position: relative;
+    text-align: center;
+    
+    &:hover, &.is-showing { color: var(--color-lighter); }
+    &:not(:last-child) { border-bottom: 1px solid $color-grey-darkest; }
+  }
+
+  &__channel-title {
+    color: inherit;
+    font-size: $font-size-larger;
+    font-weight: normal;
+    padding: $spacing-medium;
+    position: relative;
+  }
+
+  &__controls {
+    display: flex;
+      justify-content: space-between;
+    margin: 0 auto;
+    margin-bottom: $spacing-medium;
+    max-width: $width;
+  }
+
+  &__control {
+    background-color: $color-off-black;
+    border: none;
+    color: $color-grey-lightest;
+    padding: $spacing-small $spacing-medium;
+  }
+
+  &__dropdown {
+    height: 0;
+    opacity: 0;
+    transition: height $transition-append, opacity $transition-append;
+
+    &.is-showing {
+      height: 100%;
+      opacity: 1;
+    }
+  }
+
+  &__heading {
+    max-width: $width;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  &__list {
+    background-color: $color-grey-darkest;
+    border-radius: 0.5em;
+    list-style-type: none;
+    margin: 0 auto;
+    max-width: $width;
+    position: relative;
+  }
+
+  &__link {
+    color: $color-off-white;
+    font-size: $font-size-medium;
+    font-weight: 600;
+    position: absolute;
+      right: 0;
+      top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  &__search {
+    font-size: $font-size-medium;
+    margin-right: 4rem;
+    outline: none;
+    flex-grow: 1;
+  }
+
+  &__toggle {
+    cursor: pointer;
+    font-size: $font-size-medium;
+    width: 9em;
+
+    &:hover { color: var(--color-lighter); }
+    &:focus { outline: none; }
+  }
+}

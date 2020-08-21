@@ -10,12 +10,12 @@ interface IProps {
 
 export const ChannelTabs: FC<IProps> = ({ currentTab, tabNames, setCurrentTab }) => {
   return (
-    <div className="c-channel-tab__container">
+    <div className="c-tab__list">
       {
         tabNames.map(tabName => (
           <h3 
             key={tabName}
-            className={`c-channel-tab__heading ${currentTab === tabName && "c-channel-tab__heading--selected"}`}
+            className={`c-tab__heading ${currentTab === tabName && "is-selected"}`}
             onClick={() => setCurrentTab(tabName)}
           >
             {tabName}

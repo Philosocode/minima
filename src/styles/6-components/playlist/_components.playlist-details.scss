@@ -1,0 +1,23 @@
+.c-playlist-details {
+  $dot-spacing: 5px;
+
+  &__dot {
+    margin: auto $dot-spacing;
+  }
+
+  &__description {
+    margin-top: $spacing-small;
+  }
+
+  &__row {
+    display: flex;
+      align-items: center;
+    margin-top: $spacing-smallest;
+  }
+
+  &__sub-text {
+    font-weight: 500;
+    font-size: $font-size-small;
+    margin-top: 3px;
+  }
+}

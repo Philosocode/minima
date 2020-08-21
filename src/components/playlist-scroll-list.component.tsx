@@ -1,106 +1,46 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
-import { IPlaylist, IPlaylistItem } from "shared/interfaces/youtube.interfaces";
-import { IScrollListHeader, IScrollListVideo, IScrollListVideos } from "shared/interfaces/custom.interfaces";
-import { getPlaylistDetails, getPlaylistVideos, MISSING_THUMBNAIL_URL, getPlaylistVideosUntilCurrentVideo } from "services/youtube.service";
-
-import { Loader } from "components/loader.component";
-import { useFetchPaginatedResource } from "hooks/use-fetch-paginated-resource.hook";
-import { ScrollList } from "./scroll-list.component";
+import { IScrollListHeader, IScrollListVideos } from "shared/interfaces/custom.interfaces";
+import { PlaylistScrollListHeader } from "./playlist-scroll-list-header.component";
+import { PlaylistScrollListVideos } from "./playlist-scroll-list-videos.component";
+import { getQueryParams } from "shared/helpers";
 
 interface IProps {
-  playlistId: string;
-  watchingVideoId: string;
+  headerDetails: IScrollListHeader;
+  videosDetails: IScrollListVideos;
+  isLoading: boolean;
 }
 
-export const PlaylistScrollList: FC<IProps> = ({ playlistId, watchingVideoId }) => {
-  const [playlistDetails, setPlaylistDetails] = useState<IPlaylist>();
-  const [isLoading, setIsLoading] = useState(false);
+export const PlaylistScrollList: FC<IProps> = ({ isLoading, headerDetails, videosDetails }) => {    
+  const location = useLocation();
+  const [watchingVideoIdx, setWatchingVideoIdx] = useState(0);
 
-  const {
-    hasMore: hasMoreVideos,
-    items: playlistVideos,
-    loadResources: loadMoreVideos,
-    setItems: setPlaylistVideos,
-    setNextPageToken,
-    setHasMore
-  } = useFetchPaginatedResource<IPlaylistItem>(getPlaylistVideos, playlistId);
+  useEffect(() => {
+    const queryParams = getQueryParams(location.search);
+    const currentVideoId = queryParams.query["v"];
 
-  async function handleLoadPlaylistVideos() {
-    setIsLoading(true);
+    // `v` query param exists
+    if (typeof currentVideoId === "string") {
+      const playlistVideos = videosDetails.videos;
+      const currentVideoIdx = playlistVideos.findIndex((video) => video.videoId === currentVideoId);
 
-    await fetchPlaylistDetails();
-    await initialFetchPlaylistVideos();
-
-    setIsLoading(false);
-  }
-
-  async function fetchPlaylistDetails() {
-    try {
-      const playlistRes = await getPlaylistDetails(playlistId);
-
-      setPlaylistDetails(playlistRes);
-    } 
-    catch(err) {
-      alert(err);
+      setWatchingVideoIdx(currentVideoIdx);
     }
-  }
-
-  async function initialFetchPlaylistVideos() {
-    try {
-      const [fetchedVideos, pageToken] = await getPlaylistVideosUntilCurrentVideo(
-        watchingVideoId,
-        playlistId
-      );
-
-      setPlaylistVideos(fetchedVideos);
-
-      pageToken
-        ? setNextPageToken(pageToken)
-        : setHasMore(false);
-    }
-    catch(err) {
-      alert(err);
-    }
-  }
-
-  function renderLoadPlaylistsButton() {
-    return (
-      <button className="c-button" onClick={handleLoadPlaylistVideos}>LOAD PLAYLIST</button>
-    )
-  }
-
-  function getVideos(): IScrollListVideo[] {
-    return playlistVideos.map(video => {
-      const thumbnailUrl = video.snippet.thumbnails.medium?.url ?? MISSING_THUMBNAIL_URL;
-      
-      return {
-        playlistId: playlistId,
-        title: video.snippet.title,
-        thumbnailUrl: thumbnailUrl,
-        channelTitle: video.snippet.channelTitle,
-        videoId: video.snippet.resourceId.videoId,
-      };
-    });
-  }
-
-  // Render
-  if (isLoading && playlistVideos.length <= 0) return <Loader position="center-horizontal" />
-  if (!playlistDetails || playlistVideos.length <= 0) return renderLoadPlaylistsButton();
-
-  const headerDetails: IScrollListHeader = {
-    channelTitle: playlistDetails.snippet.channelTitle,
-    totalVideos: playlistDetails.contentDetails.itemCount,
-    playlistTitle: playlistDetails.snippet.title
-  };
-
-  const videosDetails: IScrollListVideos = { hasMoreVideos, loadMoreVideos, videos: getVideos() };
+  }, [videosDetails.videos, location])
 
   return (
-    <ScrollList
-      headerDetails={headerDetails} 
-      videosDetails={videosDetails}
-      isLoading={isLoading}
-    />
+    <div className="c-card">
+      <PlaylistScrollListHeader
+        headerDetails={headerDetails} 
+        watchingVideoIdx={watchingVideoIdx}
+      />
+
+      <PlaylistScrollListVideos
+        isLoading={isLoading}
+        videosDetails={videosDetails}
+        watchingVideoIdx={watchingVideoIdx}
+      />
+    </div>
   );
 }

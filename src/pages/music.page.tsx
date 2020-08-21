@@ -145,26 +145,28 @@ export const MusicPage: FC<IProps> = () => {
   const randomSongId = _.sample(musicDict[randomChannel])?.id;
 
   return (
-    <div className="o-page o-grid__container">
+    <div className="o-page o-grid">
       <div className="o-grid__item--wide">
-        <h1 className="c-heading c-heading--title">Music</h1>
-        <Link to={`/watch?v=${randomSongId}&list=music`}>Play All</Link>
-        <div className="c-music-list__controls">
+        <h1 className="c-heading--title c-heading--spaced c-text--centered c-music__heading">
+          Music
+          <Link className="c-heading--link c-music__link" to={`/watch?v=${randomSongId}&list=music`}>Play All</Link>
+        </h1>
+        <div className="c-music__controls">
           <input
             type="search"
-            className="c-music-list__search" 
+            className="c-music__control c-music__search" 
             onChange={handleFilterTextChange}
           />
           <button
             onClick={toggleAllExpandedChannels}
-            className="c-music-list__expand-toggle"
+            className="c-music__control c-music__toggle"
           >{allChannelsExpanded() ? "Minimize All ↑" : "Expand All ↓"}</button>
         </div>
 
         {
           objectIsEmpty(matchedSongs)
-            ? <h2 className="c-heading c-heading--subsubtitle c-heading--500">No songs found...</h2>
-            : <ul className="c-music-list">{ renderMusic() }</ul>
+            ? <h2 className="c-heading c-heading--subsubtitle c-text--centered c-heading--500 c-heading--spaced">No songs found...</h2>
+            : <ul className="c-music__list">{ renderMusic() }</ul>
         }
       </div>
     </div>

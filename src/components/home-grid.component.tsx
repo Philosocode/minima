@@ -13,7 +13,7 @@ export const HomeGrid: FC<IProps> = ({ headingText, playlists, videos }) => {
 
   return (
     <section className="o-grid__item--wide o-section">
-      <h2 className="c-heading c-heading--subtitle">{headingText}</h2>
+      <h2 className="c-text--centered c-heading c-heading--subtitle c-heading--spaced">{headingText}</h2>
       <div className="c-video-thumbnail__grid">
         {
           videos?.map((video) => <VideoThumbnail 
@@ -29,7 +29,7 @@ export const HomeGrid: FC<IProps> = ({ headingText, playlists, videos }) => {
             resourceUrl={`/playlist?list=${playlist.id}`}
             thumbnailUrl={playlist.snippet.thumbnails.medium.url}
             title={playlist.snippet.title}
-            count={playlist.contentDetails.itemCount.toString()}
+            numVideos={playlist.contentDetails.itemCount.toString()}
           />)
         }
       </div>
