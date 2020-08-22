@@ -6,6 +6,14 @@ export const LoginPage: FC = () => (
   <div className="o-grid">
     <div className="o-grid__item--wide">
       <LoginForm />
+      {
+        process.env.REACT_APP_DEMO && (
+          <div className="c-demo">
+            <h3>Email: test@test.com</h3>
+            <h3>Password: password</h3>
+          </div> 
+        )
+      }
     </div>
   </div>
 );
