@@ -47,8 +47,10 @@ export const SearchBar: FC = () => {
     // Infer if it's a video, channel, or playlist page
     // If not, assume general search
     const inferredSearchType = getInferredSearchType();
+
     if (inferredSearchType === "video") return handleVideoRedirect();
     if (inferredSearchType === "channel") return handleChannelRedirect();
+    if (inferredSearchType === "c") return handleShortChannelRedirect();
     if (inferredSearchType === "user") return handleUserRedirect();
     if (inferredSearchType === "playlist") return handlePlaylistRedirect();
 
@@ -81,6 +83,11 @@ export const SearchBar: FC = () => {
   function handleChannelRedirect() {
     const match = searchInputText.match(channelPageExp);
     if (match) history.push(`/channel/${match[1]}`);
+  }
+
+  function handleShortChannelRedirect() {
+    const match = searchInputText.match(channelShortExp);
+    if (match) history.push(`/user/${match[1]}`);
   }
 
   function handleUserRedirect() {
