@@ -4,7 +4,7 @@ import {
   LikeConstants,
   ILikeState,
 } from "./like.types";
-import { addLikeToDb, removeLikeFromDb } from "apis/firebase.api";
+import { addLikeToDb, removeLikeFromDb } from "services/firebase.service";
 import { DbLikeType } from "shared/interfaces/firebase.interfaces";
 
 export const loadAllLikes = (allLikes: ILikeState) => ({

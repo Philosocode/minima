@@ -1,0 +1,42 @@
+.c-song {
+  background-color: darken($color-off-black, 5%);
+  list-style-type: none;
+  padding-right: $spacing-medium;
+
+  &:not(:last-of-type) { border-bottom: 1px solid $color-grey-darkest; }
+  &:hover { background-color: lighten($color-off-black, 5%); }
+  &:hover .c-song__text { color: var(--color-lighter); }
+
+  &__link {
+    display: flex;
+      align-items: center;
+    text-decoration: none;
+  }
+
+  &__thumbnail {
+    display: block;
+    height: 8rem;
+  }
+
+  &__text {
+    color: $color-grey-lighter;
+    display: flex;
+      flex-direction: column;
+    margin-left: $spacing-medium;
+    text-align: left;
+  }
+  
+  &__title {
+    font-size: $font-size-normal-big;
+    font-weight: 600;
+
+    // Cut off long text and show ellipsis...
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__channel {
+    margin-top: $spacing-smallest;
+  }
+}

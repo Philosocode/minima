@@ -9,7 +9,7 @@ import * as serviceWorker from './serviceWorker';
 
 import "./font-awesome";
 import "./styles/styles.scss";
-import { rrfProps } from "apis/firebase.api";
+import { rrfProps } from "services/firebase.service";
 import { ReactReduxFirebaseProvider } from "react-redux-firebase";
 
 ReactDOM.render(

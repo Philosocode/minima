@@ -1,0 +1,13 @@
+.c-icon {
+  color: inherit;
+  font-size: $font-size-small;
+
+  &--large { font-size: $font-size-large; }
+
+  &__text {
+    color: $color-grey-lightest;
+    font-size: $font-size-small;
+    font-weight: 500;
+    margin-left: 4px;
+  }
+}

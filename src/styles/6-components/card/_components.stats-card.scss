@@ -1,0 +1,25 @@
+.c-stats-card {
+  font-weight: 500;
+  font-size: $font-size-small;
+  padding: $spacing-small;
+  width: 100%;
+
+  &--short { width: max-content; }
+
+  &__row {
+    display: grid;
+      grid-template-columns: 2rem 1fr;
+      column-gap: $spacing-small;
+
+    &:not(:first-child) { margin-top: $spacing-smallest; }
+  }
+
+  &__icon {
+    color: $color-grey-light;
+    text-align: center;
+  }
+
+  &__text {
+    color: $color-grey-lighter;
+  }
+}

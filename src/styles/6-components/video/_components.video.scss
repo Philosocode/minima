@@ -1,0 +1,32 @@
+.c-video {
+  &__grid {
+    display: grid;
+      grid-template-columns: 25rem 4fr 25rem;
+    column-gap: $spacing-large;
+  }
+
+  &__grid-item {
+    grid-column: span 1;
+
+    &--full { grid-column: 1 / -1; }
+  }
+
+  &__player {
+    grid-column: 1 / -1;
+    overflow: hidden;
+
+    // preserve aspect ratio: padding-top: calc(0.5625 * #{$video-width});
+    padding-top: 86vh;
+
+    position: relative;
+    width: 100%;
+  }
+
+  &__iframe {
+    display: block;
+    height: 100%; width: 100%;
+    position: absolute;
+      top: 0;
+      left: 0;
+  }
+}

@@ -1,10 +1,9 @@
 .o-site {
-  &__container {
-    margin: 0 auto;
-    padding-top: $header-height;
-    min-height: 99vh;
-    padding-bottom: 3rem;
-    position: relative;
-    text-align: center;
-  }
+  min-height: 99vh;
+
+  // add spacing between edges of screen & content
+  padding: $header-height 0;
+
+  // allow other ELs to position themselves absolutely wrt the site container
+  position: relative;
 }

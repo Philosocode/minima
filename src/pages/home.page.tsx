@@ -2,12 +2,12 @@ import React, { FC, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 import { IVideo, IChannel, IPlaylist } from "shared/interfaces/youtube.interfaces";
-import { getResourcesByIds, getVideoDetails, getChannelDetails, getPlaylistDetails } from "apis/youtube.api";
+import { getResourcesByIds, getVideoDetails, getChannelDetails, getPlaylistDetails } from "services/youtube.service";
 import { selectAllLikes } from "redux/like";
-import { Loader } from "components/loader.component";
-import { HomeGrid } from "components/home-grid.component";
-import { MusicList } from "components/music-list.component";
-import { ChannelGrid } from "components/channel-grid.component";
+import { Loader } from "components/loader/loader.component";
+import { HomeGrid } from "components/home/home-grid.component";
+import { HomeMusic } from "components/home/home-music.component";
+import { ChannelGrid } from "components/channel/channel-grid.component";
 
 export const HomePage: FC = () => {
   const allLikes = useSelector(selectAllLikes);
@@ -22,7 +22,7 @@ export const HomePage: FC = () => {
     async function loadData() {
       const { channels, music, playlists, videos } = allLikes;
 
-      // use of reverse: display the most recently added item at the top
+      // use reverse() to display the most recently added item at the top
 
       if (videos.length > 0) {
         const fetchedVideos = await getResourcesByIds<IVideo>(videos, getVideoDetails);
@@ -53,8 +53,8 @@ export const HomePage: FC = () => {
   if (!dataLoaded) return <Loader position="center-page" />
 
   return (
-    <div className="o-page o-grid__container">
-      <MusicList music={music} />
+    <div className="o-page o-grid">
+      <HomeMusic music={music} />
       <HomeGrid videos={videos} headingText="Videos" />
       <HomeGrid playlists={playlists} headingText="Playlists" />
       <ChannelGrid channels={channels} />

@@ -1,49 +1,38 @@
 import React, { FC, useState, useEffect } from "react";
-import { RouteComponentProps, withRouter } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { faCalendarDay, faEye, faVideo } from "@fortawesome/free-solid-svg-icons";
 
-import { IChannel, IPlaylistItem, IPlaylist } from "shared/interfaces/youtube.interfaces";
-import { getChannelDetails, getPlaylistVideos, getChannelPlaylists } from "apis/youtube.api";
-
+import { IChannel } from "shared/interfaces/youtube.interfaces";
+import { getChannelDetails } from "services/youtube.service";
 import { addCommasToNumber, getFormattedDate } from "shared/helpers";
 import { linkifyText } from "shared/jsx-helpers";
-import { ChannelBox } from "components/channel-box.component";
-import { ChannelTabs } from "components/channel-tabs.component";
-import { PlaylistGrid } from "components/playlist-grid.component";
-import { ChannelTabPanel } from "components/channel-tab-panel.component";
-import { VideoGrid } from "components/video-grid.component";
-import { Loader } from "components/loader.component";
-import { StatsCard } from "components/stats-card.component";
-import { HTMLTextContainer } from "components/html-text-container.component";
 
-interface IRouteParams {
-  channelId: string;
-  userName: string;
-}
+import { ChannelBox } from "components/channel/channel-box.component";
+import { ChannelTabs } from "components/channel/channel-tabs.component";
+import { ChannelTabPanel } from "components/channel/channel-tab-panel.component";
+import { HTMLTextContainer } from "components/text/html-text-container.component";
+import { Loader } from "components/loader/loader.component";
+import { PlaylistsThumbnailGrid } from "components/thumbnail-grid/playlists-thumbnail-grid.component";
+import { PlaylistVideosThumbnailGrid } from "components/thumbnail-grid/playlist-videos-thumbnail-grid.component";
+import { StatsCard } from "components/card/stats-card.component";
 
 export type ChannelTab = "Videos" | "Playlists" | "About";
 const channelTabs: ChannelTab[] = ["Videos", "Playlists", "About"];
 
-const _ChannelPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
+export const ChannelPage: FC = () => {
   // State
   const [channelData, setChannelData] = useState<IChannel>();
   const [isLoading, setIsLoading] = useState(false);
   const [currentTab, setCurrentTab] = useState<ChannelTab>("Videos");
 
-  const [uploads, setUploads] = useState<IPlaylistItem[]>([]);
-  const [uploadsPageToken, setUploadsPageToken] = useState<string>();
-  const [hasMoreUploads, setHasMoreUploads] = useState(true);
-
-  const [playlists, setPlaylists] = useState<IPlaylist[]>([]);
-  const [playlistsPageToken, setPlaylistsPageToken] = useState<string>();
-  const [hasMorePlaylists, setHasMorePlaylists] = useState(true);
-
-  const channelId = match.params.channelId;
-  const userName = match.params.userName;
+  const { channelId, userName } = useParams();
   
   // Functions
   useEffect(() => {
+    fetchChannelData();
+
     async function fetchChannelData() {
+      if (!channelId) return;
       setIsLoading(true);
 
       try {
@@ -60,8 +49,6 @@ const _ChannelPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
         setIsLoading(false);
       }
     }
-    
-    fetchChannelData();
   }, [channelId, userName]);
 
   function getStatsCardData() {
@@ -72,58 +59,6 @@ const _ChannelPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
       { icon: faVideo, text: addCommasToNumber(channelData.statistics.videoCount) },
       { icon: faEye, text: addCommasToNumber(channelData.statistics.viewCount) }
     ];
-  }
-
-  async function loadUploads() {
-    if (!channelData || !hasMoreUploads) return;
-    
-    const uploadsPlaylistId = channelData.contentDetails.relatedPlaylists.uploads;
-
-    setIsLoading(true);
-    try {
-      const res = await getPlaylistVideos(uploadsPlaylistId, uploadsPageToken);
-      
-      if (res.nextPageToken) {
-        setUploadsPageToken(res.nextPageToken);
-      }
-      else {
-        setHasMoreUploads(false);
-      }
-
-      const updatedVideos = uploads.concat(res.items);
-      setUploads(updatedVideos);
-    }
-    catch(err) {
-      alert("ERROR: Failed to load videos.");
-    }
-    finally {
-      setIsLoading(false);
-    }
-  }
-
-  async function loadPlaylists() {
-    if (!channelData || !hasMorePlaylists) return;
-
-    setIsLoading(true);
-    try {
-      const res = await getChannelPlaylists(channelData.id, playlistsPageToken);
-
-      if (res.nextPageToken) {
-        setPlaylistsPageToken(res.nextPageToken);
-      }
-      else {
-        setHasMorePlaylists(false);
-      }
-
-      const updatedPlaylists = playlists.concat(res.items);
-      setPlaylists(updatedPlaylists);
-    }
-    catch(err) {
-      alert("ERROR: Failed to load videos.");
-    }
-    finally {
-      setIsLoading(false);
-    }
   }
 
   function renderAbout() {
@@ -137,30 +72,26 @@ const _ChannelPage: FC<RouteComponentProps<IRouteParams>> = ({ match }) => {
   }
 
   // Render
-  if (!channelData) {
-    return <Loader position="center-page" />;
-  }
+  if (!channelData || isLoading) return <Loader position="center-page" />;
   return (
-    <div className="o-page o-page--channel o-grid__container">
+    <div className="o-page o-grid">
       <div className="o-grid__item--center">
         <ChannelBox channelData={channelData} location="channel-page" />
         <ChannelTabs currentTab={currentTab} tabNames={channelTabs} setCurrentTab={setCurrentTab} />
-        <ChannelTabPanel isActive={currentTab === "About"}>
+        <ChannelTabPanel isVisible={currentTab === "About"}>
           { renderAbout() }
         </ChannelTabPanel>
       </div>
 
       <div className="o-grid__item--wide">
-        <ChannelTabPanel isActive={currentTab === "Videos"}>
-          <VideoGrid videos={uploads} loadVideos={loadUploads} hasMoreVideos={hasMoreUploads} isLoading={isLoading} />
+        <ChannelTabPanel isVisible={currentTab === "Videos"}>
+          <PlaylistVideosThumbnailGrid playlistId={channelData.contentDetails.relatedPlaylists.uploads} />
         </ChannelTabPanel>
 
-        <ChannelTabPanel isActive={currentTab === "Playlists"}>
-          <PlaylistGrid playlists={playlists} loadPlaylists={loadPlaylists} hasMorePlaylists={hasMorePlaylists} isLoading={isLoading} />
+        <ChannelTabPanel isVisible={currentTab === "Playlists"}>
+          <PlaylistsThumbnailGrid channelId={channelData.id} />
         </ChannelTabPanel>
       </div>
     </div>
   )
 }
-
-export const ChannelPage = withRouter(_ChannelPage);

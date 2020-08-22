@@ -1,27 +1,38 @@
-$color-green-light: #66FFE3;
-$color-green: #33E5B0;
-$color-green-dark: #00B27D;
-$color-green-darker: #007F4A;
-
-$color-red: #F17371;
-$color-red-light: #F7B0AF;
-$color-red-dark: #C61714;
-
+// Black White Grey
 $color-white: #FFF;
 $color-off-white: #FCFCFC;
 
-$color-grey-lightest: #EEE;
-$color-grey-lighter: #CCC;
-$color-grey-light: #AAA;
+$color-grey-lightest: #E3E3E3;
+$color-grey-lighter: #C9C9C9;
+$color-grey-light: #AFAFAF;
 
-$color-grey: #7F7F7F;
-$color-grey-dark: #5A5A5A;
-$color-grey-darker: #404040;
-$color-grey-darkest: #323232;
+$color-grey: #969696;
 
-$color-off-black: #1e2022;
-$color-black: #000;
+$color-grey-dark: #7D7D7D;
+$color-grey-darker: #636363;
+$color-grey-darkest: #4A4A4A;
 
-$color-grey-outline: lighten($color-grey-dark, 8%);
+$color-off-black: #303030;
+$color-black: #121212;
 
-$green-gradient: linear-gradient(90deg, rgba(0,127,74,1) 0%, rgba(51,229,176,1) 30%, rgba(213,252,234,1) 100%);
+$color-grey-outline: $color-grey-darker;
+
+// Main Colours
+$color-green-lightest: #99FFFF;
+$color-green-lighter: #33E5B0;
+$color-green-light: #1ACC97;
+$color-green: #00B27D;
+$color-green-dark: #009964;
+$color-green-darker: #006631;
+
+$color-red: #EB5757;
+$color-red-light: #FF7171;
+$color-red-lighter: #FF8A8A;
+$color-red-lightest: #FFA4A4;
+$color-red-dark: #D23E3E;
+$color-red-darker: #B82424;
+
+// Faded
+$color-red-faded: rgba($color-red, 0.7);
+$color-green-faded: rgba($color-green, 0.7);
+$color-grey-faded: rgba($color-grey-darkest, 0.5);

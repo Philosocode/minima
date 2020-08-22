@@ -1,0 +1,32 @@
+.c-header {
+  background-color: $color-off-black;
+  border-bottom: 1px solid $color-off-black;
+  position: fixed;
+    top: 0;
+  width: 100%;
+  z-index: $z-index-header;
+
+  &__nav {
+    height: $header-height;
+    margin: 0 auto;
+    width: 100% - ($grid-edge-gap * 2);
+  }
+
+  &__logo {
+    color: $color-off-white;
+    font-size: $font-size-medium;
+    font-weight: bold;
+    text-decoration: none;
+
+    &:hover { color: var(--color-lighter); }
+  }
+
+  &__link {
+    color: $color-grey-lightest;
+    cursor: pointer;
+    font-weight: 600;
+    text-decoration: none;
+
+    &:hover { color: var(--color-lighter); }
+  }
+}

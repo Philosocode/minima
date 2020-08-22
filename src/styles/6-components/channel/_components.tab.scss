@@ -1,0 +1,31 @@
+.c-tab {
+  &__list {
+    display: flex;
+      align-items: center;
+      justify-content: space-between;
+    margin-top: $spacing-medium;
+    margin-bottom: $spacing-medium;
+    text-transform: uppercase;
+    max-width: 30rem;
+  }
+
+  &__panel {
+    display: none;
+
+    &.is-visible { display: block; }
+  }
+
+  &__heading {
+    border-bottom: 4px solid transparent;
+    color: $color-grey-light;
+    cursor: pointer;
+    font-size: $font-size-normal;
+    transition: border 0.1s ease, color 0.25s ease;
+
+    &:hover,
+    &.is-selected {
+      border-bottom: 4px solid var(--color-lighter);
+      color: var(--color-lighter);
+    }
+  }
+}

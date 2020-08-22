@@ -1,38 +1,35 @@
 import React, { FC, useState, useEffect } from "react";
-import { RouteComponentProps, withRouter } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { faCalendarDay, faEye, faThumbsUp, faThumbsDown, faPercent } from "@fortawesome/free-solid-svg-icons";
 
+import { IChannel, IVideo } from "shared/interfaces/youtube.interfaces";
+import { ECustomPlaylistTypes } from "shared/interfaces/custom.interfaces";
+import { getQueryParams, roundToTwoDecimals, getFormattedDate, addCommasToNumber } from "shared/helpers";
+import { getChannelDetails, getVideoDetails } from "services/youtube.service";
 import { setCurrentVideo } from "redux/video";
 
-import { IChannel, IVideo } from "shared/interfaces/youtube.interfaces";
-import { getQueryParams, roundToTwoDecimals, getFormattedDate, addCommasToNumber } from "shared/helpers";
-import { getChannelDetails, getVideoDetails } from "apis/youtube.api";
+import { ChannelBox } from "components/channel/channel-box.component";
+import { CustomPlaylistScrollList } from "components/playlist-scroll-list/custom-scroll-list.component";
+import { Divider } from "components/divider/divider.component";
+import { Loader } from "components/loader/loader.component";
+import { NotFoundHeading } from "components/text/not-found-heading.component";
+import { StatsCard } from "components/card/stats-card.component";
+import { ThreadList } from "components/comment/thread-list.component";
+import { VideoDescription } from "components/video/video-description.component";
+import { VideoPlayer } from "components/video/video-player.component";
+import { VideoSettingsCard } from "components/video/video-settings-card.component";
+import { YouTubePlaylistScrollList } from "components/playlist-scroll-list/youtube-playlist-scroll-list.component";
 
-import { Divider } from "components/divider.component";
-import { Loader } from "components/loader.component";
-import { PlaylistScrollList } from "components/playlist-scroll-list.component";
-import { ThreadList } from "components/thread-list.component";
-import { StatsCard } from "components/stats-card.component";
-import { VideoDescription } from "components/video-description.component";
-import { VideoPlayer } from "components/video-player.component";
-import { ChannelBox } from "components/channel-box.component";
-import { NotFoundHeading } from "components/not-found-heading.component";
-import { VideoSettingsCard } from "components/video-settings-card.component";
-import { CustomScrollList } from "components/custom-scroll-list.component";
-import { CustomPlaylistTypes } from "shared/interfaces/custom.interfaces";
-
-interface IRouteParams {
-  videoId: string;
-}
-
-const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }) => { 
+export const VideoPage: FC = () => { 
   // State
   const [videoData, setVideoData] = useState<IVideo>();
   const [channelData, setChannelData] = useState<IChannel>();
   const [playlistId, setPlaylistId] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  const location = useLocation();
+  const history = useHistory();
   const dispatch = useDispatch();
 
   // Functions
@@ -95,58 +92,53 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
     ];
   }
 
-  function renderScrollList() {
+  function getScrollList() {
     if (!playlistId || !videoData) return;
 
-    if (playlistId === CustomPlaylistTypes.MUSIC || playlistId === CustomPlaylistTypes.VIDEOS) {
-      return <CustomScrollList key={playlistId} customPlaylistType={playlistId} watchingVideoId={videoData.id} />
+    if (playlistId === ECustomPlaylistTypes.MUSIC || playlistId === ECustomPlaylistTypes.VIDEOS) {
+      return <CustomPlaylistScrollList key={playlistId} customPlaylistType={playlistId} watchingVideoId={videoData.id} />;
     }
 
-    return <PlaylistScrollList key={playlistId} playlistId={playlistId} watchingVideoId={videoData.id} />;
+    return <YouTubePlaylistScrollList key={playlistId} playlistId={playlistId} watchingVideoId={videoData.id} />;
   }
 
   // Render
-  if (!channelData || !videoData) {
-    return <Loader position="center-page" />;
-  }
+  if (!channelData || !videoData) return <Loader position="center-page" />;
+
   return (
-    <div className="o-page o-page--watch o-grid__container">
-      <div className="o-grid__item--full">
-        <VideoPlayer 
-          isLoading={isLoading}
-          videoId={videoData.id}
-          playlistId={playlistId} 
-        />
-      </div>
+    <div className="o-page o-page--watch o-grid">
+      <VideoPlayer 
+        isLoading={isLoading}
+        videoId={videoData.id}
+        playlistId={playlistId} 
+      />
 
-      <div className="o-grid__item--wide">
-        <h2 className="c-heading c-heading--subtitle c-heading--left-align">{videoData.snippet.title}</h2>
-      </div>
-      
-      <div className="o-grid__item--left-sidebar">
-        <StatsCard statsCardData={getStatsCardData()} />
-        <VideoSettingsCard videoId={videoData.id} />
-      </div>
+      <div className="o-grid__item--wide c-video__grid">
+        <h2 className="c-video__grid-item--full c-heading c-heading--subtitle c-heading--spaced">{videoData.snippet.title}</h2>
 
-      <div className="o-grid__item--center">
-        <ChannelBox channelData={channelData} location="video-page" />
-        <VideoDescription description={videoData.snippet.description} />
-        <Divider />
-        {
-          +videoData.statistics.commentCount > 0
-            ? <ThreadList
-                numComments={videoData.statistics.commentCount} 
-                videoId={videoData.id}  
-              />
-            : <NotFoundHeading>No Comments</NotFoundHeading>
-        }
-      </div>
+        <div className="c-video__grid-item">
+          <StatsCard statsCardData={getStatsCardData()} />
+          <VideoSettingsCard videoId={videoData.id} />
+        </div>
 
-      <div className="o-grid__item--right-sidebar">
-        { renderScrollList() }
+        <div className="c-video__grid-item">
+          <ChannelBox channelData={channelData} location="video-page" />
+          <VideoDescription description={videoData.snippet.description} />
+          <Divider />
+          {
+            +videoData.statistics.commentCount > 0
+              ? <ThreadList
+                  key={videoData.id}
+                  numComments={videoData.statistics.commentCount} 
+                  videoId={videoData.id}  
+                />
+              : <NotFoundHeading>No Comments</NotFoundHeading>
+          }
+        </div>
+        <div className="c-video__grid-item">
+          { getScrollList() }
+        </div>
       </div>
     </div>
   );
 };
-
-export const VideoPage = withRouter(_VideoPage);

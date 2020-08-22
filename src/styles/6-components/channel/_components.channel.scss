@@ -1,0 +1,73 @@
+.c-channel {
+  &__heading {
+    color: $color-grey-lighter;
+
+    // For channel grid cells
+    transition: color $transition-append, transform $transition-append;
+  }
+
+  &__image {
+    margin-right: 2rem;
+    width: 6rem;
+
+    &--small {
+      margin-right: $spacing-small;
+      width: 4.5rem;
+    }
+
+    &--large { width: 10rem; }
+  }
+
+  &__media {
+    margin-bottom: $spacing-small;
+  }
+
+  &__media-body {
+    display: flex;
+  }
+
+  &__subscribers {
+    font-weight: 500;
+    font-size: $font-size-small;
+    margin-top: 5px;
+
+    &--grey { color: $color-grey-light; }
+    &--large { font-size: $font-size-normal; }
+  }
+
+    // Channel Grid Stuff
+    &__grid {
+      display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
+    }
+  
+    &__grid-cell {
+      display: block;
+      overflow: hidden;
+      position: relative;
+      text-align: right;
+      width: 100%;
+    }
+  
+    &__grid-cell:hover {
+      .c-overlay-image { transform: scale(1.06); }
+      .c-overlay-image__container::before { background-color: transparent; }
+      .c-channel__text-overlay { background-position: 100%; }
+  
+      .c-channel__heading {
+        color: var(--color-lighter);
+        transform: translateX(1rem);
+      }
+    }
+  
+    &__text-overlay {
+      background-image: linear-gradient(120deg, transparent 0%, transparent 50%, rgba($color-off-black, 0.75) 50%);
+      background-size: 230%;
+      display: inline-block;
+      padding: 1rem 2rem 1rem 5px;
+      position: absolute;
+        bottom: 0;
+        right: 0;
+      transition: background $transition-append;
+    }
+}

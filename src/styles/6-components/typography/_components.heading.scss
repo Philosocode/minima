@@ -1,0 +1,45 @@
+.c-heading {
+  font-family: $font-primary;
+  font-weight: bold;
+  margin: 0;
+
+  // Compound styles
+  &--link {
+    color: inherit;
+    cursor: pointer;
+    text-decoration: none;
+    
+    &:hover { color: var(--color-lighter); }
+  }
+
+  &--small {
+    font-size: $font-size-small;
+    font-weight: 500;
+  }
+
+  // One liners
+  &--hero {
+    font-size: $font-size-mega;
+  }
+
+  &--title {
+    font-size: $font-size-largest;
+  }
+
+  &--subtitle {
+    font-size: $font-size-larger;
+  }
+
+  &--subsubtitle {
+    font-size: $font-size-large;
+  }
+
+  &--spaced {
+    margin-top: 0.9em;
+    margin-bottom: 0.9em;
+  }
+
+  &--light { color: $color-grey-lightest; }
+  &--dim { color: $color-grey-light; }
+  &--dark { color: $color-grey-darkest; }
+}

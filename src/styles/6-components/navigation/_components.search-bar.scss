@@ -1,0 +1,19 @@
+.c-search-bar {
+  margin: 0 auto;
+  position: relative;
+  width: 40vw;
+
+  &__input {
+    background-color: $color-black;
+    border: 1px solid $color-grey-darkest;
+    border-radius: 2px;
+    color: $color-off-white;
+    height: 2rem;
+    font-family: $font-primary;
+    font-weight: 500;
+    font-size: $font-size-normal;
+    padding: 1.8rem 3.6rem 1.8rem 1.8rem;
+
+    &:focus { outline: 2px solid var(--color); }
+  }
+}

@@ -1,0 +1,26 @@
+.c-button__container {
+  &--centered { text-align: center; }
+}
+
+.c-button {
+  background-color: $color-grey-darker;
+  border: 1px solid $color-grey-outline;
+  border-radius: 0.6em;
+  color: $color-off-white;
+  cursor: pointer;
+  font-family: $font-primary;
+  font-size: $font-size-small;
+  font-weight: bold;
+  padding: 0.7em 1em;
+  transition: color $transition-append, transform $transition-append;
+
+  &:hover {
+    color: var(--color-lighter);
+    transform: translateY(-2px);
+  }
+
+  &:active, &:focus {
+    outline: none;
+    transform: translateY(-1px);
+  }
+}

@@ -5,10 +5,12 @@ import _ from "lodash";
 
 import { IVideo } from "shared/interfaces/youtube.interfaces";
 import { objectIsEmpty } from "shared/helpers";
-import { getResourcesByIds, getVideoDetails } from "apis/youtube.api";
+import { getResourcesByIds, getVideoDetails } from "services/youtube.service";
 import { selectAllLikes } from "redux/like";
-import { Loader } from "components/loader.component";
-import { MusicChannelHeader } from "components/music-channel-header.component";
+
+import { Loader } from "components/loader/loader.component";
+import { MusicChannelHeader } from "components/music/music-channel-header.component";
+import { InputWithClear } from "components/input/input-with-clear.component";
 
 interface IProps {
   music?: IVideo[];
@@ -28,9 +30,13 @@ export const MusicPage: FC<IProps> = () => {
   const [musicDict, setMusicDict] = useState<IMusicDict>({});
   const [matchedSongs, setMatchedSongs] = useState<IMusicDict>({});
   const [expandedChannels, setExpandedChannels] = useState<IExpandedChannels>({});
+  const [filterText, setFilterText] = useState("");
 
   useEffect(() => {
+    loadData();
+    
     async function loadData() {
+      // Get liked songs from the DB
       const { music: likedMusicIds } = allLikes;
 
       if (likedMusicIds.length > 0) {
@@ -42,6 +48,8 @@ export const MusicPage: FC<IProps> = () => {
     }
 
     function generateMusicDict(music: IVideo[]) {
+      // musicDict will contain all liked songs
+      // matchedSongs will contain liked songs that match filter text
       const dict: IMusicDict = {};
 
       music.forEach(song => {
@@ -54,15 +62,16 @@ export const MusicPage: FC<IProps> = () => {
       setMusicDict(dict);
       setMatchedSongs(dict);
     }
-
-    loadData();
   }, [allLikes]);
 
-  function handleFilterTextChange(ev: React.FormEvent<HTMLInputElement>) {
-    const filterTerm = ev.currentTarget.value.toLowerCase();
-    if (!filterTerm) setMatchedSongs(musicDict); // Show all songs if no filter
+  useEffect(() => {
+    if (!filterText) setMatchedSongs(musicDict); // Show all songs if no filter
 
-    updateMatchedSongsWithFilter(filterTerm);
+    updateMatchedSongsWithFilter(filterText.toLowerCase());
+  }, [filterText]); // eslint-disable-line
+
+  function handleFilterTextChange(ev: React.FormEvent<HTMLInputElement>) {
+    setFilterText(ev.currentTarget.value);
   }
 
   function updateMatchedSongsWithFilter(filterTerm: string) {
@@ -79,17 +88,18 @@ export const MusicPage: FC<IProps> = () => {
   }
   
   function filterSongsByTerm(songs: IVideo[], filterTerm: string) {
+    // Only include song if channel name, song title, or description includes `filterTerm`
+
     return songs.filter(song => {
       const { channelTitle, title, description } = song.snippet;
-
-      // Only include song if title or description includes `filterTerm`
       return channelTitle.toLowerCase().includes(filterTerm) ||
              title.toLowerCase().includes(filterTerm) || 
              description.toLowerCase().includes(filterTerm);
     });
   }
 
-  function renderMusic() {
+  function getMusic() {
+    // Render all the channel headers sorted by channel name
     return Object.keys(matchedSongs).sort().map(channelTitle => {
       const songsForChannel = matchedSongs[channelTitle];
       const channelIsExpanded = expandedChannels[channelTitle] === true;
@@ -113,6 +123,7 @@ export const MusicPage: FC<IProps> = () => {
   }
 
   function allChannelsExpanded() {
+    // Check if all channels are expanded
     const channelTitles = Object.keys(matchedSongs);
 
     for (let idx = 0; idx < channelTitles.length; idx++) {
@@ -124,6 +135,7 @@ export const MusicPage: FC<IProps> = () => {
   }
 
   function toggleAllChannels(shouldExpand: boolean) {
+    // Expand/contract all channels
     const updatedExpandedChannels = {...expandedChannels};
 
     Object.keys(musicDict).forEach(channelTitle => {
@@ -134,37 +146,45 @@ export const MusicPage: FC<IProps> = () => {
   }
 
   function toggleChannelExpanded(channelTitle: string) {
+    // Expand/contract a channel
     const updatedValue = !expandedChannels[channelTitle];
     const updatedDict = Object.assign({}, expandedChannels, { [channelTitle]: updatedValue });
 
     setExpandedChannels(updatedDict);
   }
 
-  if (!dataLoaded) return <Loader position="center-page" />
+  if (!dataLoaded) return <Loader position="center-page" />;
+
+  // When playing all liked songs, start at a random song
+  // TODO: add functionality to start at beginning & random
   const randomChannel = _.sample(Object.keys(musicDict)) as string;
   const randomSongId = _.sample(musicDict[randomChannel])?.id;
 
   return (
-    <div className="o-page o-grid__container">
+    <div className="o-page o-grid">
       <div className="o-grid__item--wide">
-        <h1 className="c-heading c-heading--title">Music</h1>
-        <Link to={`/watch?v=${randomSongId}&list=music`}>Play All</Link>
-        <div className="c-music-list__controls">
-          <input
-            type="search"
-            className="c-music-list__search" 
+        <h1 className="c-heading--title c-heading--spaced c-text--centered c-music__heading">
+          Music
+          <Link className="c-heading--link c-music__link" to={`/watch?v=${randomSongId}&list=music`}>Play All</Link>
+        </h1>
+        <div className="c-music__controls">
+          <InputWithClear
             onChange={handleFilterTextChange}
+            onClear={() => setFilterText("")}
+            value={filterText}
+            containerClasses="c-music__input-container"
+            inputClasses="c-music__control c-music__input"
           />
           <button
             onClick={toggleAllExpandedChannels}
-            className="c-music-list__expand-toggle"
+            className="c-music__control c-music__toggle"
           >{allChannelsExpanded() ? "Minimize All ↑" : "Expand All ↓"}</button>
         </div>
 
         {
           objectIsEmpty(matchedSongs)
-            ? <h2 className="c-heading c-heading--subsubtitle c-heading--500">No songs found...</h2>
-            : <ul className="c-music-list">{ renderMusic() }</ul>
+            ? <h2 className="c-heading c-heading--subsubtitle c-text--centered c-heading--500 c-heading--spaced">No songs found...</h2>
+            : <ul className="c-music__list">{ getMusic() }</ul>
         }
       </div>
     </div>
