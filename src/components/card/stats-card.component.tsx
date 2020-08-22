@@ -20,10 +20,11 @@ export const StatsCard: FC<IProps> = ({ isShort, statsCardData }) => {
     "c-stats-card--short": isShort
   });
 
+  if (!statsCardData) return null;
   return (
     <div className={containerClasses}>
       {
-        statsCardData && statsCardData.map(dataRow => <StatsCardRow key={dataRow.text} icon={dataRow.icon} text={dataRow.text} /> )
+        statsCardData.map(dataRow => <StatsCardRow key={dataRow.text} icon={dataRow.icon} text={dataRow.text} /> )
       }
     </div>
   );

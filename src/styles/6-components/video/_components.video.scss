@@ -11,32 +11,6 @@
     &--full { grid-column: 1 / -1; }
   }
 
-  &__label {
-    background-color: $color-grey-darkest;
-    border-radius: 5px;
-    color: $color-off-white;
-    font-size: $font-size-small;
-    font-weight: bold;
-    padding: 5px 0.8rem;
-    position: absolute;
-  
-    &.is-current {
-      background-color: var(--color-dark);
-    }
-  
-    &--index {
-      border-bottom-left-radius: 0;
-      border-top-right-radius: 0;
-      left: 0;
-      top: 0;
-    }
-  
-    &--num-videos {
-      bottom: 1.2rem;
-      right: 1rem;
-    }
-  }
-
   &__player {
     grid-column: 1 / -1;
     overflow: hidden;
@@ -49,6 +23,7 @@
   }
 
   &__iframe {
+    display: block;
     height: 100%; width: 100%;
     position: absolute;
       top: 0;

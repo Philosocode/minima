@@ -1,26 +1,19 @@
 import React, { FC, useState, useEffect } from "react";
-import { RouteComponentProps, withRouter } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
-import { IPlaylist, IPlaylistItem } from "shared/interfaces/youtube.interfaces";
-import { getPlaylistDetails, getPlaylistVideos } from "services/youtube.service";
-import { Loader } from "components/loader.component";
-import { VideoGrid } from "components/video-grid.component";
-import { PlaylistDetails } from "components/playlist-details.component";
-import { Divider } from "components/divider.component";
+import { IPlaylist } from "shared/interfaces/youtube.interfaces";
 import { getQueryParams } from "shared/helpers";
+import { getPlaylistDetails } from "services/youtube.service";
+import { Divider } from "components/divider/divider.component";
+import { Loader } from "components/loader/loader.component";
+import { PlaylistDetails } from "components/playlist/playlist-details.component";
+import { PlaylistVideosThumbnailGrid } from "components/thumbnail-grid/playlist-videos-thumbnail-grid.component";
 
-interface IRouteParams {
-  playlistId: string;
-}
-
-const _PlaylistPage: FC<RouteComponentProps<IRouteParams>> = ({ location }) => {
+export const PlaylistPage: FC = () => {
   // State
   const [playlistDetails, setPlaylistDetails] = useState<IPlaylist>();
-  const [videos, setVideos] = useState<IPlaylistItem[]>([]);
-  const [videosPageToken, setVideosPageToken] = useState<string>();
-  const [hasMoreVideos, setHasMoreVideos] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-
+  const location = useLocation();
   
   // Functions
   useEffect(() => {
@@ -49,35 +42,8 @@ const _PlaylistPage: FC<RouteComponentProps<IRouteParams>> = ({ location }) => {
     }
   }, [location.search]);
 
-  async function loadVideos() {
-    if (!playlistDetails || !hasMoreVideos) return;
-
-    setIsLoading(true);
-    try {
-      const res = await getPlaylistVideos(playlistDetails.id, videosPageToken);
-      
-      if (res.nextPageToken) {
-        setVideosPageToken(res.nextPageToken);
-      }
-      else {
-        setHasMoreVideos(false);
-      }
-
-      const updatedVideos = videos.concat(res.items);
-      setVideos(updatedVideos);
-    }
-    catch(err) {
-      alert("ERROR: Failed to load playlist videos.");
-    }
-    finally {
-      setIsLoading(false);
-    }
-  }
-
   // Render
-  if (!playlistDetails) {
-    return <Loader position="center-page" />;
-  }
+  if (isLoading || !playlistDetails) return <Loader position="center-page" />;
 
   return (
     <div className="o-page o-grid">
@@ -87,17 +53,8 @@ const _PlaylistPage: FC<RouteComponentProps<IRouteParams>> = ({ location }) => {
       </div>
 
       <div className="o-grid__item--wide">
-        <VideoGrid 
-          videos={videos}
-          loadVideos={loadVideos}
-          hasMoreVideos={hasMoreVideos}
-          isLoading={isLoading}
-          showVideoIndices
-          playlistId={playlistDetails.id} 
-        />
+        <PlaylistVideosThumbnailGrid playlistId={playlistDetails.id} />
       </div>
     </div>
   )
 }
-
-export const PlaylistPage = withRouter(_PlaylistPage);

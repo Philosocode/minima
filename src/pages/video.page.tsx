@@ -1,38 +1,35 @@
 import React, { FC, useState, useEffect } from "react";
-import { RouteComponentProps, withRouter } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { faCalendarDay, faEye, faThumbsUp, faThumbsDown, faPercent } from "@fortawesome/free-solid-svg-icons";
 
-import { setCurrentVideo } from "redux/video";
-
 import { IChannel, IVideo } from "shared/interfaces/youtube.interfaces";
+import { ECustomPlaylistTypes } from "shared/interfaces/custom.interfaces";
 import { getQueryParams, roundToTwoDecimals, getFormattedDate, addCommasToNumber } from "shared/helpers";
 import { getChannelDetails, getVideoDetails } from "services/youtube.service";
+import { setCurrentVideo } from "redux/video";
 
-import { Divider } from "components/divider.component";
-import { Loader } from "components/loader.component";
-import { YouTubePlaylistScrollList } from "components/youtube-playlist-scroll-list.component";
-import { ThreadList } from "components/thread-list.component";
+import { ChannelBox } from "components/channel/channel-box.component";
+import { CustomPlaylistScrollList } from "components/playlist-scroll-list/custom-scroll-list.component";
+import { Divider } from "components/divider/divider.component";
+import { Loader } from "components/loader/loader.component";
+import { NotFoundHeading } from "components/text/not-found-heading.component";
 import { StatsCard } from "components/card/stats-card.component";
-import { VideoDescription } from "components/video-description.component";
-import { VideoPlayer } from "components/video-player.component";
-import { ChannelBox } from "components/channel-box.component";
-import { NotFoundHeading } from "components/not-found-heading.component";
-import { VideoSettingsCard } from "components/video-settings-card.component";
-import { CustomScrollList } from "components/custom-scroll-list.component";
-import { CustomPlaylistTypes } from "shared/interfaces/custom.interfaces";
+import { ThreadList } from "components/comment/thread-list.component";
+import { VideoDescription } from "components/video/video-description.component";
+import { VideoPlayer } from "components/video/video-player.component";
+import { VideoSettingsCard } from "components/video/video-settings-card.component";
+import { YouTubePlaylistScrollList } from "components/playlist-scroll-list/youtube-playlist-scroll-list.component";
 
-interface IRouteParams {
-  videoId: string;
-}
-
-const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }) => { 
+export const VideoPage: FC = () => { 
   // State
   const [videoData, setVideoData] = useState<IVideo>();
   const [channelData, setChannelData] = useState<IChannel>();
   const [playlistId, setPlaylistId] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  const location = useLocation();
+  const history = useHistory();
   const dispatch = useDispatch();
 
   // Functions
@@ -95,20 +92,19 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
     ];
   }
 
-  function renderScrollList() {
+  function getScrollList() {
     if (!playlistId || !videoData) return;
 
-    if (playlistId === CustomPlaylistTypes.MUSIC || playlistId === CustomPlaylistTypes.VIDEOS) {
-      return <CustomScrollList key={playlistId} customPlaylistType={playlistId} watchingVideoId={videoData.id} />
+    if (playlistId === ECustomPlaylistTypes.MUSIC || playlistId === ECustomPlaylistTypes.VIDEOS) {
+      return <CustomPlaylistScrollList key={playlistId} customPlaylistType={playlistId} watchingVideoId={videoData.id} />;
     }
 
     return <YouTubePlaylistScrollList key={playlistId} playlistId={playlistId} watchingVideoId={videoData.id} />;
   }
 
   // Render
-  if (!channelData || !videoData) {
-    return <Loader position="center-page" />;
-  }
+  if (!channelData || !videoData) return <Loader position="center-page" />;
+
   return (
     <div className="o-page o-page--watch o-grid">
       <VideoPlayer 
@@ -139,11 +135,9 @@ const _VideoPage: FC<RouteComponentProps<IRouteParams>> = ({ location, history }
           }
         </div>
         <div className="c-video__grid-item">
-          { renderScrollList() }
+          { getScrollList() }
         </div>
       </div>
     </div>
   );
 };
-
-export const VideoPage = withRouter(_VideoPage);

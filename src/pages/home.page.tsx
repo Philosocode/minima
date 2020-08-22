@@ -4,10 +4,10 @@ import { useSelector } from "react-redux";
 import { IVideo, IChannel, IPlaylist } from "shared/interfaces/youtube.interfaces";
 import { getResourcesByIds, getVideoDetails, getChannelDetails, getPlaylistDetails } from "services/youtube.service";
 import { selectAllLikes } from "redux/like";
-import { Loader } from "components/loader.component";
-import { HomeGrid } from "components/home-grid.component";
-import { HomeMusic } from "components/home-music.component";
-import { ChannelGrid } from "components/channel-grid.component";
+import { Loader } from "components/loader/loader.component";
+import { HomeGrid } from "components/home/home-grid.component";
+import { HomeMusic } from "components/home/home-music.component";
+import { ChannelGrid } from "components/channel/channel-grid.component";
 
 export const HomePage: FC = () => {
   const allLikes = useSelector(selectAllLikes);
@@ -22,7 +22,7 @@ export const HomePage: FC = () => {
     async function loadData() {
       const { channels, music, playlists, videos } = allLikes;
 
-      // use of reverse: display the most recently added item at the top
+      // use reverse() to display the most recently added item at the top
 
       if (videos.length > 0) {
         const fetchedVideos = await getResourcesByIds<IVideo>(videos, getVideoDetails);

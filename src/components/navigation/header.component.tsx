@@ -1,12 +1,12 @@
 import React, { FC } from "react";
 import { Link } from "react-router-dom";
 
-import { SearchBar } from "components/search-bar.component";
+import { SearchBar } from "components/search/search-bar.component";
 import { logoutUser } from "redux/auth";
 import { useDispatch } from "react-redux";
 import { useAuth } from "hooks/use-auth.hook";
 
-export const Header: FC = () => { 
+export const Header: FC = () => {
   const user = useAuth();
   const dispatch = useDispatch();
 
@@ -30,4 +30,4 @@ export const Header: FC = () => {
       </nav>
     </header>
   );
- }
+};

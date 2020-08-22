@@ -1,5 +1,4 @@
 .c-playlist-scroll-list {
-  $spacing-bottom: 5px;
   $playlist-divider: 1px solid $color-grey-darker;
 
   &__button {
@@ -19,23 +18,24 @@
     &:active, &:focus { outline: none; }
   }
 
-  &__text {
-    color: $color-off-white;
-    margin: 0 auto;
-    padding: 1.6rem 0;
-    width: 90%;
-  }
-
-  &__creator {
-    margin-bottom: $spacing-bottom;
+  &__title {
+    font-size: $font-size-medium;
   }
 
   &__header {
     border-bottom: $playlist-divider;
   }
 
-  &__title {
-    margin-bottom: $spacing-bottom;
+  &__header-text {
+    color: $color-off-white;
+    display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    margin: 0 auto;
+    padding: 1.6rem 0;
+    width: 90%;
+
+    & > * + * { margin-top: 5px; }
   }
 
   &__videos {

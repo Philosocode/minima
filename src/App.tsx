@@ -16,11 +16,11 @@ import { Footer } from "components/navigation/footer.component";
 
 /* Contexts */
 import { getUserData } from "services/firebase.service";
-import { Loader } from "components/loader.component";
+import { Loader } from "components/loader/loader.component";
 import { selectAuthLoaded } from "redux/auth";
 import { loadAllLikes } from "redux/like";
 import { LoginPage } from "pages/login.page";
-import { PrivateRoute } from "components/private-route.component";
+import { PrivateRoute } from "components/navigation/private-route.component";
 import { useAuth } from "hooks/use-auth.hook";
 
 export function App() {

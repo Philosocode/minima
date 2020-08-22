@@ -7,8 +7,9 @@ import { IVideo } from "shared/interfaces/youtube.interfaces";
 import { objectIsEmpty } from "shared/helpers";
 import { getResourcesByIds, getVideoDetails } from "services/youtube.service";
 import { selectAllLikes } from "redux/like";
-import { Loader } from "components/loader.component";
-import { MusicChannelHeader } from "components/music-channel-header.component";
+
+import { Loader } from "components/loader/loader.component";
+import { MusicChannelHeader } from "components/music/music-channel-header.component";
 
 interface IProps {
   music?: IVideo[];
@@ -30,7 +31,10 @@ export const MusicPage: FC<IProps> = () => {
   const [expandedChannels, setExpandedChannels] = useState<IExpandedChannels>({});
 
   useEffect(() => {
+    loadData();
+    
     async function loadData() {
+      // Get liked songs from the DB
       const { music: likedMusicIds } = allLikes;
 
       if (likedMusicIds.length > 0) {
@@ -54,8 +58,6 @@ export const MusicPage: FC<IProps> = () => {
       setMusicDict(dict);
       setMatchedSongs(dict);
     }
-
-    loadData();
   }, [allLikes]);
 
   function handleFilterTextChange(ev: React.FormEvent<HTMLInputElement>) {
@@ -89,7 +91,8 @@ export const MusicPage: FC<IProps> = () => {
     });
   }
 
-  function renderMusic() {
+  function getMusic() {
+    // Render all the channel headers sorted by channel name
     return Object.keys(matchedSongs).sort().map(channelTitle => {
       const songsForChannel = matchedSongs[channelTitle];
       const channelIsExpanded = expandedChannels[channelTitle] === true;
@@ -113,6 +116,7 @@ export const MusicPage: FC<IProps> = () => {
   }
 
   function allChannelsExpanded() {
+    // Check if all channels are expanded
     const channelTitles = Object.keys(matchedSongs);
 
     for (let idx = 0; idx < channelTitles.length; idx++) {
@@ -124,6 +128,7 @@ export const MusicPage: FC<IProps> = () => {
   }
 
   function toggleAllChannels(shouldExpand: boolean) {
+    // Expand/contract all channels
     const updatedExpandedChannels = {...expandedChannels};
 
     Object.keys(musicDict).forEach(channelTitle => {
@@ -134,13 +139,17 @@ export const MusicPage: FC<IProps> = () => {
   }
 
   function toggleChannelExpanded(channelTitle: string) {
+    // Expand/contract a channel
     const updatedValue = !expandedChannels[channelTitle];
     const updatedDict = Object.assign({}, expandedChannels, { [channelTitle]: updatedValue });
 
     setExpandedChannels(updatedDict);
   }
 
-  if (!dataLoaded) return <Loader position="center-page" />
+  if (!dataLoaded) return <Loader position="center-page" />;
+
+  // When playing all liked songs, start at a random song
+  // TODO: add functionality to start at beginning & random
   const randomChannel = _.sample(Object.keys(musicDict)) as string;
   const randomSongId = _.sample(musicDict[randomChannel])?.id;
 
@@ -166,7 +175,7 @@ export const MusicPage: FC<IProps> = () => {
         {
           objectIsEmpty(matchedSongs)
             ? <h2 className="c-heading c-heading--subsubtitle c-text--centered c-heading--500 c-heading--spaced">No songs found...</h2>
-            : <ul className="c-music__list">{ renderMusic() }</ul>
+            : <ul className="c-music__list">{ getMusic() }</ul>
         }
       </div>
     </div>

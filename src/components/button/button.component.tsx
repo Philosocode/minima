@@ -13,8 +13,7 @@ export const Button: FC<IProps> = ({ centered, className, children, ...rest }) =
     "c-button__container--centered": centered
   });
 
-  let buttonClasses = "c-button";
-  if (className) buttonClasses += ` ${className}`;
+  const buttonClasses = classNames("c-button", className);
 
   return (
     <div className={containerClasses}>

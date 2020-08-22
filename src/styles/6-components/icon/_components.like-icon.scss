@@ -1,7 +1,5 @@
 .c-like-icon {
-  &__container {
-    position: relative;
-  }
+  position: relative;
 
   &__icon {
     color: $color-grey-light;
@@ -18,7 +16,7 @@
         left: 0;
     }
 
-    &--hidden {
+    &.is-hidden {
       opacity: 0;
       visibility: hidden;
     }

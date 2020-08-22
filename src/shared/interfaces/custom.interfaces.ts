@@ -1,4 +1,4 @@
-export enum CustomPlaylistTypes {
+export enum ECustomPlaylistTypes {
   MUSIC = "music",
   VIDEOS = "videos",
 };
@@ -18,8 +18,18 @@ export interface IScrollListVideo {
 }
 
 export interface IScrollListHeader {
-  channelTitle?: string;
-  // currentVideoIdx: number;
+  playlistId: string;
   playlistTitle: string;
   totalVideos: number;
+  channelId?: string;
+  channelTitle?: string;
+}
+
+export interface IThumbnail {
+  id: string;
+  resourceUrl: string;
+  title: string;
+  thumbnailUrl: string;
+  date?: string;
+  numItemsInPlaylist?: number | string;
 }
