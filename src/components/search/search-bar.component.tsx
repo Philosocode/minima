@@ -1,14 +1,12 @@
 import React, { useState, FC, ChangeEvent, KeyboardEvent } from "react";
 import { useHistory } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import classNames from "classnames";
 
 import {
   getQueryParams,
   scrollToTop,
   getVideoQueryString,
 } from "shared/helpers";
+import { InputWithClear } from "components/input/input-with-clear.component";
 
 type SearchType =
   | "video"
@@ -23,11 +21,6 @@ export const SearchBar: FC = () => {
   // State
   const [searchInputText, setSearchInputText] = useState("");
   const history = useHistory();
-
-  const searchClearClasses = classNames({
-    "c-search-bar__clear": true,
-    "is-showing": searchInputText.length > 0
-  });
 
   // RegExps
   const channelPageExp = /\/channel\/(UC[0-9A-Za-z_-]{21}[AQgw])$/;
@@ -108,21 +101,14 @@ export const SearchBar: FC = () => {
   }
 
   return (
-    <div className="c-search-bar">
-      <input
-        autoComplete="0"
-        type="text"
-        className="c-search-bar__input"
-        placeholder="Enter a YouTube video, channel, or playlist URL"
-        value={searchInputText}
-        onChange={handleChange}
-        onKeyPress={handleSubmit}
-      />
-      <FontAwesomeIcon
-        className={searchClearClasses}
-        icon={faTimes}
-        onClick={handleSearchClear}
-      />
-    </div>
+    <InputWithClear
+      onChange={handleChange}
+      onClear={handleSearchClear}
+      onKeyPress={handleSubmit}
+      placeholder="Enter a YouTube video, channel, or playlist URL"
+      containerClasses="c-search-bar"
+      inputClasses="c-search-bar__input"
+      value={searchInputText}
+    />
   );
 };

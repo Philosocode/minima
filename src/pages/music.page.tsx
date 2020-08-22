@@ -10,6 +10,7 @@ import { selectAllLikes } from "redux/like";
 
 import { Loader } from "components/loader/loader.component";
 import { MusicChannelHeader } from "components/music/music-channel-header.component";
+import { InputWithClear } from "components/input/input-with-clear.component";
 
 interface IProps {
   music?: IVideo[];
@@ -29,6 +30,7 @@ export const MusicPage: FC<IProps> = () => {
   const [musicDict, setMusicDict] = useState<IMusicDict>({});
   const [matchedSongs, setMatchedSongs] = useState<IMusicDict>({});
   const [expandedChannels, setExpandedChannels] = useState<IExpandedChannels>({});
+  const [filterText, setFilterText] = useState("");
 
   useEffect(() => {
     loadData();
@@ -62,11 +64,14 @@ export const MusicPage: FC<IProps> = () => {
     }
   }, [allLikes]);
 
-  function handleFilterTextChange(ev: React.FormEvent<HTMLInputElement>) {
-    const filterTerm = ev.currentTarget.value.toLowerCase();
-    if (!filterTerm) setMatchedSongs(musicDict); // Show all songs if no filter
+  useEffect(() => {
+    if (!filterText) setMatchedSongs(musicDict); // Show all songs if no filter
 
-    updateMatchedSongsWithFilter(filterTerm);
+    updateMatchedSongsWithFilter(filterText.toLowerCase());
+  }, [filterText]); // eslint-disable-line
+
+  function handleFilterTextChange(ev: React.FormEvent<HTMLInputElement>) {
+    setFilterText(ev.currentTarget.value);
   }
 
   function updateMatchedSongsWithFilter(filterTerm: string) {
@@ -163,10 +168,12 @@ export const MusicPage: FC<IProps> = () => {
           <Link className="c-heading--link c-music__link" to={`/watch?v=${randomSongId}&list=music`}>Play All</Link>
         </h1>
         <div className="c-music__controls">
-          <input
-            type="text"
-            className="c-music__control c-music__search" 
+          <InputWithClear
             onChange={handleFilterTextChange}
+            onClear={() => setFilterText("")}
+            value={filterText}
+            containerClasses="c-music__input-container"
+            inputClasses="c-music__control c-music__input"
           />
           <button
             onClick={toggleAllExpandedChannels}

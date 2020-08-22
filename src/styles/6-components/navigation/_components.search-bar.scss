@@ -11,24 +11,9 @@
     height: 2rem;
     font-family: $font-primary;
     font-weight: 500;
-    font-size: 1.6rem;
+    font-size: $font-size-normal;
     padding: 1.8rem 3.6rem 1.8rem 1.8rem;
-    width: 100%;
 
     &:focus { outline: 2px solid var(--color); }
-  }
-
-  &__clear {
-    color: $color-grey-light;
-    cursor: pointer;
-    font-size: $font-size-medium;
-    opacity: 0;
-    position: absolute;
-      right: 1.4rem;
-      top: 50%;
-    transform: translateY(-50%);
-    visibility: hidden;
-
-    &.is-showing { opacity: 1; visibility: visible; }
   }
 }

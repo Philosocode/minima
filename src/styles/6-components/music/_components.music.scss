@@ -83,12 +83,17 @@
       top: 50%;
     transform: translateY(-50%);
   }
-  
-  &__search {
-    font-size: $font-size-medium;
+
+  &__input-container {
     margin-right: 4rem;
-    outline: none;
     flex-grow: 1;
+  }
+  
+  &__input {
+    font-size: $font-size-medium;
+    padding-right: 4rem;
+
+    &:active, &:focus { outline: none; }
   }
 
   &__toggle {
