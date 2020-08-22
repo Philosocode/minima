@@ -2,6 +2,8 @@ import React, { FC } from "react";
 import { Link } from "react-router-dom";
 
 import { IScrollListHeader } from "shared/interfaces/custom.interfaces";
+import { faRandom } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface IProps {
   headerDetails: IScrollListHeader;
@@ -41,6 +43,11 @@ export const PlaylistScrollListHeader: FC<IProps> = ({ watchingVideoIdx, headerD
         { getPlaylistHeading() }
         { getChannelHeading() }
         <h4 className="c-heading--small">{watchingVideoIdx} / {totalVideos - 1}</h4>
+
+        <FontAwesomeIcon
+          icon={faRandom}
+          className="c-playlist-scroll-list__shuffle"
+        />
       </div>
     </div>
   )

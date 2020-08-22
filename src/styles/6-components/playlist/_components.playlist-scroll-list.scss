@@ -62,4 +62,12 @@
   &__video-channel {
     margin-top: $spacing-smallest;
   }
+
+  &__shuffle {
+    color: $color-grey-lightest;
+    cursor: pointer;
+    font-size: $font-size-medium;
+
+    &:hover { color: var(--color-lighter); }
+  }
 }
