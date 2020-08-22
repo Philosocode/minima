@@ -11,39 +11,37 @@ interface IProps {
 }
 export const HomeGrid: FC<IProps> = ({ headingText, playlists, videos }) => {
   if (videos?.length === 0 || playlists?.length === 0) return null;
+  const thumbnails = getThumbnails();
 
-  function getThumbnailGrid() {
-    let videoThumbnails: IThumbnail[];
-
+  function getThumbnails(): IThumbnail[] | undefined {
     if (videos) {
-      videoThumbnails = videos.map(video => ({
+      return videos.map((video) => ({
         date: video.snippet.publishedAt,
         id: video.id,
         resourceUrl: `/watch?v=${video.id}`,
         thumbnailUrl: video.snippet.thumbnails.medium.url,
-        title: video.snippet.title
+        title: video.snippet.title,
       }));
-
-      return <ThumbnailGrid items={videoThumbnails} showIndexLabel />;
     }
 
     if (playlists) {
-      videoThumbnails = playlists.map(playlist => ({
+      return playlists.map((playlist) => ({
         id: playlist.id,
         thumbnailUrl: playlist.snippet.thumbnails.medium.url,
         title: playlist.snippet.title,
         resourceUrl: `/playlist?list=${playlist.id}`,
-        numItemsInPlaylist: playlist.contentDetails.itemCount.toString()
-      }))
-
-      return <ThumbnailGrid items={videoThumbnails} />;
+        numItemsInPlaylist: playlist.contentDetails.itemCount.toString(),
+      }));
     }
   }
 
+  if (!thumbnails) return null;
   return (
     <section className="o-grid__item--wide o-section">
-      <h2 className="c-text--centered c-heading c-heading--subtitle c-heading--spaced">{headingText}</h2>
-        { getThumbnailGrid() }
+      <h2 className="c-text--centered c-heading c-heading--subtitle c-heading--spaced">
+        {headingText}
+      </h2>
+      <ThumbnailGrid items={thumbnails} />;
     </section>
-  )
-}
+  );
+};
