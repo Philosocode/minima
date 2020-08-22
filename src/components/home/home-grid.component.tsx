@@ -41,7 +41,7 @@ export const HomeGrid: FC<IProps> = ({ headingText, playlists, videos }) => {
       <h2 className="c-text--centered c-heading c-heading--subtitle c-text--spaced">
         {headingText}
       </h2>
-      <ThumbnailGrid items={thumbnails} />;
+      <ThumbnailGrid items={thumbnails} />
     </section>
   );
 };

@@ -1,6 +1,6 @@
 .c-channel {
   &__heading {
-    color: $color-grey-lighter;
+    color: $color-grey-lightest;
 
     // For channel grid cells
     transition: color $transition-append, transform $transition-append;
@@ -69,5 +69,9 @@
         bottom: 0;
         right: 0;
       transition: background $transition-append;
+
+      & > .c-channel__heading {
+        color: $color-off-white;
+      }
     }
 }
