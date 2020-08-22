@@ -7,6 +7,7 @@ import { useFetchPaginatedResource } from "hooks/use-fetch-paginated-resource.ho
 
 import { LoadMoreButton } from "components/button/load-more-button.component";
 import { ThumbnailGrid } from "components/thumbnail-grid/thumbnail-grid.component";
+import { NotFoundHeading } from "components/text/not-found-heading.component";
 
 interface IProps {
   playlistId: string;
@@ -26,6 +27,10 @@ export const PlaylistVideosThumbnailGrid: FC<IProps> = ({ playlistId }) => {
     thumbnailUrl: video.snippet.thumbnails.medium.url,
     title: video.snippet.title
   }));
+
+  if (!hasMoreVideos && videos.length === 0) {
+    return <NotFoundHeading>No videos found...</NotFoundHeading>;
+  }
 
   return (
     <>

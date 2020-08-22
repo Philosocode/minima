@@ -114,7 +114,7 @@ export const VideoPage: FC = () => {
       />
 
       <div className="o-grid__item--wide c-video__grid">
-        <h2 className="c-video__grid-item--full c-heading c-heading--subtitle c-heading--spaced">{videoData.snippet.title}</h2>
+        <h2 className="c-video__grid-item--full c-heading c-heading--subtitle c-text--spaced">{videoData.snippet.title}</h2>
 
         <div className="c-video__grid-item">
           <StatsCard statsCardData={getStatsCardData()} />

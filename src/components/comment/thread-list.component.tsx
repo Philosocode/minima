@@ -32,7 +32,7 @@ export const ThreadList: FC<IProps> = ({ numComments, videoId }) => {
 
   return (
     <div>
-      { threads.length > 0 && <h2 className="c-heading c-heading--subsubtitle c-heading--spaced">{addCommasToNumber(numComments)} Comments</h2> }
+      { threads.length > 0 && <h2 className="c-heading c-heading--subsubtitle c-text--spaced">{addCommasToNumber(numComments)} Comments</h2> }
       { threads.map(t => <Thread key={t.id} thread={t} />) }
       { hasMoreComments && getLoadCommentsButton() }
     </div>

@@ -4,7 +4,7 @@
   padding: $spacing-small;
   width: 100%;
 
-  &--short { width: max-content; }
+  &--short { margin-top: $spacing-medium; width: max-content; }
 
   &__row {
     display: grid;

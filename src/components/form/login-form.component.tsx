@@ -48,7 +48,7 @@ export const LoginForm: FC = () => {
   
   return (
     <div className="o-grid__item--wide">
-      <h1 className="c-heading c-heading--title c-heading--spaced c-text--centered">Login</h1>
+      <h1 className="c-heading c-heading--title c-text--spaced c-text--centered">Login</h1>
       <form
         acceptCharset="UTF-8" 
         onSubmit={handleSubmit}

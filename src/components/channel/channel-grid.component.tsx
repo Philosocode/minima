@@ -11,7 +11,7 @@ export const ChannelGrid: FC<IProps> = ({ channels }) => {
 
   return (
     <section className="o-grid__item--full o-section">
-      <h2 className="c-heading c-text--centered c-heading--subtitle c-heading--spaced">Channels</h2>
+      <h2 className="c-heading c-text--centered c-heading--subtitle c-text--spaced">Channels</h2>
       <div className="c-channel__grid">
         { channels.map(channel => <ChannelGridCell channel={channel} key={channel.id} />) }
       </div>

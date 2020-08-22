@@ -9,6 +9,11 @@
     &:hover { color: var(--color-lighter); }
   }
 
+  &--spaced {
+    margin-top: 0.9em;
+    margin-bottom: 0.9em;
+  }
+
   /* 1-Liners */
   // Alignment
   &--left { text-align: left; }

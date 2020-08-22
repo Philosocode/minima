@@ -38,7 +38,7 @@ export const HomeGrid: FC<IProps> = ({ headingText, playlists, videos }) => {
   if (!thumbnails) return null;
   return (
     <section className="o-grid__item--wide o-section">
-      <h2 className="c-text--centered c-heading c-heading--subtitle c-heading--spaced">
+      <h2 className="c-text--centered c-heading c-heading--subtitle c-text--spaced">
         {headingText}
       </h2>
       <ThumbnailGrid items={thumbnails} />;

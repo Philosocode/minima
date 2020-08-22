@@ -34,11 +34,6 @@
     font-size: $font-size-large;
   }
 
-  &--spaced {
-    margin-top: 0.9em;
-    margin-bottom: 0.9em;
-  }
-
   &--light { color: $color-grey-lightest; }
   &--dim { color: $color-grey-light; }
   &--dark { color: $color-grey-darkest; }

@@ -7,6 +7,7 @@ import { useFetchPaginatedResource } from "hooks/use-fetch-paginated-resource.ho
 import { ThumbnailGrid } from "components/thumbnail-grid/thumbnail-grid.component";
 import { Loader } from "components/loader/loader.component";
 import { Button } from "components/button/button.component";
+import { NotFoundHeading } from "components/text/not-found-heading.component";
 
 interface IProps {
   channelId: string;
@@ -33,6 +34,10 @@ export const PlaylistsThumbnailGrid: FC<IProps> = ({ channelId }) => {
     if (!isLoading && hasMorePlaylists) {
       return <Button centered onClick={loadPlaylists}>LOAD MORE</Button>
     }
+  }
+
+  if (!hasMorePlaylists && playlists.length === 0) {
+    return <NotFoundHeading>No playlists found...</NotFoundHeading>;
   }
 
   return (

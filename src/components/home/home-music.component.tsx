@@ -12,7 +12,7 @@ export const HomeMusic: FC<IProps> = ({ music }) => {
 
   return (
     <section className="o-grid__item--center">
-      <h2 className="c-heading--spaced c-text--centered c-heading--subtitle c-music__heading">
+      <h2 className="c-text--spaced c-text--centered c-heading--subtitle c-music__heading">
         Recent Music
         <Link className="c-heading--link c-music__link" to="/music">View All</Link>
       </h2>

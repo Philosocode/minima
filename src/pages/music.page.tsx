@@ -163,7 +163,7 @@ export const MusicPage: FC<IProps> = () => {
   return (
     <div className="o-page o-grid">
       <div className="o-grid__item--wide">
-        <h1 className="c-heading--title c-heading--spaced c-text--centered c-music__heading">
+        <h1 className="c-heading--title c-text--spaced c-text--centered c-music__heading">
           Music
           <Link className="c-heading--link c-music__link" to={`/watch?v=${randomSongId}&list=music`}>Play All</Link>
         </h1>
@@ -183,7 +183,7 @@ export const MusicPage: FC<IProps> = () => {
 
         {
           objectIsEmpty(matchedSongs)
-            ? <h2 className="c-heading c-heading--subsubtitle c-text--centered c-heading--500 c-heading--spaced">No songs found...</h2>
+            ? <h2 className="c-heading c-heading--subsubtitle c-text--centered c-heading--500 c-text--spaced">No songs found...</h2>
             : <ul className="c-music__list">{ getMusic() }</ul>
         }
       </div>
