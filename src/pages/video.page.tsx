@@ -128,6 +128,7 @@ export const VideoPage: FC = () => {
           {
             +videoData.statistics.commentCount > 0
               ? <ThreadList
+                  key={videoData.id}
                   numComments={videoData.statistics.commentCount} 
                   videoId={videoData.id}  
                 />

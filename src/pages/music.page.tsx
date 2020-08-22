@@ -46,6 +46,8 @@ export const MusicPage: FC<IProps> = () => {
     }
 
     function generateMusicDict(music: IVideo[]) {
+      // musicDict will contain all liked songs
+      // matchedSongs will contain liked songs that match filter text
       const dict: IMusicDict = {};
 
       music.forEach(song => {
@@ -81,10 +83,10 @@ export const MusicPage: FC<IProps> = () => {
   }
   
   function filterSongsByTerm(songs: IVideo[], filterTerm: string) {
+    // Only include song if channel name, song title, or description includes `filterTerm`
+
     return songs.filter(song => {
       const { channelTitle, title, description } = song.snippet;
-
-      // Only include song if title or description includes `filterTerm`
       return channelTitle.toLowerCase().includes(filterTerm) ||
              title.toLowerCase().includes(filterTerm) || 
              description.toLowerCase().includes(filterTerm);
@@ -162,7 +164,7 @@ export const MusicPage: FC<IProps> = () => {
         </h1>
         <div className="c-music__controls">
           <input
-            type="search"
+            type="text"
             className="c-music__control c-music__search" 
             onChange={handleFilterTextChange}
           />
