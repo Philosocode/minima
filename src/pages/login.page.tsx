@@ -8,7 +8,7 @@ export const LoginPage: FC = () => (
       <LoginForm />
       {
         process.env.REACT_APP_DEMO && (
-          <div className="c-demo">
+          <div className="c-demo" style={{ textAlign: "center", margin: "0 auto" }}>
             <h3>Email: test@test.com</h3>
             <h3>Password: password</h3>
           </div> 
