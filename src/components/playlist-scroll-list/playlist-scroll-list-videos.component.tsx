@@ -40,12 +40,12 @@ export const PlaylistScrollListVideos: FC<IProps> = ({
     if (isLoading) return <Loader position="center-horizontal" />;
 
     return (
-      <button className="c-playlist-scroll-list__button" onClick={async () => await handleLoadMoreVideos()}>LOAD MORE</button>
+      <button className="c-playlist-scroll-list__button" onClick={handleLoadMoreVideos}>LOAD MORE</button>
     );
   }
 
   async function handleLoadMoreVideos() {
-    loadMoreVideos && await loadMoreVideos();
+    loadMoreVideos && loadMoreVideos();
   }
 
   function getVideos() {

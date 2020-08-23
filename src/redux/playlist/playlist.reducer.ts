@@ -52,7 +52,7 @@ export const playlistReducer = (state = initialState, action: TPlaylistAction): 
     case EPlaylistConstants.FETCH_PLAYLIST_VIDEOS_START:
       return {
         ...state,
-        isFetching: false,
+        isFetching: true,
       }
     case EPlaylistConstants.FETCH_PLAYLIST_VIDEOS_SUCCESS:
       return {

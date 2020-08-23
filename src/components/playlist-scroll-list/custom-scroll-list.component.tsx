@@ -1,12 +1,11 @@
 import React, { FC, useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import { IScrollListHeader, IScrollListVideos } from "shared/interfaces/custom.interfaces";
-
+import { fetchPlaylistVideosStart, selectPlaylistVideos, selectIsFetching } from "redux/playlist";
 import { Button } from "components/button/button.component";
 import { Loader } from "components/loader/loader.component";
 import { PlaylistScrollList } from "./playlist-scroll-list.component";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchPlaylistVideosStart, selectPlaylistVideos, selectIsFetching } from "redux/playlist";
 
 export const CustomPlaylistScrollList: FC = () => {
   const videos = useSelector(selectPlaylistVideos);
@@ -35,9 +34,6 @@ export const CustomPlaylistScrollList: FC = () => {
   if (videos.length <= 0) return <Button centered onClick={loadVideos}>LOAD PLAYLIST</Button>;
   if (isFetching) return <Loader position="center-horizontal" />
   if (!videosDetails || !headerDetails) return null;
-
-  console.log(videosDetails);
-  
 
   return (
     <PlaylistScrollList

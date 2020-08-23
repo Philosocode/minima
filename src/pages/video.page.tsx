@@ -27,8 +27,8 @@ export const VideoPage: FC = () => {
   const [videoData, setVideoData] = useState<IVideo>();
   const [channelData, setChannelData] = useState<IChannel>();
   const [isLoading, setIsLoading] = useState(false);
-
   const playlistId = useSelector(selectPlaylistId);
+
   const dispatch = useDispatch();
   const history = useHistory();
   const location = useLocation();
@@ -37,11 +37,15 @@ export const VideoPage: FC = () => {
   useEffect(() => {
     const queryParams = getQueryParams(location.search);
     
-    const videoQueryParam = queryParams.query["v"];
-
-    typeof videoQueryParam === "string"
+    const videoQueryParam = queryParams.query["v"];    
+    (typeof videoQueryParam === "string")
       ? fetchVideoAndChannelData(videoQueryParam)
       : alert("ERROR: Invalid video id.");
+
+    const playlistQueryParam = queryParams.query["list"];
+    if (typeof playlistQueryParam === "string") {
+      dispatch(setPlaylistId(playlistQueryParam));
+    }
 
     async function fetchVideoAndChannelData(videoId: string) {
       setIsLoading(true);
@@ -63,20 +67,9 @@ export const VideoPage: FC = () => {
         setIsLoading(false);
       }
     }
+
+    return () => { dispatch(clearPlaylist()); }
   }, [history, location.search, dispatch]);
-
-  useEffect(() => {
-    const queryParams = getQueryParams(location.search);
-    
-    const playlistQueryParam = queryParams.query["list"];
-
-    if (typeof playlistQueryParam === "string") {
-      dispatch(setPlaylistId(playlistQueryParam));
-    }
-    else {
-      dispatch(clearPlaylist());
-    }
-  }, [location.search, dispatch]);
 
   function getStatsCardData() {
     if (!videoData) return;
@@ -102,13 +95,16 @@ export const VideoPage: FC = () => {
   }
 
   function getScrollList() {
-    if (!playlistId || !videoData) return;
+    if (!playlistId) return;
 
-    if (playlistId === ECustomPlaylistTypes.MUSIC || playlistId === ECustomPlaylistTypes.VIDEOS) {
-      return <CustomPlaylistScrollList key={playlistId} />;
+    if (
+      playlistId === ECustomPlaylistTypes.MUSIC || 
+      playlistId === ECustomPlaylistTypes.VIDEOS
+    ) {
+      return <CustomPlaylistScrollList />;
     }
 
-    return <YouTubePlaylistScrollList key={playlistId} />;
+    return <YouTubePlaylistScrollList />;
   }
 
   // Render

@@ -1,8 +1,8 @@
 import React, { FC, useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 
+import { selectCurrentVideoId } from "redux/video";
 import { IScrollListHeader, IScrollListVideos } from "shared/interfaces/custom.interfaces";
-import { getQueryParams } from "shared/helpers";
 import { PlaylistScrollListHeader } from "./playlist-scroll-list-header.component";
 import { PlaylistScrollListVideos } from "./playlist-scroll-list-videos.component";
 
@@ -13,21 +13,15 @@ interface IProps {
 }
 
 export const PlaylistScrollList: FC<IProps> = ({ isLoading, headerDetails, videosDetails }) => {    
-  const location = useLocation();
   const [watchingVideoIdx, setWatchingVideoIdx] = useState(0);
+  const currentVideoId = useSelector(selectCurrentVideoId);
 
   useEffect(() => {
-    const queryParams = getQueryParams(location.search);
-    const currentVideoId = queryParams.query["v"];
-
-    // `v` query param should always exist on the watch page
-    if (typeof currentVideoId !== "string") return;
-    
     const playlistVideos = videosDetails.videos;
     const currentVideoIdx = playlistVideos.findIndex((video) => video.videoId === currentVideoId);
 
     setWatchingVideoIdx(currentVideoIdx);
-  }, [videosDetails.videos, location]);
+  }, [currentVideoId, videosDetails.videos]);
 
   return (
     <div className="c-card">
