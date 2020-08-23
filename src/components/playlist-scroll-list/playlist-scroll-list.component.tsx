@@ -20,14 +20,14 @@ export const PlaylistScrollList: FC<IProps> = ({ isLoading, headerDetails, video
     const queryParams = getQueryParams(location.search);
     const currentVideoId = queryParams.query["v"];
 
-    // `v` query param exists
-    if (typeof currentVideoId === "string") {
-      const playlistVideos = videosDetails.videos;
-      const currentVideoIdx = playlistVideos.findIndex((video) => video.videoId === currentVideoId);
+    // `v` query param should always exist on the watch page
+    if (typeof currentVideoId !== "string") return;
+    
+    const playlistVideos = videosDetails.videos;
+    const currentVideoIdx = playlistVideos.findIndex((video) => video.videoId === currentVideoId);
 
-      setWatchingVideoIdx(currentVideoIdx);
-    }
-  }, [videosDetails.videos, location])
+    setWatchingVideoIdx(currentVideoIdx);
+  }, [videosDetails.videos, location]);
 
   return (
     <div className="c-card">
@@ -35,7 +35,6 @@ export const PlaylistScrollList: FC<IProps> = ({ isLoading, headerDetails, video
         headerDetails={headerDetails} 
         watchingVideoIdx={watchingVideoIdx}
       />
-
       <PlaylistScrollListVideos
         isLoading={isLoading}
         videosDetails={videosDetails}

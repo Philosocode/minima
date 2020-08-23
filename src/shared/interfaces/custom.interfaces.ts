@@ -5,7 +5,7 @@ export enum ECustomPlaylistTypes {
 
 export interface IScrollListVideos {
   hasMoreVideos: boolean;
-  loadMoreVideos?: () => Promise<void>;
+  loadMoreVideos?: () => void;
   videos: IScrollListVideo[];
 }
 

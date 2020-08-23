@@ -5,9 +5,11 @@ import { preferenceReducer } from "./preference";
 import { videoReducer } from "./video";
 import { likeReducer } from "./like";
 import { authReducer } from "./auth";
+import { playlistReducer } from "./playlist";
 
 export const rootReducer = combineReducers({
   like: likeReducer,
+  playlist: playlistReducer,
   preference: preferenceReducer,
   video: videoReducer,
   auth: authReducer,

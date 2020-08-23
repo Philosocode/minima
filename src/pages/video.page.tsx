@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect } from "react";
 import { useLocation, useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { faCalendarDay, faEye, faThumbsUp, faThumbsDown, faPercent } from "@fortawesome/free-solid-svg-icons";
 
 import { IChannel, IVideo } from "shared/interfaces/youtube.interfaces";
@@ -8,6 +8,7 @@ import { ECustomPlaylistTypes } from "shared/interfaces/custom.interfaces";
 import { getQueryParams, roundToTwoDecimals, getFormattedDate, addCommasToNumber } from "shared/helpers";
 import { getChannelDetails, getVideoDetails } from "services/youtube.service";
 import { setCurrentVideo } from "redux/video";
+import { setPlaylistId, selectPlaylistId, clearPlaylist } from "redux/playlist";
 
 import { ChannelBox } from "components/channel/channel-box.component";
 import { CustomPlaylistScrollList } from "components/playlist-scroll-list/custom-scroll-list.component";
@@ -25,27 +26,22 @@ export const VideoPage: FC = () => {
   // State
   const [videoData, setVideoData] = useState<IVideo>();
   const [channelData, setChannelData] = useState<IChannel>();
-  const [playlistId, setPlaylistId] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const location = useLocation();
-  const history = useHistory();
+  const playlistId = useSelector(selectPlaylistId);
   const dispatch = useDispatch();
+  const history = useHistory();
+  const location = useLocation();
 
   // Functions
   useEffect(() => {
     const queryParams = getQueryParams(location.search);
     
     const videoQueryParam = queryParams.query["v"];
-    const playlistQueryParam = queryParams.query["list"];
 
     typeof videoQueryParam === "string"
       ? fetchVideoAndChannelData(videoQueryParam)
       : alert("ERROR: Invalid video id.");
-
-    typeof playlistQueryParam === "string"
-      ? setPlaylistId(playlistQueryParam)
-      : setPlaylistId("");
 
     async function fetchVideoAndChannelData(videoId: string) {
       setIsLoading(true);
@@ -68,6 +64,19 @@ export const VideoPage: FC = () => {
       }
     }
   }, [history, location.search, dispatch]);
+
+  useEffect(() => {
+    const queryParams = getQueryParams(location.search);
+    
+    const playlistQueryParam = queryParams.query["list"];
+
+    if (typeof playlistQueryParam === "string") {
+      dispatch(setPlaylistId(playlistQueryParam));
+    }
+    else {
+      dispatch(clearPlaylist());
+    }
+  }, [location.search, dispatch]);
 
   function getStatsCardData() {
     if (!videoData) return;
@@ -96,10 +105,10 @@ export const VideoPage: FC = () => {
     if (!playlistId || !videoData) return;
 
     if (playlistId === ECustomPlaylistTypes.MUSIC || playlistId === ECustomPlaylistTypes.VIDEOS) {
-      return <CustomPlaylistScrollList key={playlistId} customPlaylistType={playlistId} watchingVideoId={videoData.id} />;
+      return <CustomPlaylistScrollList key={playlistId} />;
     }
 
-    return <YouTubePlaylistScrollList key={playlistId} playlistId={playlistId} watchingVideoId={videoData.id} />;
+    return <YouTubePlaylistScrollList key={playlistId} />;
   }
 
   // Render
