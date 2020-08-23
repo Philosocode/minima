@@ -1,8 +1,8 @@
 import React, { FC } from "react";
 
+import { getPlaylistVideos, MISSING_THUMBNAIL_URL } from "services/youtube.service";
 import { IPlaylistItem } from "shared/interfaces/youtube.interfaces";
 import { IThumbnail } from "shared/interfaces/custom.interfaces";
-import { getPlaylistVideos } from "services/youtube.service";
 import { useFetchPaginatedResource } from "hooks/use-fetch-paginated-resource.hook";
 
 import { LoadMoreButton } from "components/button/load-more-button.component";
@@ -24,7 +24,7 @@ export const PlaylistVideosThumbnailGrid: FC<IProps> = ({ playlistId }) => {
     date: video.snippet.publishedAt,
     id: video.id,
     resourceUrl: `/watch?v=${video.snippet.resourceId.videoId}&list=${playlistId}`,
-    thumbnailUrl: video.snippet.thumbnails.medium.url,
+    thumbnailUrl: video.snippet.thumbnails.medium?.url ?? MISSING_THUMBNAIL_URL,
     title: video.snippet.title
   }));
 
