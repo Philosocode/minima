@@ -18,7 +18,7 @@ export const HomeGrid: FC<IProps> = ({ headingText, playlists, videos }) => {
       return videos.map((video) => ({
         date: video.snippet.publishedAt,
         id: video.id,
-        resourceUrl: `/watch?v=${video.id}`,
+        resourceUrl: `/watch?v=${video.id}&list="videos"`,
         thumbnailUrl: video.snippet.thumbnails.medium.url,
         title: video.snippet.title,
       }));
