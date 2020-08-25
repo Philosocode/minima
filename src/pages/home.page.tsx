@@ -3,14 +3,15 @@ import { useSelector } from "react-redux";
 
 import { IVideo, IChannel, IPlaylist } from "shared/interfaces/youtube.interfaces";
 import { getResourcesByIds, getVideoDetails, getChannelDetails, getPlaylistDetails } from "services/youtube.service";
-import { selectAllLikes } from "redux/like";
+import { selectLike } from "redux/like";
+
 import { Loader } from "components/loader/loader.component";
 import { HomeGrid } from "components/home/home-grid.component";
 import { HomeMusic } from "components/home/home-music.component";
 import { ChannelGrid } from "components/channel/channel-grid.component";
 
 export const HomePage: FC = () => {
-  const allLikes = useSelector(selectAllLikes);
+  const allLikes = useSelector(selectLike);
 
   const [videos, setVideos] = useState<IVideo[]>([]);
   const [music, setMusic] = useState<IVideo[]>([]);

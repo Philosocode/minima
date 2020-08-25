@@ -38,7 +38,11 @@ export const LoginForm: FC = () => {
      */
     ev.preventDefault();
 
-    dispatch(loginUser(email, password, () => history.push("/")));
+    dispatch(loginUser({
+      email,
+      password, 
+      callback: () => history.push("/") 
+    }));
   }
 
   const errorClasses = classNames({

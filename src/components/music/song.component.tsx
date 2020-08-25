@@ -8,7 +8,7 @@ interface IProps {
 }
 export const Song: FC<IProps> = ({ song }) => (
   <li className="c-song" key={song.id}>
-    <Link className="c-song__link" to={`/watch?v=${song.id}&list="music"`}>
+    <Link className="c-song__link" to={`/watch?v=${song.id}&list=music`}>
       <img className="c-song__thumbnail" src={song.snippet.thumbnails.default.url} alt={song.snippet.title} />
       <div className="c-song__text">
         <h4 className="c-song__title">{song.snippet.title}</h4>

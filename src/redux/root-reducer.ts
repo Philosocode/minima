@@ -15,5 +15,3 @@ export const rootReducer = combineReducers({
   auth: authReducer,
   firebase: firebaseReducer
 });
-
-export type AppState = ReturnType<typeof rootReducer>;

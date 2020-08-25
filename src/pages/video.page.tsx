@@ -11,7 +11,7 @@ import { setCurrentVideo } from "redux/video";
 import { setPlaylistId, selectPlaylistId, clearPlaylist } from "redux/playlist";
 
 import { ChannelBox } from "components/channel/channel-box.component";
-import { CustomPlaylistScrollList } from "components/playlist-scroll-list/custom-scroll-list.component";
+import { CustomPlaylistScrollList } from "components/playlist-scroll-list/custom-playlist-scroll-list.component";
 import { Divider } from "components/divider/divider.component";
 import { Loader } from "components/loader/loader.component";
 import { NotFoundHeading } from "components/text/not-found-heading.component";

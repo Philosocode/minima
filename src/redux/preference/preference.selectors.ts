@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
-import { AppState } from "redux/root-reducer";
+import { TAppState } from "redux/store";
 
-const selectPreference = (state: AppState) => state.preference;
+const selectPreference = (state: TAppState) => state.preference;
 
 export const selectSessionPlaybackSpeed = createSelector(
   [selectPreference],

@@ -25,8 +25,8 @@ export function useLike(
 
   function toggleLike() {
     isLiked
-      ? dispatch(unlikeResource(collectionName, resourceId, userId))
-      : dispatch(likeResource(collectionName, resourceId, userId));
+      ? dispatch(unlikeResource({ collectionName, resourceId, userId }))
+      : dispatch(likeResource({ collectionName, resourceId, userId }));
   }
   
   return [isLiked, toggleLike];

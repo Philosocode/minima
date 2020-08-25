@@ -1,4 +1,2 @@
-export * from "./video.actions"
-export * from "./video.reducer";
+export * from "./video.slice";
 export * from "./video.selectors";
-export * from "./video.types";

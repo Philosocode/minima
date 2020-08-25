@@ -1,9 +1,9 @@
 import { createSelector } from 'reselect';
 
-import { AppState } from "redux/root-reducer";
+import { TAppState } from "redux/store";
 
-const selectAuth = (state: AppState) => state.auth;
-const selectFirebase = (state: AppState) => state.firebase;
+const selectAuth = (state: TAppState) => state.auth;
+const selectFirebase = (state: TAppState) => state.firebase;
 
 export const selectAuthError = createSelector(
   [selectAuth],

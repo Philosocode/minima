@@ -5,7 +5,7 @@ export interface IUser {
   likes: IUserLikes;
 }
 
-interface IUserLikes {
+export interface IUserLikes {
   channels: string[];
   music: string[];
   playlists: string[];

@@ -1,12 +1,8 @@
 import { createSelector } from 'reselect';
-import { AppState } from "redux/root-reducer";
 
-const selectLike = (state: AppState) => state.like;
+import { TAppState } from "redux/store";
 
-export const selectAllLikes = createSelector(
-  [selectLike],
-  like => like
-);
+export const selectLike = (state: TAppState) => state.like;
 
 export const selectLikedChannels = createSelector(
   [selectLike],

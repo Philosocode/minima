@@ -6,7 +6,7 @@ import _ from "lodash";
 import { IVideo } from "shared/interfaces/youtube.interfaces";
 import { objectIsEmpty } from "shared/helpers";
 import { getResourcesByIds, getVideoDetails } from "services/youtube.service";
-import { selectAllLikes } from "redux/like";
+import { selectLike } from "redux/like";
 
 import { Loader } from "components/loader/loader.component";
 import { MusicChannelHeader } from "components/music/music-channel-header.component";
@@ -25,7 +25,7 @@ interface IExpandedChannels {
 }
 
 export const MusicPage: FC<IProps> = () => {
-  const allLikes = useSelector(selectAllLikes);
+  const allLikes = useSelector(selectLike);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [musicDict, setMusicDict] = useState<IMusicDict>({});
   const [matchedSongs, setMatchedSongs] = useState<IMusicDict>({});

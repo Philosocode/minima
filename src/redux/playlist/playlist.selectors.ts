@@ -1,8 +1,8 @@
 import { createSelector } from "reselect";
 
-import { AppState } from "redux/root-reducer";
+import { TAppState } from "redux/store";
 
-const selectPlaylist = (state: AppState) => state.playlist;
+const selectPlaylist = (state: TAppState) => state.playlist;
 
 export const selectPlaylistId = createSelector(
   [selectPlaylist],

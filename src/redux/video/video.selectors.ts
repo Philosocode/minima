@@ -1,7 +1,7 @@
 import { createSelector } from "reselect";
-import { AppState } from "redux/root-reducer";
+import { TAppState } from "redux/store";
 
-const selectVideos = (state: AppState) => state.video;
+const selectVideos = (state: TAppState) => state.video;
 
 export const selectCurrentVideo = createSelector(
   [selectVideos],

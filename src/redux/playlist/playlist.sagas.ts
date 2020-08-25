@@ -8,16 +8,15 @@ import {
 } from "services/youtube.service";
 import {
   IPlaylistItemsResponse,
-  IVideo,
   IPlaylistItem,
+  IVideo,
 } from "shared/interfaces/youtube.interfaces";
 import { IScrollListVideo } from "shared/interfaces/custom.interfaces";
 import { selectUserId } from "redux/auth";
 import { selectCurrentVideo } from "redux/video";
-import { EPlaylistConstants } from "./playlist.types";
 import {
-  selectPlaylistId,
   selectNextPageToken,
+  selectPlaylistId,
   selectPlaylistVideos,
 } from "./playlist.selectors";
 import {
@@ -27,7 +26,9 @@ import {
   fetchPlaylistVideosFailure,
   fetchCurrentPlaylistFailure,
   fetchCurrentPlaylistSuccess,
-} from "./playlist.actions";
+  fetchPlaylistVideosStart,
+} from "./playlist.slice";
+import { fetchCurrentPlaylistStart } from "./playlist.slice";
 
 export function* playlistSagas() {
   yield all([
@@ -38,10 +39,7 @@ export function* playlistSagas() {
 
 // Fetch Current Playlist
 function* fetchCurrentPlaylistWatcher() {
-  yield takeLatest(
-    EPlaylistConstants.FETCH_CURRENT_PLAYLIST_START,
-    fetchCurrentPlaylistWorker
-  );
+  yield takeLatest(fetchCurrentPlaylistStart.type, fetchCurrentPlaylistWorker);
 }
 
 function* fetchCurrentPlaylistWorker() {
@@ -58,7 +56,7 @@ function* fetchCurrentPlaylistWorker() {
 // Fetch Playlist Videos
 function* fetchPlaylistVideosWatcher() {
   yield takeLatest(
-    EPlaylistConstants.FETCH_PLAYLIST_VIDEOS_START,
+    fetchPlaylistVideosStart.type,
     fetchPlaylistVideosWorker
   );
 }
