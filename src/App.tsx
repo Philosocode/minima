@@ -27,9 +27,9 @@ import { useAuth } from "hooks/use-auth.hook";
 
 export function App() {
   const userId = useAuth();
-  const dispatch = useDispatch();
   const authLoaded = useSelector(selectAuthLoaded);
   const isLoading = useSelector((state: TAppState) => state.like.isLoading);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (!authLoaded) return;
@@ -38,7 +38,7 @@ export function App() {
   }, [authLoaded, dispatch, userId]);
 
   if (!authLoaded || isLoading) return <Loader position="center-page" />;
-
+  
   return (
     <div className="o-site">
       <Header />

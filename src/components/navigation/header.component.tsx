@@ -2,12 +2,11 @@ import React, { FC } from "react";
 import { Link } from "react-router-dom";
 
 import { SearchBar } from "components/search/search-bar.component";
-import { logoutUser } from "redux/auth";
-import { useDispatch } from "react-redux";
-import { useAuth } from "hooks/use-auth.hook";
+import { logoutUser, selectUserId } from "redux/auth";
+import { useDispatch, useSelector } from "react-redux";
 
 export const Header: FC = () => {
-  const user = useAuth();
+  const user = useSelector(selectUserId);
   const dispatch = useDispatch();
 
   async function handleLogout() {

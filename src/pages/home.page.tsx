@@ -20,6 +20,9 @@ export const HomePage: FC = () => {
   const [dataLoaded, setDataLoaded] = useState(false);
 
   useEffect(() => {
+    loadData();
+    document.title = "minima - Home";
+
     async function loadData() {
       const { channels, music, playlists, videos } = allLikes;
 
@@ -47,8 +50,6 @@ export const HomePage: FC = () => {
 
       setDataLoaded(true);
     }
-
-    loadData();
   }, [allLikes]);
 
   if (!dataLoaded) return <Loader position="center-page" />

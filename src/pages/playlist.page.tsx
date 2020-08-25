@@ -1,9 +1,11 @@
-import React, { FC, useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import React, { FC, useEffect } from "react";
+import { useLocation, useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
-import { IPlaylist } from "shared/interfaces/youtube.interfaces";
+
 import { getQueryParams } from "shared/helpers";
-import { getPlaylistDetails } from "services/youtube.service";
+import { setPlaylistId, selectPlaylistId, selectIsFetching, selectCurrentPlaylist, fetchCurrentPlaylistStart } from "redux/playlist";
+
 import { Divider } from "components/divider/divider.component";
 import { Loader } from "components/loader/loader.component";
 import { PlaylistDetails } from "components/playlist/playlist-details.component";
@@ -11,9 +13,13 @@ import { PlaylistVideosThumbnailGrid } from "components/thumbnail-grid/playlist-
 
 export const PlaylistPage: FC = () => {
   // State
-  const [playlistDetails, setPlaylistDetails] = useState<IPlaylist>();
-  const [isLoading, setIsLoading] = useState(false);
+  const currentPlaylist = useSelector(selectCurrentPlaylist);
+  const playlistId = useSelector(selectPlaylistId);
+  const isFetching = useSelector(selectIsFetching);
+
+  const dispatch = useDispatch();
   const location = useLocation();
+  const history = useHistory();
   
   // Functions
   useEffect(() => {
@@ -21,39 +27,38 @@ export const PlaylistPage: FC = () => {
     const playlistQueryParam = queryParams.query["list"];
 
     if (typeof playlistQueryParam === "string") {
-      fetchPlaylistData(playlistQueryParam);
-    }
-
-    async function fetchPlaylistData(playlistId: string) {
-      setIsLoading(true);
-
-      try {
-        const playlistRes = await getPlaylistDetails(playlistId);
-        setPlaylistDetails(playlistRes);
-
-        document.title = playlistRes.snippet.title;
+      if (playlistQueryParam === "music") {
+        history.push("/music");
       }
-      catch (err) {
-        alert("ERROR: couldn't load playlist data.");
-      }
-      finally {
-        setIsLoading(false);
+      else {
+        dispatch(setPlaylistId(playlistQueryParam));
       }
     }
-  }, [location.search]);
+  }, [dispatch, history, location.search]);
+
+  useEffect(() => {
+    if (!playlistId) return;
+    dispatch(fetchCurrentPlaylistStart());
+
+  }, [dispatch, playlistId])
+
+  useEffect(() => {
+    if (!currentPlaylist) return;
+    document.title = currentPlaylist.snippet.title;
+  }, [currentPlaylist]);
 
   // Render
-  if (isLoading || !playlistDetails) return <Loader position="center-page" />;
+  if (isFetching || !currentPlaylist) return <Loader position="center-page" />;
 
   return (
     <div className="o-page o-grid">
       <div className="o-grid__item--center">
-        <PlaylistDetails playlist={playlistDetails} />
+        <PlaylistDetails playlist={currentPlaylist} />
         <Divider />
       </div>
 
       <div className="o-grid__item--wide">
-        <PlaylistVideosThumbnailGrid playlistId={playlistDetails.id} />
+        <PlaylistVideosThumbnailGrid playlistId={currentPlaylist.id} />
       </div>
     </div>
   )

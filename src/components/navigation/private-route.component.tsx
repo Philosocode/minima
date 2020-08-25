@@ -1,15 +1,16 @@
-import React from "react";
+import React, { FC } from "react";
 import { Route, Redirect } from "react-router-dom";
 
-import { useAuth } from "hooks/use-auth.hook";
+import { useSelector } from "react-redux";
+import { selectUserId } from "redux/auth";
 
-export const PrivateRoute = ({ component, ...rest }: any) => {
-  const user = useAuth();
+export const PrivateRoute: FC<{
+  component: FC;
+  path?: string;
+  exact?: boolean;
+}> = (props) => {
+  const user = useSelector(selectUserId);
 
-  const routeComponent = (props: any) =>
-    user 
-      ? React.createElement(component, props)
-      : <Redirect to={{ pathname: "/login" }} />;
-
-  return <Route {...rest} render={routeComponent} />;
+  if (!user) return <Redirect to="/login" />;
+  return <Route path={props.path} exact={props.exact} component={props.component} />;
 };

@@ -2,8 +2,6 @@ import React, { FC, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { faCalendarDay, faEye, faVideo } from "@fortawesome/free-solid-svg-icons";
 
-import { IChannel } from "shared/interfaces/youtube.interfaces";
-import { getChannelDetails } from "services/youtube.service";
 import { addCommasToNumber, getFormattedDate } from "shared/helpers";
 import { linkifyText } from "shared/jsx-helpers";
 
@@ -15,68 +13,62 @@ import { Loader } from "components/loader/loader.component";
 import { PlaylistsThumbnailGrid } from "components/thumbnail-grid/playlists-thumbnail-grid.component";
 import { PlaylistVideosThumbnailGrid } from "components/thumbnail-grid/playlist-videos-thumbnail-grid.component";
 import { StatsCard } from "components/card/stats-card.component";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchChannel, selectCurrentChannel, selectChannelIsFetching } from "redux/channel";
 
 export type ChannelTab = "Videos" | "Playlists" | "About";
 const channelTabs: ChannelTab[] = ["Videos", "Playlists", "About"];
 
 export const ChannelPage: FC = () => {
   // State
-  const [channelData, setChannelData] = useState<IChannel>();
-  const [isLoading, setIsLoading] = useState(false);
+  const currentChannel = useSelector(selectCurrentChannel);
+  const isLoading = useSelector(selectChannelIsFetching);
   const [currentTab, setCurrentTab] = useState<ChannelTab>("Videos");
+  const dispatch = useDispatch();
 
   const { channelId, userName } = useParams();
   
   // Functions
   useEffect(() => {
-    fetchChannelData();
+    if (!channelId) return;
+    if (channelId === currentChannel?.id) return;
 
-    async function fetchChannelData() {
-      if (!channelId) return;
-      setIsLoading(true);
+    dispatch(fetchChannel({ channelId, userName}));
+    
+  }, [currentChannel, channelId, userName, dispatch]);
 
-      try {
-        const channelRes = await getChannelDetails(channelId, userName);
+  useEffect(() => {
+    if (!currentChannel) return;
 
-        setChannelData(channelRes);
-        
-        document.title = channelRes.snippet.title;
-      }
-      catch (err) {
-        alert("ERROR: couldn't load channel data.");
-      }
-      finally {
-        setIsLoading(false);
-      }
-    }
-  }, [channelId, userName]);
+    document.title = currentChannel.snippet.title;
+  }, [currentChannel]);
 
   function getStatsCardData() {
-    if (!channelData) return;
+    if (!currentChannel) return;
 
     return [
-      { icon: faCalendarDay, text: getFormattedDate(channelData.snippet.publishedAt, "MMM io, yyyy") },
-      { icon: faVideo, text: addCommasToNumber(channelData.statistics.videoCount) },
-      { icon: faEye, text: addCommasToNumber(channelData.statistics.viewCount) }
+      { icon: faCalendarDay, text: getFormattedDate(currentChannel.snippet.publishedAt, "MMM io, yyyy") },
+      { icon: faVideo, text: addCommasToNumber(currentChannel.statistics.videoCount) },
+      { icon: faEye, text: addCommasToNumber(currentChannel.statistics.viewCount) }
     ];
   }
 
   function renderAbout() {
-    if (!channelData) return;
+    if (!currentChannel) return;
     return (
       <>
-        <HTMLTextContainer textElement={linkifyText(channelData.snippet.description)} />
+        <HTMLTextContainer textElement={linkifyText(currentChannel.snippet.description)} />
         <StatsCard statsCardData={getStatsCardData()} isShort />
       </>
     )
   }
 
   // Render
-  if (!channelData || isLoading) return <Loader position="center-page" />;
+  if (!currentChannel || isLoading) return <Loader position="center-page" />;
   return (
     <div className="o-page o-grid">
       <div className="o-grid__item--center">
-        <ChannelBox channelData={channelData} location="channel-page" />
+        <ChannelBox channelData={currentChannel} location="channel-page" />
         <ChannelTabs currentTab={currentTab} tabNames={channelTabs} setCurrentTab={setCurrentTab} />
         <ChannelTabPanel isVisible={currentTab === "About"}>
           { renderAbout() }
@@ -85,11 +77,11 @@ export const ChannelPage: FC = () => {
 
       <div className="o-grid__item--wide">
         <ChannelTabPanel isVisible={currentTab === "Videos"}>
-          <PlaylistVideosThumbnailGrid playlistId={channelData.contentDetails.relatedPlaylists.uploads} />
+          <PlaylistVideosThumbnailGrid playlistId={currentChannel.contentDetails.relatedPlaylists.uploads} />
         </ChannelTabPanel>
 
         <ChannelTabPanel isVisible={currentTab === "Playlists"}>
-          <PlaylistsThumbnailGrid channelId={channelData.id} />
+          <PlaylistsThumbnailGrid channelId={currentChannel.id} />
         </ChannelTabPanel>
       </div>
     </div>

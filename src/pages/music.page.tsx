@@ -106,6 +106,7 @@ export const MusicPage: FC<IProps> = () => {
 
       return (
         <MusicChannelHeader
+          key={channelTitle}
           channelTitle={channelTitle}
           songsForChannel={songsForChannel} 
           showingSongs={channelIsExpanded}

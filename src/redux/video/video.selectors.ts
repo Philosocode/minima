@@ -8,6 +8,11 @@ export const selectCurrentVideo = createSelector(
   (video) => video.currentVideo
 );
 
+export const selectIsFetching = createSelector(
+  [selectVideos],
+  (video) => video.isFetching
+);
+
 export const selectCurrentVideoId = createSelector(
   [selectVideos],
   (video) => video.currentVideo?.id

@@ -1,4 +1,3 @@
-import thunk from "redux-thunk";
 import createSagaMiddleware from "redux-saga";
 import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import { actionTypes as rrfActionTypes } from 'react-redux-firebase'
@@ -18,7 +17,7 @@ const middleware = [...getDefaultMiddleware({
     ],
     ignoredPaths: ['firebase', 'firestore']
   },
-}), thunk, sagaMiddleware];
+}), sagaMiddleware];
 
 export const store = configureStore({
   reducer: rootReducer,
