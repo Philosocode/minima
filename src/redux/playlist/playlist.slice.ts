@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import _ from "lodash";
 
 import { IPlaylist } from "shared/interfaces/youtube.interfaces";
 import { IScrollListVideo } from "shared/interfaces/custom.interfaces";
@@ -12,6 +13,7 @@ export interface IPlaylistState {
   hasMoreVideos: boolean;
   isFetching: boolean;
   scrollListLoaded: boolean;
+  isShuffling: boolean;
   isShuffled: boolean;
 }
 
@@ -24,6 +26,7 @@ const initialState: IPlaylistState = {
   hasMoreVideos: true,
   isFetching: false,
   scrollListLoaded: false,
+  isShuffling: false,
   isShuffled: false,
 }
 
@@ -38,7 +41,15 @@ const playlistSlice = createSlice({
     setPlaylistId: (state, action: PayloadAction<string>) => { state.id = action.payload },
     setNextPageToken: (state, action: PayloadAction<string>) => { state.nextPageToken = action.payload },
     setHasMoreVideos: (state, action: PayloadAction<boolean>) => { state.hasMoreVideos = action.payload },
-    setIsShuffled: (state, action: PayloadAction<boolean>) => { state.isShuffled = action.payload },
+    shuffleStart: (state) => { state.isShuffling = true; },
+    shuffleSuccess: (state, action: PayloadAction<IScrollListVideo[]>) => {
+      state.showingVideos = action.payload;
+      state.isShuffled = true;
+    },
+    unshuffle: (state) => {
+      state.showingVideos = state.videos; 
+      state.isShuffled = false;
+    },
 
     // Async Reducers
     fetchCurrentPlaylistStart: startFetching,
@@ -49,9 +60,20 @@ const playlistSlice = createSlice({
     fetchCurrentPlaylistFailure: stopFetching,
     fetchPlaylistVideosStart: startFetching,
     fetchPlaylistVideosSuccess: (state, action: PayloadAction<IScrollListVideo[]>) => {
-      state.videos = action.payload;
+      if (state.isShuffled) {
+        const shuffledVideos = _.shuffle(action.payload);
+        state.showingVideos.push(...shuffledVideos);
+      }
+      else {
+        state.showingVideos.push(...action.payload);
+      }
+      
+      if (!state.scrollListLoaded) {
+        state.scrollListLoaded = true;
+      }
+
+      state.videos.push(...action.payload);
       state.isFetching = false;
-      if (!state.scrollListLoaded) state.scrollListLoaded = true;
     },
     fetchPlaylistVideosFailure: stopFetching,
   }
@@ -62,9 +84,11 @@ export const playlistReducer = playlistSlice.reducer;
 export const {
   clearPlaylist,
   setPlaylistId,
-  setIsShuffled,
   setNextPageToken,
   setHasMoreVideos,
+  shuffleStart,
+  shuffleSuccess,
+  unshuffle,
   fetchCurrentPlaylistStart, fetchCurrentPlaylistSuccess, fetchCurrentPlaylistFailure,
   fetchPlaylistVideosStart, fetchPlaylistVideosSuccess, fetchPlaylistVideosFailure
 } = playlistSlice.actions;

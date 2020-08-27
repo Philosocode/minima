@@ -6,7 +6,7 @@ import { faRandom } from "@fortawesome/free-solid-svg-icons";
 import classNames from "classnames";
 
 import { IScrollListHeader, ECustomPlaylistTypes } from "shared/interfaces/custom.interfaces";
-import { setIsShuffled, selectIsShuffled } from "redux/playlist";
+import { selectIsShuffled, shuffleStart, unshuffle } from "redux/playlist";
 
 interface IProps {
   headerDetails: IScrollListHeader;
@@ -45,8 +45,9 @@ export const PlaylistScrollListHeader: FC<IProps> = ({ watchingVideoIdx, headerD
   }
 
   function handleShuffle() {
-    const oppositeValue = !isShuffled;
-    dispatch(setIsShuffled(oppositeValue));
+    isShuffled
+      ? dispatch(unshuffle())
+      : dispatch(shuffleStart());
   }
 
   const shuffleIconClasses = classNames({

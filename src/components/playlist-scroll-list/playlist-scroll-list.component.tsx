@@ -1,32 +1,41 @@
 import React, { FC, useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import { selectCurrentVideoId } from "redux/video";
-import { selectScrollListLoaded } from "redux/playlist";
-import { IScrollListHeader, IScrollListVideos } from "shared/interfaces/custom.interfaces";
+import { selectScrollListLoaded, selectShowingVideos, fetchCurrentPlaylistStart, fetchPlaylistVideosStart } from "redux/playlist";
+import { IScrollListHeader } from "shared/interfaces/custom.interfaces";
 
 import { PlaylistScrollListHeader } from "./playlist-scroll-list-header.component";
 import { PlaylistScrollListVideos } from "./playlist-scroll-list-videos.component";
 import { Loader } from "components/loader/loader.component";
+import { Button } from "components/button/button.component";
 
 interface IProps {
   isLoading: boolean;
   headerDetails: IScrollListHeader;
-  videosDetails: IScrollListVideos;
 }
 
-export const PlaylistScrollList: FC<IProps> = ({ isLoading, headerDetails, videosDetails }) => {    
+export const PlaylistScrollList: FC<IProps> = ({ isLoading, headerDetails }) => {    
   const [watchingVideoIdx, setWatchingVideoIdx] = useState(0);
+  const videos = useSelector(selectShowingVideos);
   const currentVideoId = useSelector(selectCurrentVideoId);
   const scrollListLoaded = useSelector(selectScrollListLoaded);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const playlistVideos = videosDetails.videos;
-    const currentVideoIdx = playlistVideos.findIndex((video) => video.videoId === currentVideoId);
+    if (videos.length <= 0) return;
+
+    const currentVideoIdx = videos.findIndex((video) => video.videoId === currentVideoId);
 
     setWatchingVideoIdx(currentVideoIdx);
-  }, [currentVideoId, videosDetails.videos]);
+  }, [currentVideoId, videos]);
 
+  function handleInitialLoad() {
+    dispatch(fetchCurrentPlaylistStart());
+    dispatch(fetchPlaylistVideosStart());
+  }
+
+  if (videos.length <= 0) return <Button centered onClick={handleInitialLoad}>LOAD PLAYLIST</Button>;
   if (!scrollListLoaded) return <Loader position="center-horizontal" />;
 
   return (
@@ -37,7 +46,6 @@ export const PlaylistScrollList: FC<IProps> = ({ isLoading, headerDetails, video
       />
       <PlaylistScrollListVideos
         isLoading={isLoading}
-        videosDetails={videosDetails}
         watchingVideoIdx={watchingVideoIdx}
       />
     </div>

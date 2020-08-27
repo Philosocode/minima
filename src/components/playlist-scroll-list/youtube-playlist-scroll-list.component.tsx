@@ -1,19 +1,17 @@
 import React, { FC, useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
-import { IScrollListHeader, IScrollListVideos } from "shared/interfaces/custom.interfaces";
+import { IScrollListHeader } from "shared/interfaces/custom.interfaces";
+import { selectIsFetching, selectCurrentPlaylist, fetchCurrentPlaylistStart, fetchPlaylistVideosStart, selectShowingVideos } from "redux/playlist";
 
 import { PlaylistScrollList } from "./playlist-scroll-list.component";
-import { Button } from "../button/button.component";
-import { selectPlaylistVideos, selectIsFetching, fetchPlaylistVideosStart, fetchCurrentPlaylistStart, selectCurrentPlaylist, selectHasMoreVideos } from "redux/playlist";
-import { useSelector, useDispatch } from "react-redux";
+import { Button } from "components/button/button.component";
 
 export const YouTubePlaylistScrollList: FC = () => {
   const [headerDetails, setHeaderDetails] = useState<IScrollListHeader>();
-  const [videosDetails, setVideoDetails] = useState<IScrollListVideos>();
-  const videos = useSelector(selectPlaylistVideos);
   const currentPlaylist = useSelector(selectCurrentPlaylist);
   const isFetching = useSelector(selectIsFetching);
-  const hasMoreVideos = useSelector(selectHasMoreVideos);
+  const videos = useSelector(selectShowingVideos);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -28,29 +26,18 @@ export const YouTubePlaylistScrollList: FC = () => {
     });
   }, [currentPlaylist]);
 
-  useEffect(() => {
-    if (videos.length <= 0) return;
-    
-    setVideoDetails({ hasMoreVideos, videos, loadMoreVideos: handleLoadMoreVideos });
-  }, [videos.length]); // eslint-disable-line
-
-  function handleInitialLoad() {
+  function handleLoadVideos() {
     dispatch(fetchCurrentPlaylistStart());
-    handleLoadMoreVideos();
-  }
-
-  function handleLoadMoreVideos() {
     dispatch(fetchPlaylistVideosStart());
   }
 
   // Render
-  if (videos.length <= 0) return <Button centered onClick={handleInitialLoad}>LOAD PLAYLIST</Button>;
-  if (!headerDetails || !videosDetails) return null;
+  if (videos.length <= 0) return <Button centered onClick={handleLoadVideos}>LOAD PLAYLIST</Button>;
+  if (!headerDetails) return null;
 
   return (
     <PlaylistScrollList
       headerDetails={headerDetails} 
-      videosDetails={videosDetails}
       isLoading={isFetching}
     />
   );

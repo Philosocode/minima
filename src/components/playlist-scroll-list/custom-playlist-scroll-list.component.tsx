@@ -1,16 +1,15 @@
 import React, { FC, useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
-import { IScrollListHeader, IScrollListVideos, ECustomPlaylistTypes } from "shared/interfaces/custom.interfaces";
-import { fetchPlaylistVideosStart, selectPlaylistVideos, selectIsFetching } from "redux/playlist";
-import { Button } from "components/button/button.component";
+import { IScrollListHeader, ECustomPlaylistTypes } from "shared/interfaces/custom.interfaces";
+import { selectPlaylistVideos, selectIsFetching, fetchPlaylistVideosStart } from "redux/playlist";
 import { PlaylistScrollList } from "./playlist-scroll-list.component";
+import { Button } from "components/button/button.component";
 
 export const CustomPlaylistScrollList: FC = () => {
   const videos = useSelector(selectPlaylistVideos);
   const isFetching = useSelector(selectIsFetching);
   const [headerDetails, setHeaderDetails] = useState<IScrollListHeader>();
-  const [videosDetails, setVideoDetails] = useState<IScrollListVideos>();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -21,22 +20,19 @@ export const CustomPlaylistScrollList: FC = () => {
       playlistId: ECustomPlaylistTypes.MUSIC,
       totalVideos: videos.length,
     });
-
-    setVideoDetails({ hasMoreVideos: false, videos });
   }, [videos]);
 
-  function loadVideos() {
+  function handleLoadVideos() {
     dispatch(fetchPlaylistVideosStart());
   }
 
   // Render
-  if (videos.length <= 0) return <Button centered onClick={loadVideos}>LOAD PLAYLIST</Button>;
-  if (!videosDetails || !headerDetails) return null;
+  if (videos.length <= 0) return <Button centered onClick={handleLoadVideos}>LOAD PLAYLIST</Button>;
+  if (!headerDetails) return null;
 
   return (
     <PlaylistScrollList
       headerDetails={headerDetails} 
-      videosDetails={videosDetails}
       isLoading={isFetching}
     />
   );

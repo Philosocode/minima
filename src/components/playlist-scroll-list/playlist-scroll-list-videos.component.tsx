@@ -1,22 +1,23 @@
 import React, { FC } from "react";
 
-import { IScrollListVideos } from "shared/interfaces/custom.interfaces";
 import { useToggle } from "hooks/use-toggle.hook";
 import { Loader } from "components/loader/loader.component";
 import { PlaylistScrollListVideo } from "components/playlist-scroll-list/playlist-scroll-list-video.component";
+import { useSelector, useDispatch } from "react-redux";
+import { selectHasMoreVideos, selectShowingVideos, fetchPlaylistVideosStart } from "redux/playlist";
 
 interface IProps {
   isLoading: boolean;
-  videosDetails: IScrollListVideos;
   watchingVideoIdx: number;
 }
 export const PlaylistScrollListVideos: FC<IProps> = ({
   isLoading,
-  videosDetails,
   watchingVideoIdx,
 }) => {
   const [hidingPreviousVideos, toggleHidingPreviousVideos] = useToggle(true);
-  const { hasMoreVideos, loadMoreVideos, videos } = videosDetails;
+  const hasMoreVideos = useSelector(selectHasMoreVideos);
+  const videos = useSelector(selectShowingVideos);
+  const dispatch = useDispatch();
 
   function getVideosToShow() {
     if (hidingPreviousVideos) return videos.slice(watchingVideoIdx);
@@ -45,7 +46,7 @@ export const PlaylistScrollListVideos: FC<IProps> = ({
   }
 
   async function handleLoadMoreVideos() {
-    loadMoreVideos && loadMoreVideos();
+    dispatch(fetchPlaylistVideosStart());
   }
 
   function getVideos() {

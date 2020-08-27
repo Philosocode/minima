@@ -1,10 +1,12 @@
 import { takeLatest, put, all, call, select } from "redux-saga/effects";
+import _ from "lodash";
 
 import {
   getPlaylistVideos,
   fetchLikedVideos,
   getPlaylistDetails,
   getPlaylistVideosUntilCurrentVideo,
+  MISSING_THUMBNAIL_URL,
 } from "services/youtube.service";
 import {
   IPlaylistItemsResponse,
@@ -27,6 +29,8 @@ import {
   fetchCurrentPlaylistFailure,
   fetchCurrentPlaylistSuccess,
   fetchPlaylistVideosStart,
+  shuffleStart,
+  shuffleSuccess,
 } from "./playlist.slice";
 import { fetchCurrentPlaylistStart } from "./playlist.slice";
 
@@ -34,6 +38,7 @@ export function* playlistSagas() {
   yield all([
     call(fetchCurrentPlaylistWatcher),
     call(fetchPlaylistVideosWatcher),
+    call(shuffleWatcher),
   ]);
 }
 
@@ -70,7 +75,7 @@ function* fetchPlaylistVideosWorker() {
     }
 
     const loadedVideos = yield select(selectPlaylistVideos);
-
+    
     loadedVideos.length <= 0
       ? yield initialFetchYouTubePlaylistVideos(playlistId)
       : yield fetchYouTubePlaylistVideos(playlistId);
@@ -120,7 +125,7 @@ function* fetchYouTubePlaylistVideos(playlistId: string) {
     const convertedVideos: IScrollListVideo[] = res.items.map((video) => ({
       channelTitle: video.snippet.channelTitle,
       playlistId,
-      thumbnailUrl: video.snippet.thumbnails.medium.url,
+      thumbnailUrl: video.snippet.thumbnails.medium?.url ?? MISSING_THUMBNAIL_URL,
       title: video.snippet.title,
       videoId: video.snippet.resourceId.videoId,
     }));
@@ -166,4 +171,24 @@ function* initialFetchYouTubePlaylistVideos(playlistId: string) {
   } catch (err) {
     throw new Error(err);
   }
+}
+
+// Shuffle
+function* shuffleWatcher() {
+  yield takeLatest(shuffleStart, shuffleWorker);
+}
+
+function* shuffleWorker() {
+  const videos = (yield select(selectPlaylistVideos)) as IScrollListVideo[];
+  const clonedVideos = [...videos];
+
+  const currentVideo = (yield select(selectCurrentVideo)) as IVideo;
+  const currentVideoId = currentVideo.id;
+  
+  // The currently watching video will be the first video in the shuffled list
+  const firstVideo = _.remove(clonedVideos, (video) => video.videoId === currentVideoId)[0];
+  const shuffledVideos = _.shuffle(clonedVideos);
+  const videosToReturn = [firstVideo, ...shuffledVideos]
+
+  yield put(shuffleSuccess(videosToReturn));
 }

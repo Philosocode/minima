@@ -43,3 +43,8 @@ export const selectPlaylistVideos = createSelector(
   [selectPlaylist],
   (playlist) => playlist.videos
 );
+
+export const selectShowingVideos = createSelector(
+  [selectPlaylist],
+  (playlist) => playlist.showingVideos
+);
