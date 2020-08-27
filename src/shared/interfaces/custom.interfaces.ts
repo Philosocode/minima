@@ -15,6 +15,7 @@ export interface IScrollListVideo {
   thumbnailUrl: string;
   title: string;
   videoId: string;
+  date?: string;
 }
 
 export interface IScrollListHeader {

@@ -41,12 +41,13 @@ const _VideoPlayer: FC<RouteComponentProps & IProps> = ({
   const options = {
     modestBranding: 1,
     rel: 0,
-    ...(playlistId && {
-      listType: "playlist",
-      list: playlistId,
-    }),
     ...(startSeconds && { start: startSeconds }),
     ...(endSeconds && { end: endSeconds }),
+    // Disable playlist param cause it kept loading the next video when isLooping is turned on
+    // ...(playlistId && !shouldLoop && {
+    //   listType: "playlist",
+    //   list: playlistId,
+    // }),
   };
 
   useEffect(() => {
