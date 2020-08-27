@@ -67,7 +67,10 @@
     color: $color-grey-lightest;
     cursor: pointer;
     font-size: $font-size-medium;
+    transition: transform 0.1s ease;
 
-    &:hover { color: var(--color-lighter); }
+    &.is-selected { color: var(--color-lighter); }
+    &:hover { color: var(--color-lightest); }
+    &:active { transform: scale(0.9); }
   }
 }

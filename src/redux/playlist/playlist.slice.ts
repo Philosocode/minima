@@ -12,6 +12,7 @@ export interface IPlaylistState {
   hasMoreVideos: boolean;
   isFetching: boolean;
   scrollListLoaded: boolean;
+  isShuffled: boolean;
 }
 
 const initialState: IPlaylistState = {
@@ -23,6 +24,7 @@ const initialState: IPlaylistState = {
   hasMoreVideos: true,
   isFetching: false,
   scrollListLoaded: false,
+  isShuffled: false,
 }
 
 function startFetching(state: IPlaylistState) { state.isFetching = true; }
@@ -36,6 +38,7 @@ const playlistSlice = createSlice({
     setPlaylistId: (state, action: PayloadAction<string>) => { state.id = action.payload },
     setNextPageToken: (state, action: PayloadAction<string>) => { state.nextPageToken = action.payload },
     setHasMoreVideos: (state, action: PayloadAction<boolean>) => { state.hasMoreVideos = action.payload },
+    setIsShuffled: (state, action: PayloadAction<boolean>) => { state.isShuffled = action.payload },
 
     // Async Reducers
     fetchCurrentPlaylistStart: startFetching,
@@ -59,6 +62,7 @@ export const playlistReducer = playlistSlice.reducer;
 export const {
   clearPlaylist,
   setPlaylistId,
+  setIsShuffled,
   setNextPageToken,
   setHasMoreVideos,
   fetchCurrentPlaylistStart, fetchCurrentPlaylistSuccess, fetchCurrentPlaylistFailure,

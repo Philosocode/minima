@@ -1,9 +1,12 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faRandom } from "@fortawesome/free-solid-svg-icons";
+import classNames from "classnames";
 
 import { IScrollListHeader, ECustomPlaylistTypes } from "shared/interfaces/custom.interfaces";
-import { faRandom } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { setIsShuffled, selectIsShuffled } from "redux/playlist";
 
 interface IProps {
   headerDetails: IScrollListHeader;
@@ -12,6 +15,10 @@ interface IProps {
 
 export const PlaylistScrollListHeader: FC<IProps> = ({ watchingVideoIdx, headerDetails }) => {
   const { channelId, channelTitle, playlistId, playlistTitle, totalVideos } = headerDetails;
+  const isShuffled = useSelector(selectIsShuffled);
+  const dispatch = useDispatch();
+
+  useEffect(() => {}, [isShuffled]);
 
   function getPlaylistHeading() {
     const path = (playlistId === ECustomPlaylistTypes.MUSIC)
@@ -24,7 +31,7 @@ export const PlaylistScrollListHeader: FC<IProps> = ({ watchingVideoIdx, headerD
         to={path}
       >{playlistTitle}</Link>
     );
-  }
+  };
 
   function getChannelHeading() {
     if (!channelTitle || !channelId) return;
@@ -37,6 +44,16 @@ export const PlaylistScrollListHeader: FC<IProps> = ({ watchingVideoIdx, headerD
     );
   }
 
+  function handleShuffle() {
+    const oppositeValue = !isShuffled;
+    dispatch(setIsShuffled(oppositeValue));
+  }
+
+  const shuffleIconClasses = classNames({
+    "c-playlist-scroll-list__shuffle": true,
+    "is-selected": isShuffled
+  });
+
   return (
     <div className="c-playlist-scroll-list__header">
       <div className="c-playlist-scroll-list__header-text">
@@ -46,7 +63,8 @@ export const PlaylistScrollListHeader: FC<IProps> = ({ watchingVideoIdx, headerD
 
         <FontAwesomeIcon
           icon={faRandom}
-          className="c-playlist-scroll-list__shuffle"
+          className={shuffleIconClasses}
+          onClick={handleShuffle}
         />
       </div>
     </div>

@@ -14,6 +14,11 @@ export const selectIsFetching = createSelector(
   (playlist) => playlist.isFetching
 );
 
+export const selectIsShuffled = createSelector(
+  [selectPlaylist],
+  (playlist) => playlist.isShuffled
+);
+
 export const selectScrollListLoaded = createSelector(
   [selectPlaylist],
   (playlist) => playlist.scrollListLoaded
