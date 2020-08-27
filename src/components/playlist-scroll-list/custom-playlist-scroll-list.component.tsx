@@ -9,9 +9,9 @@ import { PlaylistScrollList } from "./playlist-scroll-list.component";
 export const CustomPlaylistScrollList: FC = () => {
   const videos = useSelector(selectPlaylistVideos);
   const isFetching = useSelector(selectIsFetching);
-  const dispatch = useDispatch();
   const [headerDetails, setHeaderDetails] = useState<IScrollListHeader>();
   const [videosDetails, setVideoDetails] = useState<IScrollListVideos>();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (videos.length <= 0) return;

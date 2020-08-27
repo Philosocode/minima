@@ -42,12 +42,7 @@ export const VideoPage: FC = () => {
     else alert("ERROR: Invalid video id.");
 
     const playlistQueryParam = queryParams.query["list"];
-    if (
-      typeof playlistQueryParam === "string" &&
-      !["music", "videos"].includes(playlistQueryParam)
-    ) {
-      dispatch(setPlaylistId(playlistQueryParam));
-    }
+    if (typeof playlistQueryParam === "string") dispatch(setPlaylistId(playlistQueryParam));
 
     return () => { dispatch(clearPlaylist()); }
   }, [history, location.search, dispatch]);
