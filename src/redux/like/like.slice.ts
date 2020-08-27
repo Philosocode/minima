@@ -67,7 +67,7 @@ const initialState: ILikeState = {
   playlists: [],
   music: [],
   videos: [],
-  isLoading: false,
+  isLoading: true,
 };
 
 const likeSlice = createSlice({

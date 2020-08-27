@@ -36,7 +36,10 @@ const channelSlice = createSlice({
   name: "channel",
   initialState,
   reducers: {
-    clearChannel: () => initialState
+    clearChannel: () => initialState,
+    setCurrentChannel: (state, action: PayloadAction<IChannel>) => {
+      state.currentChannel = action.payload;
+    },
   },
   extraReducers: {
     [fetchChannel.pending.type]: (state) => { state.isFetching = true; },
@@ -50,5 +53,6 @@ const channelSlice = createSlice({
 
 export const channelReducer = channelSlice.reducer;
 export const {
-  clearChannel
+  clearChannel,
+  setCurrentChannel,
 } = channelSlice.actions;

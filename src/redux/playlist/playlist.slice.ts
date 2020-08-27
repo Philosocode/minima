@@ -11,6 +11,7 @@ export interface IPlaylistState {
   nextPageToken: string;
   hasMoreVideos: boolean;
   isFetching: boolean;
+  scrollListLoaded: boolean;
 }
 
 const initialState: IPlaylistState = {
@@ -21,6 +22,7 @@ const initialState: IPlaylistState = {
   nextPageToken: "",
   hasMoreVideos: true,
   isFetching: false,
+  scrollListLoaded: false,
 }
 
 function startFetching(state: IPlaylistState) { state.isFetching = true; }
@@ -46,6 +48,7 @@ const playlistSlice = createSlice({
     fetchPlaylistVideosSuccess: (state, action: PayloadAction<IScrollListVideo[]>) => {
       state.videos = action.payload;
       state.isFetching = false;
+      if (!state.scrollListLoaded) state.scrollListLoaded = true;
     },
     fetchPlaylistVideosFailure: stopFetching,
   }

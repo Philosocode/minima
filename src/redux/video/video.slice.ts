@@ -35,6 +35,9 @@ const videoSlice = createSlice({
   name: "video",
   initialState,
   reducers: {
+    setCurrentVideo(state, action: PayloadAction<IVideo>) {
+      state.currentVideo = action.payload;
+    },
     setShouldLoop(state, action: PayloadAction<boolean>) {
       state.shouldLoop = action.payload;
     },
@@ -57,6 +60,7 @@ const videoSlice = createSlice({
 
 export const videoReducer = videoSlice.reducer;
 export const {
+  setCurrentVideo,
   setShouldLoop,
   setStartSeconds,
   setEndSeconds,

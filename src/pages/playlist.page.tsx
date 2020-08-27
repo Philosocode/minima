@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 
 import { getQueryParams } from "shared/helpers";
+import { ECustomPlaylistTypes } from "shared/interfaces/custom.interfaces";
 import { setPlaylistId, selectPlaylistId, selectIsFetching, selectCurrentPlaylist, fetchCurrentPlaylistStart } from "redux/playlist";
-
 import { Divider } from "components/divider/divider.component";
 import { Loader } from "components/loader/loader.component";
 import { PlaylistDetails } from "components/playlist/playlist-details.component";
@@ -27,7 +27,7 @@ export const PlaylistPage: FC = () => {
     const playlistQueryParam = queryParams.query["list"];
 
     if (typeof playlistQueryParam === "string") {
-      if (playlistQueryParam === "music") {
+      if (playlistQueryParam === ECustomPlaylistTypes.MUSIC) {
         history.push("/music");
       }
       else {

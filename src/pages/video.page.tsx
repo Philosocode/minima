@@ -1,12 +1,8 @@
-import React, { FC, useEffect } from "react";
-import { useLocation, useHistory } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import React, { FC, useEffect, useState } from "react";
 import { faCalendarDay, faEye, faThumbsUp, faThumbsDown, faPercent } from "@fortawesome/free-solid-svg-icons";
 
 import { ECustomPlaylistTypes } from "shared/interfaces/custom.interfaces";
 import { getQueryParams, roundToTwoDecimals, getFormattedDate, addCommasToNumber } from "shared/helpers";
-import { selectIsFetching, fetchVideo, selectCurrentVideo } from "redux/video";
-import { setPlaylistId, selectPlaylistId, clearPlaylist } from "redux/playlist";
 
 import { ChannelBox } from "components/channel/channel-box.component";
 import { CustomPlaylistScrollList } from "components/playlist-scroll-list/custom-playlist-scroll-list.component";
@@ -19,46 +15,80 @@ import { VideoDescription } from "components/video/video-description.component";
 import { VideoPlayer } from "components/video/video-player.component";
 import { VideoSettingsCard } from "components/video/video-settings-card.component";
 import { YouTubePlaylistScrollList } from "components/playlist-scroll-list/youtube-playlist-scroll-list.component";
-import { fetchChannel, selectCurrentChannel } from "redux/channel";
+import { IVideo, IChannel } from "shared/interfaces/youtube.interfaces";
+import { usePrevious } from "hooks/use-previous.hook";
+import { useLocation } from "react-router-dom";
+import { getVideoDetails, getChannelDetails } from "services/youtube.service";
+import { useDispatch, useSelector } from "react-redux";
+import { setPlaylistId, selectPlaylistId, clearPlaylist, selectIsFetching, selectScrollListLoaded } from "redux/playlist";
+import { setCurrentVideo } from "redux/video";
+import { setCurrentChannel } from "redux/channel";
 
 export const VideoPage: FC = () => { 
   // State
-  const currentVideo = useSelector(selectCurrentVideo);
-  const currentChannel = useSelector(selectCurrentChannel);
-  const isFetching = useSelector(selectIsFetching);
+  const [isFetching, setIsFetching] = useState(true);
+  const [videoData, setVideoData] = useState<IVideo>();
+  const [channelData, setChannelData] = useState<IChannel>();
+
   const playlistId = useSelector(selectPlaylistId);
+  const playlistFetching = useSelector(selectIsFetching);
+  const scrollListLoaded = useSelector(selectScrollListLoaded);
 
-  const dispatch = useDispatch();
-  const history = useHistory();
   const location = useLocation();
+  const dispatch = useDispatch();
 
-  // Functions
-  useEffect(() => {
-    const queryParams = getQueryParams(location.search);
-    
-    const videoQueryParam = queryParams.query["v"];
-
-    if (typeof videoQueryParam === "string") dispatch(fetchVideo(videoQueryParam));
-    else alert("ERROR: Invalid video id.");
-
-    const playlistQueryParam = queryParams.query["list"];
-    if (typeof playlistQueryParam === "string") dispatch(setPlaylistId(playlistQueryParam));
-
-    return () => { dispatch(clearPlaylist()); }
-  }, [history, location.search, dispatch]);
+  const previousPlaylistId = usePrevious(playlistId);
+  const previousChannel = usePrevious(channelData);
 
   useEffect(() => {
-    if (!currentVideo) return;
-    dispatch(fetchChannel({ channelId: currentVideo.snippet.channelId }));
+    setIsFetching(true);
 
-    document.title = currentVideo.snippet.title;
-  }, [currentVideo, dispatch]);
+    fetchData();
+
+    async function fetchData() {
+      const query = getQueryParams(location.search).query;
+      const videoQuery = query["v"];
+      const playlistQuery = query["list"];
+
+      if (typeof videoQuery !== "string") return alert("Invalid video ID");
+
+      try {
+        const video = await getVideoDetails(videoQuery);
+        const channel = await getChannelDetails(video.snippet.channelId);
+
+        setVideoData(video);
+        dispatch(setCurrentVideo(video))
+
+        // Only update channel if changed
+        if (channel.id !== previousChannel?.id) {
+          setChannelData(channel);
+          dispatch(setCurrentChannel(channel));
+        }
+
+        // Only update playlist ID if different from previous render
+        if (
+          typeof playlistQuery === "string" &&
+          playlistQuery !== previousPlaylistId
+        ) {
+          // No need to clear the playlist if not set
+          if (playlistId) dispatch(clearPlaylist());
+          dispatch(setPlaylistId(playlistQuery));
+        }
+      }
+      catch (err) {
+        alert(err);
+      }
+      finally {
+        setIsFetching(false);
+      }
+    }
+  }, [dispatch, location.search]); // eslint-disable-line
 
   function getStatsCardData() {
-    if (!currentVideo) return;
+    if (!videoData) return;
     
-    const { publishedAt } = currentVideo.snippet; 
-    const { likeCount, dislikeCount, viewCount } = currentVideo.statistics;
+    const { publishedAt } = videoData.snippet; 
+    const { likeCount, dislikeCount, viewCount } = videoData.statistics;
     const likes = +likeCount;
     const dislikes = +dislikeCount;
 
@@ -80,45 +110,48 @@ export const VideoPage: FC = () => {
   function getScrollList() {
     if (!playlistId) return;
 
+    // Show loader on initial playlist videos fetch
+    if (playlistFetching && !scrollListLoaded) return <Loader position="center-horizontal" />
+
     if (
       playlistId === ECustomPlaylistTypes.MUSIC || 
       playlistId === ECustomPlaylistTypes.VIDEOS
     ) {
-      return <CustomPlaylistScrollList />;
+      return <CustomPlaylistScrollList key={playlistId} />;
     }
 
-    return <YouTubePlaylistScrollList />;
+    return <YouTubePlaylistScrollList key={playlistId} />;
   }
 
   // Render
-  if (!currentVideo || !currentChannel) return <Loader position="center-page" />;
+  if (isFetching || !videoData || !channelData) return <Loader position="center-page" />;
 
   return (
     <div className="o-page o-page--watch o-grid">
       <VideoPlayer 
         isLoading={isFetching}
-        videoId={currentVideo.id}
+        videoId={videoData.id}
         playlistId={playlistId} 
       />
 
       <div className="o-grid__item--wide c-video__grid">
-        <h2 className="c-video__grid-item--full c-heading c-heading--subtitle c-text--spaced">{currentVideo.snippet.title}</h2>
+        <h2 className="c-video__grid-item--full c-heading c-heading--subtitle c-text--spaced">{videoData.snippet.title}</h2>
 
         <div className="c-video__grid-item">
           <StatsCard statsCardData={getStatsCardData()} />
-          <VideoSettingsCard videoId={currentVideo.id} />
+          <VideoSettingsCard videoId={videoData.id} />
         </div>
 
         <div className="c-video__grid-item">
-          <ChannelBox channelData={currentChannel} location="video-page" />
-          <VideoDescription description={currentVideo.snippet.description} />
+          <ChannelBox channelData={channelData} location="video-page" />
+          <VideoDescription description={videoData.snippet.description} />
           <Divider />
           {
-            +currentVideo.statistics.commentCount > 0
+            +videoData.statistics.commentCount > 0
               ? <ThreadList
-                  key={currentVideo.id}
-                  numComments={currentVideo.statistics.commentCount} 
-                  videoId={currentVideo.id}  
+                  key={videoData.id}
+                  numComments={videoData.statistics.commentCount} 
+                  videoId={videoData.id}  
                 />
               : <NotFoundHeading>No Comments</NotFoundHeading>
           }

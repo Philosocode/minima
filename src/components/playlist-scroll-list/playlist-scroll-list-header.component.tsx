@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { Link } from "react-router-dom";
 
-import { IScrollListHeader } from "shared/interfaces/custom.interfaces";
+import { IScrollListHeader, ECustomPlaylistTypes } from "shared/interfaces/custom.interfaces";
 import { faRandom } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -14,7 +14,7 @@ export const PlaylistScrollListHeader: FC<IProps> = ({ watchingVideoIdx, headerD
   const { channelId, channelTitle, playlistId, playlistTitle, totalVideos } = headerDetails;
 
   function getPlaylistHeading() {
-    const path = (playlistId === "music")
+    const path = (playlistId === ECustomPlaylistTypes.MUSIC)
       ? "/music"
       : `/playlist?list=${playlistId}`;
 

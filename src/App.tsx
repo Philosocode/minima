@@ -33,7 +33,7 @@ export function App() {
 
   useEffect(() => {
     if (!authLoaded) return;
-    if (userId) dispatch(fetchAllLikes(userId));
+    dispatch(fetchAllLikes(userId));
 
   }, [authLoaded, dispatch, userId]);
 

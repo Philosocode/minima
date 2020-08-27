@@ -14,6 +14,11 @@ export const selectIsFetching = createSelector(
   (playlist) => playlist.isFetching
 );
 
+export const selectScrollListLoaded = createSelector(
+  [selectPlaylist],
+  (playlist) => playlist.scrollListLoaded
+);
+
 export const selectNextPageToken = createSelector(
   [selectPlaylist],
   (playlist) => playlist.nextPageToken

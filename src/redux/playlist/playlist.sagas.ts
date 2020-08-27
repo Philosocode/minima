@@ -11,7 +11,7 @@ import {
   IPlaylistItem,
   IVideo,
 } from "shared/interfaces/youtube.interfaces";
-import { IScrollListVideo } from "shared/interfaces/custom.interfaces";
+import { IScrollListVideo, ECustomPlaylistTypes } from "shared/interfaces/custom.interfaces";
 import { selectUserId } from "redux/auth";
 import { selectCurrentVideo } from "redux/video";
 import {
@@ -65,7 +65,7 @@ function* fetchPlaylistVideosWorker() {
   try {
     const playlistId = yield select(selectPlaylistId);
 
-    if (playlistId === "music" || playlistId === "videos") {
+    if (playlistId === ECustomPlaylistTypes.MUSIC || playlistId === ECustomPlaylistTypes.VIDEOS) {
       return yield fetchCustomPlaylistVideos(playlistId);
     }
 
@@ -79,12 +79,12 @@ function* fetchPlaylistVideosWorker() {
   }
 }
 
-function* fetchCustomPlaylistVideos(customPlaylistType: "music" | "videos") {
+function* fetchCustomPlaylistVideos(customPlaylistType: ECustomPlaylistTypes) {
   try {
     const userId = yield select(selectUserId);
 
     const res =
-      customPlaylistType === "music"
+      customPlaylistType === ECustomPlaylistTypes.MUSIC
         ? yield fetchLikedVideos("music", userId)
         : yield fetchLikedVideos("videos", userId);
 

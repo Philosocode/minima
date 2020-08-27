@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { IScrollListHeader, IScrollListVideos } from "shared/interfaces/custom.interfaces";
+import { IScrollListHeader, IScrollListVideos, ECustomPlaylistTypes } from "shared/interfaces/custom.interfaces";
 import { fetchPlaylistVideosStart, selectPlaylistVideos, selectIsFetching } from "redux/playlist";
 import { Button } from "components/button/button.component";
 import { PlaylistScrollList } from "./playlist-scroll-list.component";
@@ -18,7 +18,7 @@ export const CustomPlaylistScrollList: FC = () => {
 
     setHeaderDetails({
       playlistTitle: "Liked Songs",
-      playlistId: "music",
+      playlistId: ECustomPlaylistTypes.MUSIC,
       totalVideos: videos.length,
     });
 
