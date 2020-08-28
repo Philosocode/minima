@@ -20,19 +20,17 @@ import { selectAuthLoaded } from "redux/auth";
 import { selectDoneInitialFetch, fetchAllLikesStart } from "redux/like";
 import { LoginPage } from "pages/login.page";
 import { PrivateRoute } from "components/navigation/private-route.component";
-import { useAuth } from "hooks/use-auth.hook";
 
 export function App() {
-  const userId = useAuth();
   const authLoaded = useSelector(selectAuthLoaded);
   const doneInitialFetch = useSelector(selectDoneInitialFetch);
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (!authLoaded) return;
-    dispatch(fetchAllLikesStart());
+    if (!doneInitialFetch) dispatch(fetchAllLikesStart());
 
-  }, [authLoaded, dispatch, userId]);
+  }, [authLoaded, doneInitialFetch, dispatch]);
 
   if (!authLoaded || !doneInitialFetch) return <Loader position="center-page" />;
   

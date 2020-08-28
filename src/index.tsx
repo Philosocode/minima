@@ -4,21 +4,24 @@ import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 
 import { App } from './App';
-import { store } from "redux/store";
+import { store, persistor } from "redux/store";
 import * as serviceWorker from './serviceWorker';
 
 import "./font-awesome";
 import "./styles/styles.scss";
 import { rrfProps } from "services/firebase.service";
 import { ReactReduxFirebaseProvider } from "react-redux-firebase";
+import { PersistGate } from "redux-persist/integration/react";
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <ReactReduxFirebaseProvider {...rrfProps}>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
+        <PersistGate persistor={persistor}>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </PersistGate>
       </ReactReduxFirebaseProvider>
     </Provider>
   </React.StrictMode>,
