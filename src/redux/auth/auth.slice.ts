@@ -1,5 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+
 import { login, logout } from "services/firebase.service";
+import { clearLikes } from "redux/like";
+import { clearPreferences } from "redux/preference";
 
 export interface IAuthState {
   error: string;
@@ -34,6 +37,8 @@ export const logoutUser = createAsyncThunk(
   async function (_, thunkAPI) {
     try {
       await logout();
+      thunkAPI.dispatch(clearLikes());
+      thunkAPI.dispatch(clearPreferences());
     }
     catch (err) {
       thunkAPI.rejectWithValue(err);

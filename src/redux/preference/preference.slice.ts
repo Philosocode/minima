@@ -14,8 +14,9 @@ const preferenceSlice = createSlice({
     setSessionPlaybackSpeed(state, action: PayloadAction<number>) {
       state.sessionPlaybackSpeed = action.payload;
     },
+    clearPreferences: () => initialState,
   },
 });
 
 export const preferenceReducer = preferenceSlice.reducer;
-export const { setSessionPlaybackSpeed } = preferenceSlice.actions;
+export const { clearPreferences, setSessionPlaybackSpeed } = preferenceSlice.actions;

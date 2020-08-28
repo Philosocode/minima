@@ -16,7 +16,7 @@ import { Footer } from "components/navigation/footer.component";
 
 /* Contexts */
 import { Loader } from "components/loader/loader.component";
-import { selectAuthLoaded } from "redux/auth";
+import { selectAuthLoaded, selectUserId } from "redux/auth";
 import { selectDoneInitialFetch, fetchAllLikesStart } from "redux/like";
 import { LoginPage } from "pages/login.page";
 import { PrivateRoute } from "components/navigation/private-route.component";
@@ -25,14 +25,15 @@ export function App() {
   const authLoaded = useSelector(selectAuthLoaded);
   const doneInitialFetch = useSelector(selectDoneInitialFetch);
   const dispatch = useDispatch();
+  const userId = useSelector(selectUserId);
 
   useEffect(() => {
     if (!authLoaded) return;
-    if (!doneInitialFetch) dispatch(fetchAllLikesStart());
+    if (userId && !doneInitialFetch) dispatch(fetchAllLikesStart());
 
-  }, [authLoaded, doneInitialFetch, dispatch]);
+  }, [authLoaded, doneInitialFetch, dispatch, userId]);
 
-  if (!authLoaded || !doneInitialFetch) return <Loader position="center-page" />;
+  if (!authLoaded || (userId && !doneInitialFetch)) return <Loader position="center-page" />;
   
   return (
     <div className="o-site">

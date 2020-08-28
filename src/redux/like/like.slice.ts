@@ -92,6 +92,7 @@ const likeSlice = createSlice({
       state.isLoading = false;
     },
     unlikeResourceFailure: stopLoading,
+    clearLikes: () => initialState,
   },
 });
 
@@ -101,4 +102,5 @@ export const {
   fetchAllLikesStart, fetchAllLikesSuccess, fetchAllLikesFailure,
   likeResourceStart, likeResourceSuccess, likeResourceFailure,
   unlikeResourceStart, unlikeResourceSuccess, unlikeResourceFailure,
+  clearLikes
 } = likeSlice.actions;
