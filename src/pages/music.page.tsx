@@ -5,10 +5,8 @@ import _ from "lodash";
 
 import { IVideo } from "shared/interfaces/youtube.interfaces";
 import { objectIsEmpty } from "shared/helpers";
-import { getResourcesByIds, getVideoDetails } from "services/youtube.service";
-import { selectLike } from "redux/like";
+import { selectLikedMusic } from "redux/like";
 
-import { Loader } from "components/loader/loader.component";
 import { MusicChannelHeader } from "components/music/music-channel-header.component";
 import { InputWithClear } from "components/input/input-with-clear.component";
 
@@ -25,46 +23,31 @@ interface IExpandedChannels {
 }
 
 export const MusicPage: FC<IProps> = () => {
-  const allLikes = useSelector(selectLike);
-  const [dataLoaded, setDataLoaded] = useState(false);
   const [musicDict, setMusicDict] = useState<IMusicDict>({});
   const [matchedSongs, setMatchedSongs] = useState<IMusicDict>({});
   const [expandedChannels, setExpandedChannels] = useState<IExpandedChannels>({});
   const [filterText, setFilterText] = useState("");
+  const likedMusic = useSelector(selectLikedMusic);
+
+  // Generate music dict
+  useEffect(() => {
+    // musicDict will contain all liked songs
+    // matchedSongs will contain liked songs that match filter text
+    const dict: IMusicDict = {};
+
+    likedMusic.forEach(song => {
+      const { channelTitle } = song.snippet;
+
+      if (!dict[channelTitle]) dict[channelTitle] = [];
+      dict[channelTitle].push(song);
+    });
+
+    setMusicDict(dict);
+    setMatchedSongs(dict);
+  }, [likedMusic]);
 
   useEffect(() => {
-    loadData();
-    
-    async function loadData() {
-      // Get liked songs from the DB
-      const { music: likedMusicIds } = allLikes;
-
-      if (likedMusicIds.length > 0) {
-        const fetchedMusic = await getResourcesByIds<IVideo>(likedMusicIds, getVideoDetails);
-        generateMusicDict(fetchedMusic);
-      }
-
-      setDataLoaded(true);
-    }
-
-    function generateMusicDict(music: IVideo[]) {
-      // musicDict will contain all liked songs
-      // matchedSongs will contain liked songs that match filter text
-      const dict: IMusicDict = {};
-
-      music.forEach(song => {
-        const { channelTitle } = song.snippet;
-
-        if (!dict[channelTitle]) dict[channelTitle] = [];
-        dict[channelTitle].push(song);
-      });
-
-      setMusicDict(dict);
-      setMatchedSongs(dict);
-    }
-  }, [allLikes]);
-
-  useEffect(() => {
+    if (objectIsEmpty(musicDict)) return;
     if (!filterText) setMatchedSongs(musicDict); // Show all songs if no filter
 
     updateMatchedSongsWithFilter(filterText.toLowerCase());
@@ -154,8 +137,6 @@ export const MusicPage: FC<IProps> = () => {
     setExpandedChannels(updatedDict);
   }
 
-  if (!dataLoaded) return <Loader position="center-page" />;
-
   // When playing all liked songs, start at a random song
   // TODO: add functionality to start at beginning & random
   const randomChannel = _.sample(Object.keys(musicDict)) as string;
@@ -183,7 +164,7 @@ export const MusicPage: FC<IProps> = () => {
         </div>
 
         {
-          objectIsEmpty(matchedSongs)
+          (objectIsEmpty(musicDict) || objectIsEmpty(matchedSongs))
             ? <h2 className="c-heading c-heading--subsubtitle c-text--centered c-heading--500 c-text--spaced">No songs found...</h2>
             : <ul className="c-music__list">{ getMusic() }</ul>
         }

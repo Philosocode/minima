@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 
 import { IPlaylist } from "shared/interfaces/youtube.interfaces";
 import { getFormattedDate } from "shared/helpers";
-import { useLike } from "hooks/use-like.hook";
 import { selectLikedPlaylists } from "redux/like";
+import { useLike } from "hooks/use-like.hook";
 import { HeartIcon } from "components/icon/heart-icon.component";
 
 interface IProps {

@@ -1,95 +1,104 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { getUserData, addLikeToDb, removeLikeFromDb } from "services/firebase.service";
-import { IUserLikes, DbLikeType } from "shared/interfaces/firebase.interfaces";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+
+import { DbLikeType } from "shared/interfaces/firebase.interfaces";
+import { IVideo, IChannel, IPlaylist } from "shared/interfaces/youtube.interfaces";
 
 export interface ILikeState {
-  channels: string[];
-  playlists: string[];
-  music: string[];
-  videos: string[];
+  channels: IChannel[];
+  playlists: IPlaylist[];
+  music: IVideo[];
+  videos: IVideo[];
   isLoading: boolean;
+  doneInitialFetch: boolean;
 }
 
-interface ILikeResourceData {
+export interface ILikeResourceStart {
   collectionName: DbLikeType;
-  resourceId: string;
-  userId: string;
 }
 
-interface ILikeResourcePayload {
+export interface ILikeResourceSuccess {
   collectionName: DbLikeType;
-  resourceId: string;
+  resource: IChannel | IPlaylist | IVideo;
 }
 
-// Thunks
-export const fetchAllLikes = createAsyncThunk(
-  "like/fetchAllLikes",
-  async function (userId: string) {
-    const response = await getUserData(userId);
+export interface IFetchAllLikesPayload {
+  channels?: IChannel[];
+  music?: IVideo[];
+  playlists?: IPlaylist[];
+  videos?: IVideo[];
+}
 
-    return response.likes;
-  }
-);
-
-export const likeResource = createAsyncThunk(
-  "like/likeResource",
-  async function (data: ILikeResourceData, thunkAPI) {
-    const { collectionName, resourceId, userId } = data;
-
-    try {
-      await addLikeToDb(collectionName, resourceId, userId);
-      return { collectionName, resourceId };
-    }
-    catch (err) {
-      thunkAPI.rejectWithValue(err);
-    }
-  }
-);
-
-export const unlikeResource = createAsyncThunk(
-  "like/unlikeResource",
-  async function (data: ILikeResourceData, thunkAPI) {
-    const { collectionName, resourceId, userId } = data;
-
-    try {
-      await removeLikeFromDb(collectionName, resourceId, userId);
-      return { collectionName, resourceId };
-    }
-    catch (err) {
-      thunkAPI.rejectWithValue(err);
-    }
-  }
-)
-
-// Slice
 const initialState: ILikeState = {
   channels: [],
   playlists: [],
   music: [],
   videos: [],
-  isLoading: true,
+  isLoading: false,
+  doneInitialFetch: false,
 };
+
+function startLoading(state: ILikeState) { state.isLoading = true; }
+function stopLoading(state: ILikeState) { state.isLoading = false; }
 
 const likeSlice = createSlice({
   name: "like",
   initialState,
-  reducers: {},
-  extraReducers: {
-    [fetchAllLikes.pending.type]: (state) => { state.isLoading = true; },
-    [fetchAllLikes.fulfilled.type]: (state, action: PayloadAction<IUserLikes>) => {
-      return { ...state, ...action.payload, isLoading: false };
+  reducers: {
+    fetchAllLikesStart: startLoading,
+    fetchAllLikesSuccess: (state, action: PayloadAction<IFetchAllLikesPayload>) => {
+      const { channels, music, playlists, videos } = action.payload;
+
+      if (channels) state.channels = channels;
+      if (music) state.music = music;
+      if (playlists) state.playlists = playlists;
+      if (videos) state.videos = videos;
+
+      state.isLoading = false;
+      state.doneInitialFetch = true;
     },
-    [fetchAllLikes.rejected.type]: (state) => { state.isLoading = false; },
-    [likeResource.fulfilled.type]: (state, action: PayloadAction<ILikeResourcePayload>) => {
-      const { collectionName, resourceId } = action.payload;
-      state[collectionName].push(resourceId);
+    fetchAllLikesFailure: stopLoading,
+
+    likeResourceStart: (state, action: PayloadAction<ILikeResourceStart>) => {
+      state.isLoading = true;
     },
-    [unlikeResource.fulfilled.type]: (state, action: PayloadAction<ILikeResourcePayload>) => {
-      const { collectionName, resourceId } = action.payload;
-      const resourceIdx = state[collectionName].findIndex(id => id === resourceId);
+    likeResourceSuccess: (state, action: PayloadAction<ILikeResourceSuccess>) => {
+      const { collectionName, resource } = action.payload;
+
+      if (collectionName === "channels") {
+        state["channels"].push(resource as IChannel);
+      } else if (collectionName === "playlists") {
+        state["playlists"].push(resource as IPlaylist);
+      } else if (collectionName === "music") {
+        state["music"].push(resource as IVideo)
+      } else {
+        state["videos"].push(resource as IVideo);
+      }
+
+      state.isLoading = false;
+    },
+    likeResourceFailure: stopLoading,
+
+    unlikeResourceStart: (state, action: PayloadAction<ILikeResourceStart>) => {
+      state.isLoading = true;
+    },
+    unlikeResourceSuccess: (state, action: PayloadAction<ILikeResourceSuccess>) => {
+      const { collectionName, resource } = action.payload;
+      const resourceId = resource.id;
+      const collection = (state[collectionName] as any[]);
+
+      const resourceIdx = collection.findIndex(item => item.id === resourceId);
+
       state[collectionName].splice(resourceIdx, 1);
-    }
-  }
+      state.isLoading = false;
+    },
+    unlikeResourceFailure: stopLoading,
+  },
 });
 
 export const likeReducer = likeSlice.reducer;
+
+export const {
+  fetchAllLikesStart, fetchAllLikesSuccess, fetchAllLikesFailure,
+  likeResourceStart, likeResourceSuccess, likeResourceFailure,
+  unlikeResourceStart, unlikeResourceSuccess, unlikeResourceFailure,
+} = likeSlice.actions;

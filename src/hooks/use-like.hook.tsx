@@ -1,13 +1,12 @@
 import { useDispatch, useSelector } from "react-redux";
-import { likeResource, unlikeResource, selectLikedChannels } from "redux/like";
+import { likeResourceStart, unlikeResourceStart } from "redux/like";
 
 import { DbLikeType } from "shared/interfaces/firebase.interfaces";
-import { useAuth } from "./use-auth.hook";
 
 export function useLike(
   collectionName: DbLikeType,
   resourceId: string,
-  selector: typeof selectLikedChannels
+  selector: any
 ): [boolean, () => void] {
   /**
    * Hook for reading and updating liked resources.
@@ -18,15 +17,14 @@ export function useLike(
    * 
    * @returns [resourceLiked, toggleResourceLiked]
    */
-  const likedResources = useSelector(selector);
-  const isLiked = likedResources.includes(resourceId);
+  const likedResources = useSelector(selector) as any[];
+  const isLiked = likedResources.find(item => item.id === resourceId);
   const dispatch = useDispatch();
-  const userId = useAuth();
 
   function toggleLike() {
     isLiked
-      ? dispatch(unlikeResource({ collectionName, resourceId, userId }))
-      : dispatch(likeResource({ collectionName, resourceId, userId }));
+      ? dispatch(unlikeResourceStart({ collectionName }))
+      : dispatch(likeResourceStart({ collectionName }));
   }
   
   return [isLiked, toggleLike];

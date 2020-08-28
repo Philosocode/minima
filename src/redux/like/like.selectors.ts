@@ -23,3 +23,8 @@ export const selectLikedVideos = createSelector(
   [selectLike],
   like => like.videos
 );
+
+export const selectDoneInitialFetch = createSelector(
+  [selectLike],
+  like => like.doneInitialFetch
+);

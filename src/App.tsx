@@ -2,9 +2,6 @@ import React, { useEffect } from "react";
 import { Switch, Route } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-/* Types */
-import { TAppState } from "redux/store";
-
 /* Pages */
 import { HomePage } from "pages/home.page";
 import { ChannelPage } from "pages/channel.page";
@@ -20,7 +17,7 @@ import { Footer } from "components/navigation/footer.component";
 /* Contexts */
 import { Loader } from "components/loader/loader.component";
 import { selectAuthLoaded } from "redux/auth";
-import { fetchAllLikes } from "redux/like";
+import { selectDoneInitialFetch, fetchAllLikesStart } from "redux/like";
 import { LoginPage } from "pages/login.page";
 import { PrivateRoute } from "components/navigation/private-route.component";
 import { useAuth } from "hooks/use-auth.hook";
@@ -28,16 +25,16 @@ import { useAuth } from "hooks/use-auth.hook";
 export function App() {
   const userId = useAuth();
   const authLoaded = useSelector(selectAuthLoaded);
-  const isLoading = useSelector((state: TAppState) => state.like.isLoading);
+  const doneInitialFetch = useSelector(selectDoneInitialFetch);
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (!authLoaded) return;
-    dispatch(fetchAllLikes(userId));
+    dispatch(fetchAllLikesStart());
 
   }, [authLoaded, dispatch, userId]);
 
-  if (!authLoaded || isLoading) return <Loader position="center-page" />;
+  if (!authLoaded || !doneInitialFetch) return <Loader position="center-page" />;
   
   return (
     <div className="o-site">
