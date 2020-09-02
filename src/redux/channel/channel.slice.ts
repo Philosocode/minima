@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 
-import { IChannel } from "shared/interfaces/youtube.interfaces";
+import { IChannel, IFetchChannelArgs } from "shared/interfaces/youtube.interfaces";
 import { getChannelDetails } from "services/youtube.service";
 
 export interface IChannelState {
@@ -14,17 +14,11 @@ const initialState: IChannelState = {
   error: undefined
 };
 
-interface IFetchChannelArgs {
-  channelId: string;
-  userName?: string;
-}
 export const fetchChannel = createAsyncThunk(
   "channel/fetchChannel",
   async function (data: IFetchChannelArgs, thunkAPI) {
-    const { channelId, userName } = data;
-
     try {
-      return await getChannelDetails(channelId, userName);
+      return await getChannelDetails(data);
     }
     catch (err) {
       thunkAPI.rejectWithValue(err);

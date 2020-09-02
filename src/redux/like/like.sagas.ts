@@ -8,7 +8,7 @@ import {
 } from "./like.slice";
 import { getUserData, addLikeToDb, removeLikeFromDb } from "services/firebase.service";
 import { DbLikeType } from "shared/interfaces/firebase.interfaces";
-import { getResourcesByIds, getChannelDetails, getVideoDetails, getPlaylistDetails } from "services/youtube.service";
+import { getResourcesByIds, getVideoDetails, getPlaylistDetails, getChannelByChannelId } from "services/youtube.service";
 import { IChannel, IVideo, IPlaylist } from "shared/interfaces/youtube.interfaces";
 import { selectUserId } from "redux/auth";
 import { PayloadAction } from "@reduxjs/toolkit";
@@ -102,7 +102,7 @@ function* fetchAllLikesWorker() {
 
     // Add all the requests into an ARR for Promise.allResolved
     if (hasLikedChannels) {
-      requests.push(getResourcesByIds<IChannel>(channels, getChannelDetails))
+      requests.push(getResourcesByIds<IChannel>(channels, getChannelByChannelId))
       likedResourceTypes.push("channels");
     }
 

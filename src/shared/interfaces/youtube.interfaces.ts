@@ -43,6 +43,10 @@ interface IChannelStatistics {
   viewCount: string;
 }
 
+export interface IFetchChannelArgs {
+  id: string;
+  idType: "channel" | "username";
+}
 
 /* ======== */
 // COMMENT

@@ -11,6 +11,7 @@ import {
   IPlaylist,
   IPlaylistsResponse,
   IChannel,
+  IFetchChannelArgs,
 } from "shared/interfaces/youtube.interfaces";
 import { VIDEO_CACHE_DAYS } from "shared/constants";
 import { addDocToDb, getDocFromDb, getChannelFromDbWithUsername, getLikes, getDocsFromDb } from "./firebase.service";
@@ -60,30 +61,37 @@ export async function getResourcesByIds<ResourceType>(
   return resources;
 }
 
-export async function getChannelDetails(channelId: string, username?: string): Promise<IChannel> {
-  if (!channelId && !username) throw new Error("Must provide channel ID or username");
-
+export async function getChannelDetails(data: IFetchChannelArgs): Promise<IChannel> {
   type ChannelDocument = IChannel & IDocument;
+  
+  const { id, idType } = data;
+  const channelFromDb = (idType === "channel")
+    ? await getDocFromDb("channels", id) as ChannelDocument
+    : await getChannelFromDbWithUsername(id) as ChannelDocument;
 
-  const channelFromDb = (username)
-    ? await getChannelFromDbWithUsername(username) as ChannelDocument
-    : await getDocFromDb("channels", channelId) as ChannelDocument;
-    
   if (!channelFromDb || documentIsOutdated(channelFromDb, VIDEO_CACHE_DAYS)) {
-    return await fetchChannelDetails(channelId, username);
+    return await fetchChannelDetails(data);
   }
 
   return channelFromDb;
 };
 
-async function fetchChannelDetails(channelId?: string, username?: string): Promise<IChannel> {
+// Wrapper around `getChannelDetails` for use in like saga
+export async function getChannelByChannelId(channelId: string): Promise<IChannel> {
+  return getChannelDetails({ id: channelId, idType: "channel" });
+}
+
+async function fetchChannelDetails(data: IFetchChannelArgs): Promise<IChannel> {
   const url = BASE_URL + "/channels";
   const part = "id,contentDetails,snippet,statistics";
+  const { id, idType } = data;
+
   const params = {
     key: API_KEY,
-    id: channelId,
-    forUsername: username,
-    part: part
+    // Conditionally add `id` and `forUsername` keys depending on `idType`
+    ...(idType === "channel") && { id },
+    ...(idType === "username") && { forUsername: id },
+    part
   };
   
   try {

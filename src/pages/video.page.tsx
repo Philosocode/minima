@@ -54,7 +54,7 @@ export const VideoPage: FC = () => {
 
       try {
         const video = await getVideoDetails(videoQuery);
-        const channel = await getChannelDetails(video.snippet.channelId);
+        const channel = await getChannelDetails({ id: video.snippet.channelId, idType: "channel" });
 
         setVideoData(video);
         dispatch(setCurrentVideo(video))

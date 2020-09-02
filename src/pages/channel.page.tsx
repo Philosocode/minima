@@ -1,9 +1,11 @@
 import React, { FC, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { faCalendarDay, faEye, faVideo } from "@fortawesome/free-solid-svg-icons";
 
 import { addCommasToNumber, getFormattedDate } from "shared/helpers";
 import { linkifyText } from "shared/jsx-helpers";
+import { fetchChannel, selectCurrentChannel, selectChannelIsFetching } from "redux/channel";
 
 import { ChannelBox } from "components/channel/channel-box.component";
 import { ChannelTabs } from "components/channel/channel-tabs.component";
@@ -13,8 +15,7 @@ import { Loader } from "components/loader/loader.component";
 import { PlaylistsThumbnailGrid } from "components/thumbnail-grid/playlists-thumbnail-grid.component";
 import { PlaylistVideosThumbnailGrid } from "components/thumbnail-grid/playlist-videos-thumbnail-grid.component";
 import { StatsCard } from "components/card/stats-card.component";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchChannel, selectCurrentChannel, selectChannelIsFetching } from "redux/channel";
+import { IFetchChannelArgs } from "shared/interfaces/youtube.interfaces";
 
 export type ChannelTab = "Videos" | "Playlists" | "About";
 const channelTabs: ChannelTab[] = ["Videos", "Playlists", "About"];
@@ -27,15 +28,28 @@ export const ChannelPage: FC = () => {
   const dispatch = useDispatch();
 
   const { channelId, userName } = useParams();
-  
+
   // Functions
   useEffect(() => {
-    if (!channelId) return;
-    if (channelId === currentChannel?.id) return;
+    if (!channelId && !userName) return;
 
-    dispatch(fetchChannel({ channelId, userName}));
+    // Don't fetch if channelId or userName === current channel displayed
+    if (channelId && (channelId === currentChannel?.id)) return;
+    if (userName && (userName === currentChannel?.snippet.customUrl)) return;
+
+    let idData: IFetchChannelArgs;
     
-  }, [currentChannel, channelId, userName, dispatch]);
+    if (channelId) {
+      idData = { id: channelId, idType: "channel" };
+    } else if (userName) {
+      idData = { id: userName, idType: "username" };
+    } else {
+      return alert("ERROR: Channel ID or user name is required on channel page.");
+    }
+
+    dispatch(fetchChannel(idData));
+    
+  }, [channelId, userName, dispatch]); // eslint-disable-line
 
   useEffect(() => {
     if (!currentChannel) return;
