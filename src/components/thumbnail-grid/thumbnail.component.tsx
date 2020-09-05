@@ -22,10 +22,12 @@ export const Thumbnail: FC<IProps> = ({
   index,
   numItemsInPlaylist,
 }) => {
+  const showItemCountLabel = (numItemsInPlaylist !== undefined);
+
   const labelClasses = classNames({
     "c-thumbnail__label": true,
     "c-thumbnail__label--index": index,
-    "c-thumbnail__label--num-videos": numItemsInPlaylist,
+    "c-thumbnail__label--num-videos": showItemCountLabel
   });
 
   return (
@@ -33,7 +35,7 @@ export const Thumbnail: FC<IProps> = ({
       <Link className="c-thumbnail__link" to={resourceUrl}>
         <div className="c-thumbnail__image-container">
           {index && <div className={labelClasses}>{index}</div>}
-          {numItemsInPlaylist && <div className={labelClasses}>{numItemsInPlaylist} Videos</div>}
+          {showItemCountLabel && <div className={labelClasses}>{numItemsInPlaylist} Videos</div>}
           <img
             className="c-thumbnail__image"
             src={thumbnailUrl}
