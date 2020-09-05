@@ -78,14 +78,14 @@ function convertUrlToAnchorElement(url: string) {
   return (
     <Fragment key={url}>{
       parts.map(
-        part => {
+        (part, idx) => {
           // It's a YouTube URL. Convert to Link element
           if (part.match(youtubeUrlExp)) {
             const relativeUrl = part.replace(youtubeUrlExp, "");
             const shortenedUrl = getShortenedUrl(part);
 
             return (
-              <Link key={relativeUrl} to={relativeUrl} onClick={scrollToTop}>{shortenedUrl}</Link>
+              <Link key={relativeUrl + idx} to={relativeUrl} onClick={scrollToTop}>{shortenedUrl}</Link>
             );
           }
 
@@ -94,7 +94,7 @@ function convertUrlToAnchorElement(url: string) {
             const url = `/watch?v=${videoId}`;
 
             return (
-              <Link key={url} to={url} onClick={scrollToTop}>{part}</Link>
+              <Link key={url + idx} to={url} onClick={scrollToTop}>{part}</Link>
             );
           }
 
@@ -103,7 +103,7 @@ function convertUrlToAnchorElement(url: string) {
             const shortenedUrl = getShortenedUrl(part);
 
             return (
-              <a key={shortenedUrl} href={part} target="_blank" rel="noopener noreferrer">{shortenedUrl}</a>
+              <a key={shortenedUrl + idx} href={part} target="_blank" rel="noopener noreferrer">{shortenedUrl}</a>
             )
           }
           // Regular text

@@ -2,10 +2,9 @@ import React, { FC, useEffect } from "react";
 import { useLocation, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-
 import { getQueryParams } from "shared/helpers";
 import { ECustomPlaylistTypes } from "shared/interfaces/custom.interfaces";
-import { setPlaylistId, selectPlaylistId, selectIsFetching, selectCurrentPlaylist, fetchCurrentPlaylistStart } from "redux/playlist";
+import { setPlaylistId, selectIsFetching, selectCurrentPlaylist, fetchCurrentPlaylistStart } from "redux/playlist";
 import { Divider } from "components/divider/divider.component";
 import { Loader } from "components/loader/loader.component";
 import { PlaylistDetails } from "components/playlist/playlist-details.component";
@@ -14,7 +13,6 @@ import { PlaylistVideosThumbnailGrid } from "components/thumbnail-grid/playlist-
 export const PlaylistPage: FC = () => {
   // State
   const currentPlaylist = useSelector(selectCurrentPlaylist);
-  const playlistId = useSelector(selectPlaylistId);
   const isFetching = useSelector(selectIsFetching);
 
   const dispatch = useDispatch();
@@ -23,6 +21,8 @@ export const PlaylistPage: FC = () => {
   
   // Functions
   useEffect(() => {
+    // Use `list` query param to update global current playlist
+    // If `list` is music, redirect to music page
     const queryParams = getQueryParams(location.search);
     const playlistQueryParam = queryParams.query["list"];
 
@@ -32,15 +32,10 @@ export const PlaylistPage: FC = () => {
       }
       else {
         dispatch(setPlaylistId(playlistQueryParam));
+        dispatch(fetchCurrentPlaylistStart());
       }
     }
   }, [dispatch, history, location.search]);
-
-  useEffect(() => {
-    if (!playlistId) return;
-    dispatch(fetchCurrentPlaylistStart());
-
-  }, [dispatch, playlistId])
 
   useEffect(() => {
     if (!currentPlaylist) return;

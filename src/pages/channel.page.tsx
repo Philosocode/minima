@@ -1,9 +1,9 @@
 import React, { FC, useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { faCalendarDay, faEye, faVideo } from "@fortawesome/free-solid-svg-icons";
 
-import { addCommasToNumber, getFormattedDate } from "shared/helpers";
+import { addCommasToNumber, getFormattedDate, getQueryParams } from "shared/helpers";
 import { linkifyText } from "shared/jsx-helpers";
 import { fetchChannel, selectCurrentChannel, selectChannelIsFetching } from "redux/channel";
 
@@ -17,20 +17,22 @@ import { PlaylistVideosThumbnailGrid } from "components/thumbnail-grid/playlist-
 import { StatsCard } from "components/card/stats-card.component";
 import { IFetchChannelArgs } from "shared/interfaces/youtube.interfaces";
 
-export type ChannelTab = "Videos" | "Playlists" | "About";
-const channelTabs: ChannelTab[] = ["Videos", "Playlists", "About"];
+export type ChannelTab = "videos" | "playlists" | "about";
+const channelTabs = ["videos", "playlists", "about"];
 
 export const ChannelPage: FC = () => {
   // State
   const currentChannel = useSelector(selectCurrentChannel);
   const isLoading = useSelector(selectChannelIsFetching);
-  const [currentTab, setCurrentTab] = useState<ChannelTab>("Videos");
-  const dispatch = useDispatch();
-
+  const [currentTab, setCurrentTab] = useState<ChannelTab>("videos");
   const { channelId, userName } = useParams();
+
+  const dispatch = useDispatch();
+  const location = useLocation();
 
   // Functions
   useEffect(() => {
+    // Fetch current channel based on the channelId / userName
     if (!channelId && !userName) return;
 
     // Don't fetch if channelId or userName === current channel displayed
@@ -52,6 +54,20 @@ export const ChannelPage: FC = () => {
   }, [channelId, userName, dispatch]); // eslint-disable-line
 
   useEffect(() => {
+    // Set the current tab whenever the `tab` query param changes
+    const { query } = getQueryParams(location.search);
+    const tabQuery = query["tab"];
+
+    if (typeof tabQuery === "string") {
+      if (tabQuery !== currentTab && channelTabs.includes(tabQuery)) {
+        setCurrentTab(tabQuery as ChannelTab);
+      }
+    } else {
+      setCurrentTab("videos");
+    }
+  }, [location.search]); // eslint-disable-line
+
+  useEffect(() => {
     if (!currentChannel) return;
 
     document.title = currentChannel.snippet.title;
@@ -67,8 +83,9 @@ export const ChannelPage: FC = () => {
     ];
   }
 
-  function renderAbout() {
+  function getAbout() {
     if (!currentChannel) return;
+
     return (
       <>
         <HTMLTextContainer textElement={linkifyText(currentChannel.snippet.description)} />
@@ -83,18 +100,20 @@ export const ChannelPage: FC = () => {
     <div className="o-page o-grid">
       <div className="o-grid__item--center">
         <ChannelBox channelData={currentChannel} location="channel-page" />
-        <ChannelTabs currentTab={currentTab} tabNames={channelTabs} setCurrentTab={setCurrentTab} />
-        <ChannelTabPanel isVisible={currentTab === "About"}>
-          { renderAbout() }
+        <ChannelTabs currentTab={currentTab} tabNames={channelTabs as ChannelTab[]} />
+        <ChannelTabPanel isVisible={currentTab === "about"}>
+          { getAbout() }
         </ChannelTabPanel>
       </div>
 
       <div className="o-grid__item--wide">
-        <ChannelTabPanel isVisible={currentTab === "Videos"}>
-          <PlaylistVideosThumbnailGrid playlistId={currentChannel.contentDetails.relatedPlaylists.uploads} />
+        <ChannelTabPanel isVisible={currentTab === "videos"}>
+          <PlaylistVideosThumbnailGrid
+            playlistId={currentChannel.contentDetails.relatedPlaylists.uploads} 
+          />
         </ChannelTabPanel>
 
-        <ChannelTabPanel isVisible={currentTab === "Playlists"}>
+        <ChannelTabPanel isVisible={currentTab === "playlists"}>
           <PlaylistsThumbnailGrid channelId={currentChannel.id} />
         </ChannelTabPanel>
       </div>

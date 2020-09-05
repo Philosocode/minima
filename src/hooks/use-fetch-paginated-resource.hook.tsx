@@ -26,16 +26,15 @@ export function useFetchPaginatedResource<ResourceType>(
 
   useEffect(() => {
     if (options?.doInitialLoad) loadResources();
-    // eslint-disable-next-line
-  }, []);
+  }, []); // eslint-disable-line
 
   async function loadResources() {
     if (!hasMore) return;
-    
+
+    setIsLoading(true);
+
     try {
-      setIsLoading(true);
       const res = await loadMoreCb(resourceId, nextPageToken);
-      setIsLoading(false);
 
       // A nextPageToken means there are more items to load
       res.nextPageToken
@@ -52,6 +51,9 @@ export function useFetchPaginatedResource<ResourceType>(
     }
     catch (err) {
       throw new Error(err);
+    }
+    finally {
+      setIsLoading(false);
     }
   }
 

@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, memo } from "react";
 
 import { getPlaylistVideos, MISSING_THUMBNAIL_URL } from "services/youtube.service";
 import { IPlaylistItem } from "shared/interfaces/youtube.interfaces";
@@ -12,7 +12,7 @@ import { NotFoundHeading } from "components/text/not-found-heading.component";
 interface IProps {
   playlistId: string;
 }
-export const PlaylistVideosThumbnailGrid: FC<IProps> = ({ playlistId }) => {
+export const PlaylistVideosThumbnailGrid: FC<IProps> = memo(({ playlistId }) => {
   const {
     hasMore: hasMoreVideos,
     isLoading,
@@ -38,4 +38,4 @@ export const PlaylistVideosThumbnailGrid: FC<IProps> = ({ playlistId }) => {
       <LoadMoreButton hasMoreItems={hasMoreVideos} isLoading={isLoading} loadItems={loadVideos} />
     </>
   )
-};
+});

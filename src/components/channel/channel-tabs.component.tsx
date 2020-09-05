@@ -1,27 +1,28 @@
-import React, { FC, Dispatch, SetStateAction } from "react";
+import React, { FC } from "react";
+import { useHistory, useLocation } from "react-router-dom";
 
 import { ChannelTab } from "pages/channel.page";
 
 interface IProps {
   currentTab: ChannelTab;
   tabNames: ChannelTab[];
-  setCurrentTab: Dispatch<SetStateAction<ChannelTab>>;
 }
 
-export const ChannelTabs: FC<IProps> = ({
-  currentTab,
-  tabNames,
-  setCurrentTab,
-}) => (
-  <div className="c-tab__list">
-    {tabNames.map((tabName) => (
-      <h3
-        key={tabName}
-        className={`c-tab__heading ${currentTab === tabName && "is-selected"}`}
-        onClick={() => setCurrentTab(tabName)}
-      >
-        {tabName}
-      </h3>
-    ))}
-  </div>
-);
+export const ChannelTabs: FC<IProps> = ({ currentTab, tabNames }) => {
+  const history = useHistory();
+  const location = useLocation();
+
+  return (
+    <div className="c-tab__list">
+      {tabNames.map((tabName) => (
+        <h3
+          key={tabName}
+          className={`c-tab__heading ${currentTab === tabName && "is-selected"}`}
+          onClick={() => history.replace(`${location.pathname}?tab=${tabName}`)}
+        >
+          {tabName}
+        </h3>
+      ))}
+    </div>
+  );
+};

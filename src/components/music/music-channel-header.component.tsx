@@ -40,4 +40,4 @@ export const MusicChannelHeader: FC<IProps> = ({ channelTitle, showingSongs, son
       </ul>
     </li>
   )
-}
+};

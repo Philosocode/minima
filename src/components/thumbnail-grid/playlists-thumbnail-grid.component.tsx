@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, memo } from "react";
 
 import { IPlaylist } from "shared/interfaces/youtube.interfaces";
 import { IThumbnail } from "shared/interfaces/custom.interfaces";
@@ -12,7 +12,7 @@ import { NotFoundHeading } from "components/text/not-found-heading.component";
 interface IProps {
   channelId: string;
 }
-export const PlaylistsThumbnailGrid: FC<IProps> = ({ channelId }) => {
+export const PlaylistsThumbnailGrid: FC<IProps> = memo(({ channelId }) => {
   const {
     hasMore: hasMorePlaylists,
     isLoading,
@@ -46,4 +46,4 @@ export const PlaylistsThumbnailGrid: FC<IProps> = ({ channelId }) => {
       { getLoadMoreButton() }
     </>
   )
-};
+});
