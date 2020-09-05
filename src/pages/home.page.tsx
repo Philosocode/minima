@@ -8,7 +8,11 @@ import { ChannelGrid } from "components/channel/channel-grid.component";
 
 export const HomePage: FC = () => {
   const allLikes = useSelector(selectLike);
-  const { channels, music, playlists, videos } = allLikes;
+
+  const channels = allLikes.channels.slice().reverse();
+  const music = allLikes.music.slice().reverse();
+  const playlists = allLikes.playlists.slice().reverse();
+  const videos = allLikes.videos.slice().reverse();
 
   useEffect(() => {
     document.title = "minima - Home";

@@ -128,8 +128,7 @@ function* fetchAllLikesWorker() {
     const userLikesPayload: IFetchAllLikesPayload = {};
 
     likedResourceTypes.forEach((resourceType, idx) => {
-      // use reverse() to display the most recently added item at the top
-      let itemsArr: any[] = fetchedItems[idx].reverse();
+      let itemsArr: any[] = fetchedItems[idx];
 
       if (resourceType === "channels") {
         userLikesPayload[resourceType] = itemsArr as IChannel[];
