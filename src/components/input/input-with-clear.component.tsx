@@ -7,11 +7,12 @@ interface IProps {
   onClear: () => void;
   onChange: (ev: ChangeEvent<HTMLInputElement>) => void;
   value: string;
-  containerClasses?: string;
+
   onKeyPress?: (ev: KeyboardEvent<HTMLInputElement>) => void;
+  containerClasses?: string;
   inputClasses?: string;
   clearClasses?: string;
-  placeholder?: string;
+  [x: string]: any; // add so spread operator works
 }
 export const InputWithClear: FC<IProps> = ({
   onClear,
@@ -21,17 +22,16 @@ export const InputWithClear: FC<IProps> = ({
   containerClasses,
   inputClasses,
   clearClasses,
-  placeholder
+  ...rest
 }) => {
   return (
     <div className={classNames("c-input__container", containerClasses)}>
       <input
         autoComplete="0"
-        className={classNames("c-input", inputClasses)} 
+        className={classNames("c-input", inputClasses)}
         onChange={onChange}
         onKeyPress={onKeyPress}
-        placeholder={placeholder}
-        value={value}
+        {...rest}
       />
       <FontAwesomeIcon
         className={classNames("c-input__clear", { "is-showing": value !== "" }, clearClasses)}

@@ -24,7 +24,6 @@ export const SearchBar: FC = () => {
 
   // RegExps
   const channelPageExp = /\/channel\/(UC[0-9A-Za-z_-]{21}[AQgw])$/;
-  const channelShortExp = /\/c\/(.*)/;
   const userPageExp = /\/user\/(.*)/;
   const playlistPageExp = /\/playlist\?list=(.*)/;
 
@@ -38,9 +37,8 @@ export const SearchBar: FC = () => {
   }
 
   function handleSubmit(ev: KeyboardEvent<HTMLInputElement>) {
-    // Trigger on Enter key when 1+ characters have been entered
-    if (ev.key !== "Enter") return;
-    if (!searchInputText) return;
+    // Ignore if not Enter key pressed or search input is empty
+    if (ev.key !== "Enter" || !searchInputText) return;
 
     scrollToTop();
 
@@ -50,7 +48,6 @@ export const SearchBar: FC = () => {
 
     if (inferredSearchType === "video") return handleVideoRedirect();
     if (inferredSearchType === "channel") return handleChannelRedirect();
-    if (inferredSearchType === "c") return handleShortChannelRedirect();
     if (inferredSearchType === "user") return handleUserRedirect();
     if (inferredSearchType === "playlist") return handlePlaylistRedirect();
 
@@ -64,7 +61,6 @@ export const SearchBar: FC = () => {
     if (queryParams.query["v"]) return "video";
 
     if (searchInputText.match(channelPageExp))  return "channel";
-    if (searchInputText.match(channelShortExp)) return "c";
     if (searchInputText.match(userPageExp))     return "user";
     if (searchInputText.match(playlistPageExp)) return "playlist";
 
@@ -83,11 +79,6 @@ export const SearchBar: FC = () => {
   function handleChannelRedirect() {
     const match = searchInputText.match(channelPageExp);
     if (match) history.push(`/channel/${match[1]}`);
-  }
-
-  function handleShortChannelRedirect() {
-    const match = searchInputText.match(channelShortExp);
-    if (match) history.push(`/user/${match[1]}`);
   }
 
   function handleUserRedirect() {
@@ -115,6 +106,8 @@ export const SearchBar: FC = () => {
       placeholder="Enter a YouTube video, channel, or playlist URL"
       containerClasses="c-search-bar"
       inputClasses="c-search-bar__input"
+      type="search"
+      role="search"
       value={searchInputText}
     />
   );
