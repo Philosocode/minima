@@ -14,21 +14,26 @@ jest.mock("react-router-dom"), () => ({
 });
 
 describe("<SearchBar />", () => {
-  it("redirects to the correct page", async () => {
-    const history = createMemoryHistory();
+  let history;
+  let searchInput: HTMLInputElement;
+
+  beforeEach(() => {
+    history = createMemoryHistory();
     history.push = jest.fn();
-
-    // Deal with window.scrollTo: https://qiita.com/akameco/items/0edfdae02507204b24c8
-    const noop = () => {};
-    Object.defineProperty(window, 'scrollTo', { value: noop, writable: true });
-
+  
     render(
       <Router history={history}>
         <SearchBar />
       </Router>
     );
 
-    const searchInput = screen.getByRole(/search/i);
+    searchInput = screen.getByRole(/search/i) as HTMLInputElement;
+  });
+
+  it("redirects to the correct page", () => {
+    // Deal with window.scrollTo: https://qiita.com/akameco/items/0edfdae02507204b24c8
+    const noop = () => {};
+    Object.defineProperty(window, 'scrollTo', { value: noop, writable: true });
 
     const testData = [
       {
@@ -58,5 +63,19 @@ describe("<SearchBar />", () => {
       expect(history.push).toHaveBeenCalledWith(expect.stringContaining(data.expectedPath));
       userEvent.clear(searchInput);
     });
+  });
+
+  it("shouldn't redirect if search input is empty", () => {
+    userEvent.type(searchInput, "{enter}");
+    expect(history.push).not.toHaveBeenCalled();
+  });
+
+  it("clears search input when clear button is clicked", () => {
+    userEvent.type(searchInput, "text 123");
+
+    const clearButton = screen.getByRole(/button/i);
+    userEvent.click(clearButton);
+
+    expect(searchInput.value).toBe("");
   });
 });

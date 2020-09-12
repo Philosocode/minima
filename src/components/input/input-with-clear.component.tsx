@@ -31,12 +31,15 @@ export const InputWithClear: FC<IProps> = ({
         className={classNames("c-input", inputClasses)}
         onChange={onChange}
         onKeyPress={onKeyPress}
+        value={value}
         {...rest}
       />
       <FontAwesomeIcon
+        aria-hidden={false}
         className={classNames("c-input__clear", { "is-showing": value !== "" }, clearClasses)}
         icon={faTimes}
         onClick={onClear}
+        role="button"
       />
     </div>
   );
