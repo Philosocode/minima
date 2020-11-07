@@ -26,7 +26,7 @@ const middleware = [...getDefaultMiddleware({
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["like", "preference"]
+  whitelist: ["like"]
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
