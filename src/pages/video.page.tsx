@@ -56,6 +56,8 @@ export const VideoPage: FC = () => {
         const video = await getVideoDetails(videoQuery);
         const channel = await getChannelDetails({ id: video.snippet.channelId, idType: "channel" });
 
+        document.title = video.snippet.title;
+
         setVideoData(video);
         dispatch(setCurrentVideo(video))
 
@@ -83,6 +85,12 @@ export const VideoPage: FC = () => {
       }
     }
   }, [dispatch, location.search]); // eslint-disable-line
+
+  useEffect(() => {
+    if (!videoData) return;
+
+    document.title = videoData.snippet.title;
+  }, [videoData]); // eslint-disable-line
 
   function getStatsCardData() {
     if (!videoData) return;
