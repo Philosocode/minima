@@ -46,6 +46,7 @@ const channelSlice = createSlice({
 });
 
 export const channelReducer = channelSlice.reducer;
+
 export const {
   clearChannel,
   setCurrentChannel,

@@ -27,6 +27,7 @@ export function App() {
   const dispatch = useDispatch();
   const userId = useSelector(selectUserId);
 
+
   useEffect(() => {
     if (!authLoaded) return;
     if (userId && !doneInitialFetch) dispatch(fetchAllLikesStart());

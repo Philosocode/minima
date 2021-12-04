@@ -27,7 +27,6 @@ export const fetchVideo = createAsyncThunk(
     catch (err) {
       thunkAPI.rejectWithValue(err);
     }
-
   }
 );
 
